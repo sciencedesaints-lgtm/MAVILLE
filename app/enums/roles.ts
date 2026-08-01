@@ -1,0 +1,7 @@
+export enum Roles {
+    CITOYEN = 'CITOYEN',
+    COMMERCANT = 'COMMERCANT',
+    PRESTATAIRE = 'PRESTATAIRE',
+    AGENT_COMMUNAL = 'AGENT_COMMUNAL',
+    ADMIN = 'ADMIN',
+  }

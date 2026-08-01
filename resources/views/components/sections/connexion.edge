@@ -1,0 +1,33 @@
+<section class="form-container" id="section-connexion">
+  <div>
+    <h1><span>MA</span>VILLE</h1>
+    <p>Ravi de vous revoir ! Entrez vos identifiants pour vous connecter.</p>
+  </div>
+
+  <div>
+    <form action="{{ route('web.session.store') }}" method="POST" id="form-connexion">
+      {{ csrfField() }}
+      
+      <div>
+        <label for="login">Identifiant (Email ou Téléphone)</label>
+        <input type="text" name="login" id="login" placeholder="Email ou Téléphone" required />
+      </div>
+
+      <div>
+        <label for="login-password">Mot de passe</label>
+        <div class="password-group">
+          <input type="password" name="password" id="login-password" placeholder="Mot de passe" required />
+          <button type="button" id="toggle-password-login" class="btn-toggle">👁️</button>
+        </div>
+      </div>
+
+      <p class="text-right">
+        <a href="#" class="btn-link">Mot de passe oublié ?</a>
+      </p>
+
+      <div>
+        <button type="submit" class="btn-gradient">Se connecter</button>
+      </div>
+    </form>
+  </div>
+</section>

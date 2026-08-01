@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MAVILLE - Votre ville au quotidien</title>
+  
+  {{-- Google Material Symbols --}}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+
+  {{-- Ingestion CSS et JS via Vite --}}
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body>
+
+  {{-- Notification Toast Globale --}}
+  <div id="toast-container" class="toast-container"></div>
+
+  {{-- Point d'injection des pages --}}
+  {{{ await $slots.main() }}}
+
+</body>
+</html>
