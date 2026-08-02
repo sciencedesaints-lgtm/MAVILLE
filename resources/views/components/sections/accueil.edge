@@ -1,197 +1,819 @@
-<section id="section-accueil" class="app-card active" style="display: flex; flex-direction: column;">
-  
-  <!-- 1. HEADER / BARRE SUPÉRIEURE -->
-  <header class="main-header">
-    <div class="header-left">
-      <button id="burger-btn" class="burger-menu">☰</button>
-      <div class="logo">MA<span>VILLE</span></div>
-    </div>
+<section id="section-accueil" class="dashboard">
 
-    <div class="header-search">
-      <div class="search-input-wrapper">
-        <span class="search-icon">🔍</span>
-        <input type="text" placeholder="Rechercher un produit, un service, un établissement...">
-        <div class="search-actions">
-          <button title="Recherche vocale" class="btn-search-opt">🎙️</button>
-          <button title="Recherche par image" class="btn-search-opt">📷</button>
-        </div>
-      </div>
-      <button class="btn-search-submit">Rechercher</button>
-    </div>
+    <!-- ========================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================= -->
 
-    <div class="header-right">
-      <div class="location-badge">📍 <span>Lubumbashi</span></div>
-      <div class="lang-selector">🌐 FR</div>
-      <button class="icon-btn notifications-btn">🔔 <span class="badge">3</span></button>
-      <div class="user-profile">
-        <div class="avatar">PK</div>
-        <div class="user-info">
-          <span class="user-name">Parfait Kamey</span>
-          <span class="user-role">Mon compte ▼</span>
-        </div>
-      </div>
-    </div>
-  </header>
+    <aside class="sidebar">
 
-  <!-- CONTENT CONTAINER -->
-  <div class="dashboard-body">
+        <div class="logo">
+            <img src="/images/logo.png" alt="MAVILLE">
+            <div>
+                <h2>MAVILLE</h2>
+                <small>Ma ville, ma vie</small>
+            </div>
+        </div>
 
-    <!-- 2. BLOC SUPÉRIEUR : GRILLE DES CATÉGORIES + HERO BANNER -->
-    <div class="top-grid">
-      
-      <!-- NAVIGATION PAR CATÉGORIES (Gauche) -->
-      <aside class="categories-hub">
-        <h3>Services & Catégories</h3>
-        <div class="categories-grid">
-          <a href="#" class="cat-item">🛍️ <span>Produits</span></a>
-          <a href="#" class="cat-item">🔧 <span>Services</span></a>
-          <a href="#" class="cat-item">🍴 <span>Restaurants</span></a>
-          <a href="#" class="cat-item">💊 <span>Pharmacies</span></a>
-          <a href="#" class="cat-item">🎓 <span>Éducation</span></a>
-          <a href="#" class="cat-item">🚌 <span>Transport</span></a>
-          <a href="#" class="cat-item">🏠 <span>Immobilier</span></a>
-          <a href="#" class="cat-item">🏷️ <span>Offres & Promos</span></a>
-          <a href="#" class="cat-item">💼 <span>Emplois</span></a>
-          <a href="#" class="cat-item">🎪 <span>Événements</span></a>
-          <a href="#" class="cat-item">🌱 <span>Agriculture</span></a>
-          <a href="#" class="cat-item">🏛️ <span>Vie citoyenne</span></a>
-        </div>
-        <div class="premium-box">
-          <p><strong>Passez Premium</strong></p>
-          <small>Plus de visibilité pour vos commerces</small>
-          <button class="btn-xs">Découvrir</button>
-        </div>
-      </aside>
+        <nav>
 
-      <!-- HERO BANNER (Droite) -->
-      <div class="hero-banner">
-        <div class="hero-content">
-          <h1>Découvrez tout <br>dans <span>votre ville</span></h1>
-          <p>La meilleure façon de vivre votre ville</p>
-          
-          <div class="hero-filters">
-            <button class="filter-btn active">📍 Autour de moi</button>
-            <button class="filter-btn">🏙️ Toute la ville</button>
-            <button class="filter-btn">🌍 Autre ville / pays</button>
-          </div>
-        </div>
-      </div>
-    </div>
+            <a href="#" class="active">
+                <i class="fas fa-home"></i>
+                Accueil
+            </a>
 
-    <!-- 3. BARRE DE WIDGETS CLÉS (Météo, Wallet, Carte) -->
-    <div class="widgets-row">
-      
-      <!-- WIDGET METEO -->
-      <div class="widget-card weather-widget">
-        <div class="widget-header">
-          <span>Lubumbashi</span>
-          <span class="weather-temp">27°C ☀️</span>
-        </div>
-        <div class="widget-details">
-          <p>🌱 Qualité de l'air: <strong>Bonne</strong></p>
-          <p>🚗 Trafic: <strong>Fluide</strong></p>
-        </div>
-      </div>
+            <a href="#">
+                <i class="fas fa-store"></i>
+                Boutiques
+            </a>
 
-      <!-- WIDGET WALLET -->
-      <div class="widget-card wallet-widget">
-        <div class="widget-header">
-          <span>Mon solde MAVILLE</span>
-          <strong class="wallet-balance">125,500 FC</strong>
-        </div>
-        <div class="wallet-actions">
-          <button>👛 Portefeuille</button>
-          <button>💳 Mes cartes</button>
-          <button>🔄 Transferts</button>
-        </div>
-      </div>
+            <a href="#">
+                <i class="fas fa-tools"></i>
+                Services
+            </a>
 
-      <!-- WIDGET CARTE -->
-      <div class="widget-card map-widget">
-        <div class="map-placeholder">
-          <span>📍 Carte interactive de Lubumbashi</span>
-          <button class="btn-xs">Voir la carte</button>
-        </div>
-      </div>
-    </div>
+            <a href="#">
+                <i class="fas fa-tags"></i>
+                Offres & Promotions
+            </a>
 
-    <!-- 4. SECTION PROMOTIONS DU JOUR (Chargement Dynamique) -->
+            <a href="#">
+                <i class="fas fa-bus"></i>
+                Transport
+            </a>
+
+            <a href="#">
+                <i class="fas fa-home"></i>
+                Immobilier
+            </a>
+
+            <a href="#">
+                <i class="fas fa-heartbeat"></i>
+                Santé
+            </a>
+
+            <a href="#">
+                <i class="fas fa-briefcase"></i>
+                Emplois
+            </a>
+
+            <a href="#">
+                <i class="fas fa-calendar"></i>
+                Evènements
+            </a>
+
+            <a href="#">
+                <i class="fas fa-seedling"></i>
+                Agriculture
+            </a>
+
+            <a href="#">
+                <i class="fas fa-city"></i>
+                Vie citoyenne
+            </a>
+
+            <a href="#">
+                <i class="fas fa-ellipsis-h"></i>
+                Plus
+            </a>
+
+        </nav>
+
+        <div class="premium-card">
+
+            <h3>Passez Premium</h3>
+
+            <p>
+                Plus de visibilité.<br>
+                Plus de clients.
+            </p>
+
+            <button>
+                Découvrir
+            </button>
+
+        </div>
+
+    </aside>
+
+    <!-- ========================= -->
+    <!-- CONTENU -->
+    <!-- ========================= -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    placeholder="Rechercher un produit, un service, un établissement..."
+                >
+
+                <button>
+
+                    <i class="fas fa-search"></i>
+
+                    Rechercher
+
+                </button>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="location">
+
+                    <i class="fas fa-map-marker-alt"></i>
+
+                    Lubumbashi
+
+                </div>
+
+                <div class="language">
+
+                    FR
+
+                </div>
+
+                <div class="notifications">
+
+                    <i class="far fa-bell"></i>
+
+                    <span>3</span>
+
+                </div>
+
+                <div class="user">
+
+                    <img
+                        src="/images/avatar.jpg"
+                        alt="Utilisateur"
+                    >
+
+                    <div>
+
+                        <strong>Parfait Kamey</strong>
+
+                        <small>Mon compte</small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-left">
+
+                <img
+                    src="/images/banner-ville.jpg"
+                    alt="Ville"
+                >
+
+                <div class="hero-overlay">
+
+                    <h1>
+
+                        Découvrez tout
+
+                        <span>dans votre ville</span>
+
+                    </h1>
+
+                    <p>
+
+                        La meilleure façon de vivre votre ville
+
+                    </p>
+
+                    <div class="hero-search-types">
+
+                        <button>
+
+                            <i class="fas fa-keyboard"></i>
+
+                            Recherche texte
+
+                        </button>
+
+                        <button>
+
+                            <i class="fas fa-microphone"></i>
+
+                            Recherche vocale
+
+                        </button>
+
+                        <button>
+
+                            <i class="fas fa-camera"></i>
+
+                            Recherche image
+
+                        </button>
+
+                    </div>
+
+                    <div class="hero-filters">
+
+                        <button class="active">
+
+                            Autour de moi
+
+                        </button>
+
+                        <button>
+
+                            Toute la ville
+
+                        </button>
+
+                        <button>
+
+                            Autre ville / pays
+
+                        </button>
+
+                        <button>
+
+                            Monde entier
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Widgets droite -->
+
+            <div class="hero-right">
+
+                <!-- METEO -->
+
+                <div class="card weather">
+
+                    <h3>Lubumbashi</h3>
+
+                    <div class="temperature">
+
+                        27°C
+
+                    </div>
+
+                    <p>Ensoleillé</p>
+
+                    <hr>
+
+                    <p>
+
+                        🌱 Qualité de l'air :
+
+                        <strong>Bonne</strong>
+
+                    </p>
+
+                    <p>
+
+                        🚗 Trafic :
+
+                        <strong>Fluide</strong>
+
+                    </p>
+
+                </div>
+
+                <!-- COMPTE -->
+
+                <div class="card account">
+
+                    <h3>Mon compte</h3>
+
+                    <h2>125 500 FC</h2>
+
+                    <div class="wallet-actions">
+
+                        <button>
+
+                            Portefeuille
+
+                        </button>
+
+                        <button>
+
+                            Mes cartes
+
+                        </button>
+
+                        <button>
+
+                            Transferts
+
+                        </button>
+
+                        <button>
+
+                            Historique
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+                <!-- ========================================= -->
+        <!-- CATÉGORIES PRINCIPALES -->
+        <!-- ========================================= -->
+
+        <section class="categories">
+
+            <div class="category-card">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Produits</span>
+            </div>
+
+            <div class="category-card">
+                <i class="fas fa-wrench"></i>
+                <span>Services</span>
+            </div>
+
+            <div class="category-card">
+                <i class="fas fa-utensils"></i>
+                <span>Restaurants</span>
+            </div>
+
+            <div class="category-card">
+                <i class="fas fa-clinic-medical"></i>
+                <span>Pharmacies</span>
+            </div>
+
+            <div class="category-card">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Education</span>
+            </div>
+
+            <div class="category-card">
+                <i class="fas fa-bus"></i>
+                <span>Transport</span>
+            </div>
+
+            <div class="category-card">
+                <i class="fas fa-home"></i>
+                <span>Immobilier</span>
+            </div>
+
+            <div class="category-card">
+                <i class="fas fa-tags"></i>
+                <span>Offres</span>
+            </div>
+
+            <div class="category-card">
+                <i class="fas fa-ellipsis-h"></i>
+                <span>Plus</span>
+            </div>
+
+        </section>
+
+        <!-- ========================================= -->
+        <!-- PREMIÈRE LIGNE -->
+        <!-- ========================================= -->
+
+        <section class="content-grid">
+
+            <!-- Promotions -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>Promotions du jour 🔥</h3>
+
+                    <a href="#">Voir tout</a>
+
+                </div>
+
+                <div class="promo-grid">
+
+                    <div class="promo-card">
+
+                        <img src="/images/promo1.jpg" alt="">
+
+                        <span class="badge red">-30%</span>
+
+                        <h4>Carrefour</h4>
+
+                        <p>Produits alimentaires</p>
+
+                    </div>
+
+                    <div class="promo-card">
+
+                        <img src="/images/promo2.jpg" alt="">
+
+                        <span class="badge red">-20%</span>
+
+                        <h4>Zara</h4>
+
+                        <p>Nouvelle collection</p>
+
+                    </div>
+
+                    <div class="promo-card">
+
+                        <img src="/images/promo3.jpg" alt="">
+
+                        <span class="badge green">-15%</span>
+
+                        <h4>Pharmacie</h4>
+
+                        <p>Médicaments</p>
+
+                    </div>
+
+                    <div class="promo-card">
+
+                        <img src="/images/promo4.jpg" alt="">
+
+                        <span class="badge red">-25%</span>
+
+                        <h4>Marché</h4>
+
+                        <p>Fruits & légumes</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Prix -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>Prix essentiels</h3>
+
+                    <a href="#">Voir tout</a>
+
+                </div>
+
+                <table class="price-table">
+
+                    <tr>
+
+                        <td>🌾 Farine (1kg)</td>
+
+                        <td>2 000 FC</td>
+
+                        <td class="down">↓2%</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>🛢 Huile (1L)</td>
+
+                        <td>3 500 FC</td>
+
+                        <td class="up">↑5%</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>🍬 Sucre (1kg)</td>
+
+                        <td>2 500 FC</td>
+
+                        <td>0%</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>🍚 Riz (1kg)</td>
+
+                        <td>2 800 FC</td>
+
+                        <td class="down">↓1%</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>⛽ Essence</td>
+
+                        <td>2 950 FC</td>
+
+                        <td class="up">↑3%</td>
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+            <!-- Carte -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>Carte de la ville</h3>
+
+                    <a href="#">Voir la carte</a>
+
+                </div>
+
+                <img
+                    src="/images/map.jpg"
+                    class="city-map"
+                    alt="Carte"
+                >
+
+            </div>
+
+            <!-- Services -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>Services populaires</h3>
+
+                    <a href="#">Voir tout</a>
+
+                </div>
+
+                <div class="services-grid">
+
+                    <div class="service-card">
+
+                        <img src="/images/service1.jpg">
+
+                        <strong>Électriciens</strong>
+
+                        <small>A partir de 15 000 FC</small>
+
+                    </div>
+
+                    <div class="service-card">
+
+                        <img src="/images/service2.jpg">
+
+                        <strong>Plombiers</strong>
+
+                        <small>A partir de 10 000 FC</small>
+
+                    </div>
+
+                    <div class="service-card">
+
+                        <img src="/images/service3.jpg">
+
+                        <strong>Mécaniciens</strong>
+
+                        <small>A partir de 20 000 FC</small>
+
+                    </div>
+
+                    <div class="service-card">
+
+                        <img src="/images/service4.jpg">
+
+                        <strong>Menuisiers</strong>
+
+                        <small>A partir de 12 000 FC</small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+            <!-- ===================================================== -->
+    <!-- EMPLOIS - ÉVÉNEMENTS - VIE CITOYENNE -->
+    <!-- ===================================================== -->
+
     <section class="dashboard-section">
-      <div class="section-header">
-        <h2>Promotions du jour 🔥</h2>
-        <a href="#" class="see-all">Voir tout</a>
+      <div class="section-title">
+        <h2>Actualités de votre ville</h2>
+        <a href="#">Tout afficher</a>
       </div>
-      <div id="shops-container" class="shops-grid">
-        <!-- Les cartes de boutiques seront injectées ici par app.js -->
-        <p>Chargement des opportunités...</p>
+
+      <div class="city-news-grid">
+
+        <!-- EMPLOIS -->
+        <div class="news-card">
+          <div class="news-header">
+            💼 Emplois récents
+          </div>
+
+          <div class="news-body">
+
+            <div class="news-item">
+              <strong>Développeur Full Stack</strong>
+              <span>Tech Solutions RDC</span>
+              <small>Publié il y a 2 h</small>
+            </div>
+
+            <div class="news-item">
+              <strong>Comptable</strong>
+              <span>Entreprise Horizon</span>
+              <small>Publié aujourd'hui</small>
+            </div>
+
+            <div class="news-item">
+              <strong>Assistant Marketing</strong>
+              <span>Digital Plus</span>
+              <small>Publié hier</small>
+            </div>
+
+          </div>
+
+          <a href="#" class="card-link">
+            Voir toutes les offres →
+          </a>
+        </div>
+
+        <!-- EVENEMENTS -->
+        <div class="news-card">
+          <div class="news-header">
+            🎉 Événements
+          </div>
+
+          <div class="news-body">
+
+            <div class="news-item">
+              <strong>Salon de l'Entrepreneuriat</strong>
+              <span>Pullman Grand Karavia</span>
+              <small>15 Août</small>
+            </div>
+
+            <div class="news-item">
+              <strong>Concert</strong>
+              <span>Stade Kibassa Maliba</span>
+              <small>20 Août</small>
+            </div>
+
+            <div class="news-item">
+              <strong>Forum Numérique</strong>
+              <span>Université de Lubumbashi</span>
+              <small>28 Août</small>
+            </div>
+
+          </div>
+
+          <a href="#" class="card-link">
+            Voir le calendrier →
+          </a>
+        </div>
+
+        <!-- VIE CITOYENNE -->
+        <div class="news-card">
+          <div class="news-header">
+            🏛 Vie citoyenne
+          </div>
+
+          <div class="news-body">
+
+            <div class="news-item">
+              🚧 Travaux routiers annoncés
+            </div>
+
+            <div class="news-item">
+              💡 Coupures d'électricité prévues
+            </div>
+
+            <div class="news-item">
+              🚰 Distribution d'eau
+            </div>
+
+            <div class="news-item">
+              🚨 Signaler un problème
+            </div>
+
+          </div>
+
+          <button class="primary-btn">
+            Faire un signalement
+          </button>
+        </div>
+
       </div>
     </section>
 
-    <!-- 5. GRILLE 3 COLONNES : PRIX, SERVICES, ADS -->
-    <div class="middle-grid">
-      
-      <!-- PRIX ESSENTIELS -->
-      <div class="info-card">
-        <div class="section-header">
-          <h3>Prix essentiels aujourd'hui</h3>
-          <a href="#" class="see-all">Voir tout</a>
-        </div>
-        <ul class="prices-list">
-          <li><span>🌾 Farine (1kg)</span> <strong>2,000 FC <small class="down">↓ 2%</small></strong></li>
-          <li><span>🍾 Huile (1L)</span> <strong>3,500 FC <small class="up">↑ 5%</small></strong></li>
-          <li><span>🍬 Sucre (1kg)</span> <strong>2,500 FC <small>0%</small></strong></li>
-          <li><span>🌾 Riz (1kg)</span> <strong>2,800 FC <small class="down">↓ 1%</small></strong></li>
-        </ul>
-      </div>
+</div>
 
-      <!-- SERVICES POPULAIRES -->
-      <div class="info-card">
-        <div class="section-header">
-          <h3>Services populaires</h3>
-          <a href="#" class="see-all">Voir tout</a>
-        </div>
-        <div class="services-list">
-          <div class="service-item">⚡ <span>Électriciens</span> <small>à partir de 15,000 FC</small></div>
-          <div class="service-item">🚰 <span>Plombiers</span> <small>à partir de 10,000 FC</small></div>
-          <div class="service-item">🚗 <span>Mécaniciens</span> <small>à partir de 20,000 FC</small></div>
-        </div>
-      </div>
+<!-- ===================================================== -->
+<!-- MENU LATÉRAL -->
+<!-- ===================================================== -->
 
-      <!-- BANNIÈRE PUB / BOOST -->
-      <div class="info-card boost-card">
-        <h3>Boostez votre visibilité 🚀</h3>
-        <p>Attirez plus de clients avec nos offres premium.</p>
-        <button class="btn-gradient">Voir les offres</button>
-      </div>
+<aside id="sidebar" class="sidebar">
 
+  <div class="sidebar-header">
+    <div class="logo">
+      MA<span>VILLE</span>
     </div>
 
-    <!-- 6. BAS DE PAGE (Emplois, Événements, Vie Citoyenne) -->
-    <div class="bottom-grid">
-      <div class="info-card">
-        <h3>💼 Emplois récents</h3>
-        <ul>
-          <li><strong>Développeur Web</strong> - Tech Solutions</li>
-          <li><strong>Comptable</strong> - Enterprise SARL</li>
-        </ul>
-      </div>
-
-      <div class="info-card">
-        <h3>🎪 Événements à venir</h3>
-        <ul>
-          <li><strong>Concert Fally Ipupa</strong> - Stade TP Mazembe</li>
-          <li><strong>Salon de l'Emploi</strong> - Pullman Hotel</li>
-        </ul>
-      </div>
-
-      <div class="info-card">
-        <h3>📢 Vie citoyenne</h3>
-        <ul>
-          <li>🚨 Signaler un problème en ville</li>
-          <li>⚡ Signalement panne d'électricité</li>
-        </ul>
-      </div>
-    </div>
-
+    <button id="closeSidebar">
+      ✕
+    </button>
   </div>
+
+  <nav>
+
+    <a href="#">
+      🏠 Accueil
+    </a>
+
+    <a href="#">
+      🛍 Produits
+    </a>
+
+    <a href="#">
+      🔧 Services
+    </a>
+
+    <a href="#">
+      🏪 Établissements
+    </a>
+
+    <a href="#">
+      ❤️ Favoris
+    </a>
+
+    <a href="#">
+      📦 Mes commandes
+    </a>
+
+    <a href="#">
+      💬 Messages
+    </a>
+
+    <a href="#">
+      🔔 Notifications
+    </a>
+
+    <a href="#">
+      👤 Mon profil
+    </a>
+
+    <a href="#">
+      ⚙ Paramètres
+    </a>
+
+  </nav>
+
+</aside>
+
 </section>
+
+<script>
+
+const burger=document.getElementById("burger-btn")
+const sidebar=document.getElementById("sidebar")
+const close=document.getElementById("closeSidebar")
+
+if(burger){
+burger.onclick=()=>{
+sidebar.classList.add("show")
+}
+}
+
+if(close){
+close.onclick=()=>{
+sidebar.classList.remove("show")
+}
+}
+
+window.onclick=function(e){
+
+if(
+sidebar &&
+sidebar.classList.contains("show") &&
+!sidebar.contains(e.target) &&
+e.target!==burger
+){
+sidebar.classList.remove("show")
+}
+
+}
+
+</script>
