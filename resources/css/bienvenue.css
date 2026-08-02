@@ -1,0 +1,197 @@
+/* ==========================================
+   1. CONTENEUR ET LAYOUT BIENVENUE
+   ========================================== */
+   .bienvenue-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 24px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e3a8a 100%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  
+  /* EFFET EN ARRIÈRE-PLAN (GLOW) */
+  .bienvenue-container::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle at 50% 30%, rgba(37, 99, 235, 0.25), transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .bienvenue-header,
+  .bienvenue-content,
+  .bienvenue-footer {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 480px;
+  }
+  
+  /* ==========================================
+     2. LOGO ET EN-TÊTE
+     ========================================== */
+  .bienvenue-header {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .brand-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .brand-name {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  
+  .brand-name b {
+    color: #3b82f6;
+  }
+  
+  .brand-tagline {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
+  
+  /* ==========================================
+     3. CONTENU CENTRAL & ILLUSTRATION
+     ========================================== */
+  .bienvenue-content {
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .hero-illustration {
+    font-size: 4.5rem;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.4));
+    animation: float 4s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  
+  .bienvenue-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  
+  .bienvenue-description {
+    color: #cbd5e1;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  /* ==========================================
+     4. BOUTONS ET ACTIONS
+     ========================================== */
+  .bienvenue-footer {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .btn-start {
+    width: 100%;
+    padding: 16px 24px;
+    background: #2563eb;
+    color: #ffffff;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.5);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-start:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px rgba(37, 99, 235, 0.6);
+  }
+  
+  .btn-start:active {
+    transform: translateY(0);
+  }
+  
+  .btn-start .arrow-icon {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .btn-start:hover .arrow-icon {
+    transform: translateX(4px);
+  }
+  
+  .city-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin: 0 auto;
+  }
+  
+  /* ==========================================
+     5. RESPONSIVE DESIGN (PETITS ÉCRANS)
+     ========================================== */
+  @media (max-height: 670px) {
+    .bienvenue-container {
+      padding: 24px 16px;
+    }
+    .hero-illustration {
+      font-size: 3.5rem;
+      margin-bottom: 0;
+    }
+    .bienvenue-title {
+      font-size: 1.4rem;
+    }
+    .bienvenue-content {
+      margin: 20px 0;
+    }
+  }

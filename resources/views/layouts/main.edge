@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MAVILLE - Votre ville au quotidien</title>
-  
-  {{-- Google Material Symbols --}}
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title || 'MAVILLE' }}</title>
 
-  {{-- Ingestion CSS et JS via Vite --}}
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  {{-- Assets globaux Vite (CSS global + JS de base) --}}
+  @vite(['resources/css/global.css', 'resources/js/global.js'])
+
+  {{-- Injection dynamique du CSS spécifique à la page --}}
+  @if($slots.page_css)
+    {{{ await $slots.page_css() }}}
+  @endif
 </head>
 <body>
 
-  {{-- Notification Toast Globale --}}
-  <div id="toast-container" class="toast-container"></div>
-
-  {{-- Point d'injection des pages --}}
+  {{-- Contenu principal de la page --}}
   {{{ await $slots.main() }}}
+
+  {{-- Injection dynamique du JavaScript spécifique à la page --}}
+  @if($slots.page_js)
+    {{{ await $slots.page_js() }}}
+  @endif
 
 </body>
 </html>

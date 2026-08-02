@@ -1,0 +1,57 @@
+@component('layouts/main', { title: 'Authentification - MAVILLE' })
+
+  @slot('page_css')
+    @vite(['resources/css/authentification.css'])
+  @end
+
+  <div class="auth-selection-container">
+    
+    <!-- EN-TÊTE -->
+    <header class="auth-header">
+      <div class="auth-logo-badge">
+        📍
+      </div>
+      <h1 class="auth-brand-name">MA<b>VILLE</b></h1>
+    </header>
+
+    <!-- TITRE & EXPLICATION -->
+    <main class="auth-content">
+      <h2 class="auth-title">Rejoignez l'aventure</h2>
+      <p class="auth-subtitle">
+        Connectez-vous à votre compte ou inscrivez-vous pour accéder à tous les services de votre ville.
+      </p>
+    </main>
+
+    <!-- OPTIONS D'AUTHENTIFICATION -->
+    <div class="auth-actions">
+      
+      <!-- BOUTON D'INSCRIPTION -->
+      <a href="{{ route('web.inscription') }}" class="btn-auth-option btn-auth-primary" id="auth-creer-compte">
+        <div class="option-icon">✨</div>
+        <div class="option-text">
+          <span class="option-title">Créer un compte</span>
+          <span class="option-desc">Nouveau sur MAVILLE ? Rejoignez-nous</span>
+        </div>
+        <span class="option-arrow">→</span>
+      </a>
+
+      <!-- BOUTON DE CONNEXION -->
+      <a href="{{ route('web.connexion') }}" class="btn-auth-option btn-auth-secondary" id="auth-connexion">
+        <div class="option-icon">🔑</div>
+        <div class="option-text">
+          <span class="option-title">Se connecter</span>
+          <span class="option-desc">Vous avez déjà un compte ?</span>
+        </div>
+        <span class="option-arrow">→</span>
+      </a>
+
+    </div>
+
+    <!-- PIED DE PAGE -->
+    <footer class="auth-footer">
+      <span>🔒</span> Connexion sécurisée
+    </footer>
+
+  </div>
+
+@end

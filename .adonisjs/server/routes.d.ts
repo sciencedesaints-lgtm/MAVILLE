@@ -4,7 +4,11 @@ type ParamValue = string | number | bigint | boolean
 
 export type ScannedRoutes = {
   ALL: {
-    'home': { paramsTuple?: []; params?: {} }
+    'web.bienvenue': { paramsTuple?: []; params?: {} }
+    'web.authentification': { paramsTuple?: []; params?: {} }
+    'web.connexion': { paramsTuple?: []; params?: {} }
+    'web.inscription': { paramsTuple?: []; params?: {} }
+    'web.accueil': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }
     'auth.logout': { paramsTuple?: []; params?: {} }
@@ -30,7 +34,11 @@ export type ScannedRoutes = {
     'demandes_services.update_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
-    'home': { paramsTuple?: []; params?: {} }
+    'web.bienvenue': { paramsTuple?: []; params?: {} }
+    'web.authentification': { paramsTuple?: []; params?: {} }
+    'web.connexion': { paramsTuple?: []; params?: {} }
+    'web.inscription': { paramsTuple?: []; params?: {} }
+    'web.accueil': { paramsTuple?: []; params?: {} }
     'etablissements.index': { paramsTuple?: []; params?: {} }
     'etablissements.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'produits.index': { paramsTuple?: []; params?: {} }
@@ -39,7 +47,11 @@ export type ScannedRoutes = {
     'demandes_services.index': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
-    'home': { paramsTuple?: []; params?: {} }
+    'web.bienvenue': { paramsTuple?: []; params?: {} }
+    'web.authentification': { paramsTuple?: []; params?: {} }
+    'web.connexion': { paramsTuple?: []; params?: {} }
+    'web.inscription': { paramsTuple?: []; params?: {} }
+    'web.accueil': { paramsTuple?: []; params?: {} }
     'etablissements.index': { paramsTuple?: []; params?: {} }
     'etablissements.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'produits.index': { paramsTuple?: []; params?: {} }

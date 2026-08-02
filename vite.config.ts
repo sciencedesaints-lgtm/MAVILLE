@@ -4,22 +4,24 @@ import adonisjs from '@adonisjs/vite/client'
 export default defineConfig({
   plugins: [
     adonisjs({
-      /**
-       * Entrypoints of your application. Each entrypoint will
-       * result in a separate bundle.
-       */
-      entrypoints: ['resources/css/app.css', 'resources/js/app.js'],
+      entrypoints: [
+        /* --- Fichiers CSS --- */
+        'resources/css/global.css',
+        'resources/css/bienvenue.css',
+        'resources/css/authentification.css',
+        'resources/css/connexion.css',
+        'resources/css/inscription.css',
+        'resources/css/accueil.css',
 
-      /**
-       * Paths to watch and reload the browser on file change
-       */
+        /* --- Fichiers JavaScript --- */
+        'resources/js/global.js',
+        'resources/js/bienvenue.js',
+        'resources/js/authentification.js',
+        'resources/js/connexion.js',
+        'resources/js/inscription.js',
+        'resources/js/accueil.js',
+      ],
       reload: ['resources/views/**/*.edge'],
     }),
   ],
-
-  server: {
-    watch: {
-      ignored: ['**/storage/**', '**/tmp/**'],
-    },
-  },
 })

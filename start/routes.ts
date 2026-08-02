@@ -13,49 +13,60 @@ const AiController = () => import('#controllers/ai_controller')
 
 /* 
 ========================================================================== 
-1. ACCUEIL ET VUES COMPOSANTS (HTML / WEB)
+1. VUES ET AFFICHAGE WEB (PAGE PAR PAGE)
 ========================================================================== 
 */
 
-// Route d'accueil
-router.get('/', async ({ view }) => {
-  return view.render('pages/app')
-}).as('home')
+// Page de Bienvenue (Racine du site)
+router.on('/').render('pages/bienvenue').as('web.bienvenue')
 
-// Authentification Web (Affichage des vues et formulaires web)
-router.group(() => {
- // Connexion Web / API
- router.post('/login', async ({ request, response }) => {
-  // Traitement de la connexion...
+// Page de Sélection d'Authentification
+router.on('/authentification').render('pages/authentification').as('web.authentification')
 
-  return response.ok({
-    message: 'Connexion réussie !',
-    // token: '...'
-  })
-}).as('web.session.store')
+// Page de Connexion
+router.on('/connexion').render('pages/connexion').as('web.connexion')
 
-router.post('/register', async ({ request, response }) => {
-  const data = request.all()
-  
-  // 1. Logique de création de l'utilisateur en BDD ici...
-  // const user = await User.create(data)
+// Page d'Inscription
+router.on('/inscription').render('pages/inscription').as('web.inscription')
 
-  // 2. Répondre en JSON au JavaScript
-  return response.ok({
-    success: true,
-    message: 'Compte créé avec succès',
-    // token: tokenGeneré
-  })
-}).as('web.new_account.store')
+// Page d'Accueil Dashboard
+router.on('/accueil').render('pages/accueil').as('web.accueil')
 
-  router.post('/logout', async ({ response }) => {
-    return response.redirect().toRoute('session.create')
-  }).as('auth.logout') // 👈 Nom attribué ici
-})
 
 /* 
 ========================================================================== 
-2. API BACKEND MAVILLE (/api/v1)
+2. ACTIONS WEB (FORMULAIRES POST / LOGOUT)
+========================================================================== 
+*/
+
+router.group(() => {
+  // Connexion Web
+  router.post('/login', async ({ response }) => {
+    return response.ok({
+      message: 'Connexion réussie !',
+    })
+  }).as('web.session.store')
+
+  // Inscription Web
+  router.post('/register', async ({ request, response }) => {
+    const data = request.all()
+    
+    return response.ok({
+      success: true,
+      message: 'Compte créé avec succès',
+    })
+  }).as('web.new_account.store')
+
+  // Déconnexion Web
+  router.post('/logout', async ({ response }) => {
+    return response.redirect().toRoute('web.connexion')
+  }).as('auth.logout')
+})
+
+
+/* 
+========================================================================== 
+3. API BACKEND MAVILLE (/api/v1)
 ========================================================================== 
 */
 
@@ -63,7 +74,7 @@ router.group(() => {
 
   /* --- API PUBLIQUE --- */
   
-  // Auth API (Utilise automatiquement les contrôleurs)
+  // Auth API
   router.post('/auth/register', [NewAccountController, 'store'])
   router.post('/auth/login', [SessionController, 'store'])
 

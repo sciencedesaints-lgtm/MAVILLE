@@ -1,0 +1,43 @@
+@component('layouts/main', { title: 'Bienvenue - MAVILLE' })
+
+  @slot('page_css')
+    @vite(['resources/css/bienvenue.css'])
+  @end
+
+  <div class="bienvenue-container">
+    
+    <!-- EN-TÊTE LOGO -->
+    <header class="bienvenue-header">
+      <div class="brand-icon-wrapper">
+        📍
+      </div>
+      <h1 class="brand-name">MA<b>VILLE</b></h1>
+      <span class="brand-tagline">Ma ville, ma vie</span>
+    </header>
+
+    <!-- CONTENU CENTRAL -->
+    <main class="bienvenue-content">
+      <div class="hero-illustration">
+        🏙️
+      </div>
+      <h2 class="bienvenue-title">Bienvenue sur MAVILLE</h2>
+      <p class="bienvenue-description">
+        Découvrez votre ville dans les moindres détails, trouvez des services, événements et commerces en temps réel.
+      </p>
+    </main>
+
+    <!-- BOUTON D'ACTION -->
+    <footer class="bienvenue-footer">
+      <a href="{{ route('web.authentification') }}" class="btn-start">
+        <span>Continuer</span>
+        <span class="arrow-icon">→</span>
+      </a>
+
+      <div class="city-indicator">
+        📍 Lubumbashi, RDC
+      </div>
+    </footer>
+
+  </div>
+
+@end

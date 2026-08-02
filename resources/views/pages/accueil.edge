@@ -1,0 +1,334 @@
+@component('layouts/main', { title: 'Accueil - MAVILLE' })
+
+  {{-- NOUVEAU (correct avec AdonisJS v6) --}}
+@slot('page_css')
+  @vite(['resources/css/accueil.css'])
+@end
+
+  <div class="app-layout">
+    
+    <!-- BARRE DE NAVIGATION LATÉRALE (SIDEBAR) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="brand-logo">
+          <span class="logo-icon">📍</span>
+          <div class="logo-text">
+            <span class="logo-title">MA<b>VILLE</b></span>
+            <span class="logo-subtitle">Ma ville, ma vie</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="{{ route('web.accueil') }}" class="nav-item active"><span>🏠</span> Accueil</a>
+        <a href="#" class="nav-item"><span>🏪</span> Boutiques</a>
+        <a href="#" class="nav-item"><span>🛠️</span> Services</a>
+        <a href="#" class="nav-item"><span>🏷️</span> Offres & Promos</a>
+        <a href="#" class="nav-item"><span>🚌</span> Transport</a>
+        <a href="#" class="nav-item"><span>🏢</span> Immobilier</a>
+        <a href="#" class="nav-item"><span>❤️</span> Santé</a>
+        <a href="#" class="nav-item"><span>💼</span> Emplois</a>
+        <a href="#" class="nav-item"><span>📅</span> Événements</a>
+        <a href="#" class="nav-item"><span>🌱</span> Agriculture</a>
+        <a href="#" class="nav-item"><span>🏛️</span> Vie citoyenne</a>
+        <a href="#" class="nav-item"><span>•••</span> Plus</a>
+      </nav>
+
+      <div class="sidebar-banner-premium">
+        <span class="crown-icon">👑</span>
+        <h4>Passez Premium</h4>
+        <p>Plus de visibilité, plus de clients.</p>
+        <button class="btn-premium">Découvrir</button>
+      </div>
+    </aside>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="main-wrapper">
+      
+      <!-- HEADER SUPÉRIEUR -->
+      <header class="top-header">
+        <div class="global-search-bar">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Rechercher un produit, un service, un établissement...">
+          <button class="btn-search">Rechercher</button>
+        </div>
+
+        <div class="header-right">
+          <div class="location-select">
+            📍 Lubumbashi <span>∨</span>
+          </div>
+          <div class="lang-select">
+            FR <span>∨</span>
+          </div>
+          <div class="notification-btn">
+            🔔<span class="notif-badge">3</span>
+          </div>
+          <div class="user-profile">
+            <img src="https://i.pravatar.cc/100?img=33" alt="Parfait Kamey" class="avatar">
+            <div class="user-info">
+              <span class="user-name">Parfait Kamey</span>
+              <span class="user-role">Mon compte ∨</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- GRILLE COMPOSÉE DE L'ACCUEIL -->
+      <div class="dashboard-grid">
+        
+        <!-- CONTENU CENTRAL GAUCHE -->
+        <div class="dashboard-main">
+          
+          <!-- HERO BANNER -->
+          <section class="hero-banner">
+            <div class="hero-overlay">
+              <h1 class="hero-title">Découvrez tout <br>dans <span>votre ville</span></h1>
+              <p class="hero-subtitle">La meilleure façon de vivre votre ville</p>
+
+              <div class="hero-search-tabs">
+                <button class="tab-btn active">🔍 Recherche texte</button>
+                <button class="tab-btn">🎙️ Recherche vocale</button>
+                <button class="tab-btn">📷 Recherche par image</button>
+              </div>
+
+              <div class="hero-filters">
+                <button class="filter-btn active">✈️ Autour de moi</button>
+                <button class="filter-btn">🌐 Toute la ville</button>
+                <button class="filter-btn">🌐 Autre ville / pays</button>
+                <button class="filter-btn">🌍 Monde entier</button>
+              </div>
+            </div>
+
+            <!-- MÉTÉO FLOATING CARD -->
+            <div class="weather-widget">
+              <div class="weather-header">
+                <div class="weather-city">Lubumbashi</div>
+                <div class="weather-temp">27°C <span class="sun-icon">☀️</span></div>
+                <div class="weather-desc">Ensoleillé<br><small>32° / 18°</small></div>
+              </div>
+              <div class="weather-info-box">
+                <span class="leaf-icon">🍃</span>
+                <div>
+                  <strong>Qualité de l'air</strong>
+                  <p class="text-green">Bonne</p>
+                </div>
+              </div>
+              <div class="weather-info-box">
+                <span class="car-icon">🚗</span>
+                <div>
+                  <strong>Trafic</strong>
+                  <p class="text-green">Fluide</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- GRILLE CATEGORIES RAPIDES -->
+          <section class="categories-grid">
+            <div class="cat-card"><div class="cat-icon bg-green">🛍️</div><span>Produits</span></div>
+            <div class="cat-card"><div class="cat-icon bg-blue">🔧</div><span>Services</span></div>
+            <div class="cat-card"><div class="cat-icon bg-orange">🍴</div><span>Restaurants</span></div>
+            <div class="cat-card"><div class="cat-icon bg-emerald">➕</div><span>Pharmacies</span></div>
+            <div class="cat-card"><div class="cat-icon bg-purple">🎓</div><span>Éducation</span></div>
+            <div class="cat-card"><div class="cat-icon bg-sky">🚌</div><span>Transport</span></div>
+            <div class="cat-card"><div class="cat-icon bg-violet">🏠</div><span>Immobilier</span></div>
+            <div class="cat-card"><div class="cat-icon bg-amber">🏷️</div><span>Offres & Promos</span></div>
+            <div class="cat-card"><div class="cat-icon bg-gray">•••</div><span>Plus</span></div>
+          </section>
+
+          <!-- LIGNE DES 4 WIDGETS MÉDIUMS -->
+          <section class="widgets-row-4">
+            
+            <!-- PROMOTIONS DU JOUR -->
+            <div class="content-box">
+              <div class="box-header">
+                <h3>Promotions du jour 🔥</h3>
+                <a href="#" class="see-all">Voir tout</a>
+              </div>
+              <div class="promo-cards-grid">
+                <div class="promo-card">
+                  <span class="badge-discount">-30%</span>
+                  <img src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=300&q=80" alt="Carrefour">
+                  <h4>Carrefour</h4>
+                  <p>Sur une sélection de produits</p>
+                  <small>Jusqu'au 31 Mai</small>
+                </div>
+                <div class="promo-card">
+                  <span class="badge-discount">-20%</span>
+                  <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=300&q=80" alt="ZARA">
+                  <h4>ZARA</h4>
+                  <p>Nouvelle collection Été 2024</p>
+                  <small>Jusqu'au 28 Mai</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- PRIX ESSENTIELS -->
+            <div class="content-box">
+              <div class="box-header">
+                <h3>Prix essentiels aujourd'hui</h3>
+                <a href="#" class="see-all">Voir tout</a>
+              </div>
+              <ul class="price-list">
+                <li><span>🌾 Farine (1kg)</span> <strong>2,000 FC</strong> <span class="trend down">↓ -2%</span></li>
+                <li><span>🛢️ Huile (1L)</span> <strong>3,500 FC</strong> <span class="trend up">↑ +5%</span></li>
+                <li><span>🧂 Sucre (1kg)</span> <strong>2,500 FC</strong> <span class="trend neutral">0%</span></li>
+                <li><span>🌾 Riz (1kg)</span> <strong>2,800 FC</strong> <span class="trend down">↓ -1%</span></li>
+                <li><span>🍞 Pain (1 pièce)</span> <strong>200 FC</strong> <span class="trend neutral">0%</span></li>
+              </ul>
+            </div>
+
+            <!-- CARTE DE LA VILLE -->
+            <div class="content-box">
+              <div class="box-header">
+                <h3>Carte de la ville</h3>
+                <a href="#" class="see-all">Voir la carte</a>
+              </div>
+              <div class="map-placeholder">
+                <div class="map-pin pin-1">📍</div>
+                <div class="map-pin pin-2">📍</div>
+                <div class="map-pin pin-3">📍</div>
+                <div class="map-pin pin-user">🔵</div>
+              </div>
+            </div>
+
+            <!-- SERVICES POPULAIRES -->
+            <div class="content-box">
+              <div class="box-header">
+                <h3>Services populaires</h3>
+                <a href="#" class="see-all">Voir tout</a>
+              </div>
+              <div class="services-list-mini">
+                <div class="service-item">
+                  <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=150&q=80" alt="Électriciens">
+                  <span>Électriciens</span>
+                  <small>À partir de 15,000 FC</small>
+                </div>
+                <div class="service-item">
+                  <img src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=150&q=80" alt="Plombiers">
+                  <span>Plombiers</span>
+                  <small>À partir de 10,000 FC</small>
+                </div>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- LIGNE DES PETITS SECTIONS DU BAS -->
+          <section class="bottom-widgets-grid">
+            
+            <div class="content-box">
+              <div class="box-header"><h3>Emplois</h3><a href="#" class="see-all">Voir tout</a></div>
+              <div class="mini-list-item">
+                <span class="icon-square">💻</span>
+                <div>
+                  <strong>Développeur Web</strong>
+                  <p>Tech Solutions - Lubumbashi</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-box">
+              <div class="box-header"><h3>Immobilier</h3><a href="#" class="see-all">Voir tout</a></div>
+              <div class="mini-list-item">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=100&q=80" class="thumb">
+                <div>
+                  <strong>Appartement à louer</strong>
+                  <p>Golf • 500,000 FC/mois</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-box">
+              <div class="box-header"><h3>Événements</h3><a href="#" class="see-all">Voir tout</a></div>
+              <div class="mini-list-item">
+                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=100&q=80" class="thumb">
+                <div>
+                  <strong>Concert Fally Ipupa</strong>
+                  <p>12 Mai • Stade TP Mazembe</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-box">
+              <div class="box-header"><h3>Vie citoyenne</h3><a href="#" class="see-all">Voir tout</a></div>
+              <div class="mini-list-item">
+                <span class="icon-square red">📍</span>
+                <div>
+                  <strong>Signaler un problème</strong>
+                  <p>Aidez à améliorer votre ville</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-box">
+              <div class="box-header"><h3>Vos alertes</h3><a href="#" class="see-all">Voir toutes</a></div>
+              <div class="mini-list-item">
+                <span class="icon-square green">📦</span>
+                <div>
+                  <strong>Commande #CMD123</strong>
+                  <p>En cours de livraison • Il y a 10 min</p>
+                </div>
+              </div>
+            </div>
+
+          </section>
+
+        </div>
+
+        <!-- COLONNE DROITE (PORTEFEUILLE & RACCOURCIS) -->
+        <aside class="dashboard-right">
+          
+          <!-- COMPTE & SOLDE -->
+          <div class="account-card">
+            <h3>Mon compte</h3>
+            <div class="balance-box">
+              <div class="balance-title">Solde MAVILLE <span class="eye-icon">👁️</span></div>
+              <div class="balance-amount">125,500 FC</div>
+            </div>
+            <div class="account-actions">
+              <button class="action-btn"><span>👛</span>Portefeuille</button>
+              <button class="action-btn"><span>💳</span>Mes cartes</button>
+              <button class="action-btn"><span>🔄</span>Transferts</button>
+              <button class="action-btn"><span>🕒</span>Historique</button>
+            </div>
+          </div>
+
+          <!-- RACCOURCIS -->
+          <div class="shortcuts-card">
+            <div class="box-header">
+              <h3>Mes raccourcis</h3>
+              <a href="#" class="see-all">Modifier</a>
+            </div>
+            <div class="shortcuts-grid">
+              <div class="shortcut-item"><span>🛍️</span><small>Mes commandes</small></div>
+              <div class="shortcut-item"><span>❤️</span><small>Mes favoris</small></div>
+              <div class="shortcut-item badge-rel"><span>💬</span><span class="badge-num">5</span><small>Messages</small></div>
+              <div class="shortcut-item"><span>📢</span><small>Mes annonces</small></div>
+            </div>
+          </div>
+
+          <!-- BANNIÈRE BOOST -->
+          <div class="boost-card">
+            <div class="boost-content">
+              <h4>Boostez votre visibilité</h4>
+              <p>Attirez plus de clients avec nos offres premium.</p>
+              <button class="btn-boost">Voir les offres</button>
+            </div>
+            <div class="boost-img">🚀</div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  @slot('page_js')
+    <script src="/js/accueil.js"></script>
+  @end
+
+@end

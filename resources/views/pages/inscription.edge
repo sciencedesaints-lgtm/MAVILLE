@@ -1,0 +1,152 @@
+@component('layouts/main', { title: 'Inscription - MAVILLE' })
+
+  @slot('page_css')
+    @vite(['resources/css/inscription.css'])
+  @end
+
+  @slot('main')
+  <div class="inscription-container">
+
+    {{-- 1. Formulaire d'inscription --}}
+    <section class="inscription-card active" id="section-inscription">
+      <header class="inscription-header">
+        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
+        <h2 class="inscription-title">Créer un compte</h2>
+        <p class="inscription-subtitle">Rejoignez la communauté de votre ville.</p>
+      </header>
+
+      <form id="form-inscription">
+        {{ csrfField() }}
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nom" class="form-label">Nom</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" name="nom" id="nom" class="form-input" placeholder="Votre nom" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="prenom" class="form-label">Prénom</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" name="prenom" id="prenom" class="form-input" placeholder="Votre prénom" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="genre" class="form-label">Genre</label>
+            <div class="input-wrapper">
+              <span class="input-icon">⚥</span>
+              <select name="genre" id="genre" class="form-input" required>
+                <option value="" disabled selected>Choisir un genre</option>
+                <option value="homme">Homme</option>
+                <option value="femme">Femme</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Adresse Email</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input type="email" name="email" id="email" class="form-input" placeholder="exemple@email.com" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="telephone" class="form-label">Téléphone</label>
+            <div class="input-wrapper">
+              <span class="input-icon">📞</span>
+              <input type="tel" name="telephone" id="telephone" class="form-input" placeholder="+243..." required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="ville" class="form-label">Ville</label>
+            <div class="input-wrapper">
+              <span class="input-icon">📍</span>
+              <input type="text" name="ville" id="ville" class="form-input" value="Lubumbashi" placeholder="Ville" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="signup-password" class="form-label">Mot de passe</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" name="password" id="signup-password" class="form-input" placeholder="••••••••" required />
+              <button type="button" id="toggle-password-signup" class="toggle-password">👁️</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">Créer mon compte</button>
+        </div>
+      </form>
+
+      <div class="inscription-footer">
+        Vous avez déjà un compte ? <a href="{{ route('web.connexion') }}">Se connecter</a>
+      </div>
+    </section>
+
+    {{-- 2. Étapes d'Onboarding --}}
+    <section id="onboarding-1" class="inscription-card hidden">
+      <header class="inscription-header">
+        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
+        <h2 class="inscription-title">Le Concept</h2>
+        <p class="inscription-subtitle">Votre ville à portée de main.</p>
+      </header>
+      <div class="bienvenue-content">
+        <div class="hero-illustration">🏙️</div>
+        <p class="bienvenue-description"><strong>MAVILLE</strong> vous permet de découvrir les commerces et services essentiels.</p>
+      </div>
+      <button type="button" id="btn-onboarding-1" class="btn-submit">Suivant</button>
+    </section>
+
+    <section id="onboarding-2" class="inscription-card hidden">
+      <header class="inscription-header">
+        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
+        <h2 class="inscription-title">Ce que vous pouvez faire</h2>
+        <p class="inscription-subtitle">Des fonctionnalités pensées pour vous.</p>
+      </header>
+      <div class="bienvenue-content">
+        <div class="hero-illustration">🛍️</div>
+        <p class="bienvenue-description">Explorez les boutiques locales et profitez des offres exclusives.</p>
+      </div>
+      <button type="button" id="btn-onboarding-2" class="btn-submit">Suivant</button>
+    </section>
+
+    <section id="onboarding-3" class="inscription-card hidden">
+      <header class="inscription-header">
+        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
+        <h2 class="inscription-title">Conditions d'utilisation</h2>
+        <p class="inscription-subtitle">Règles de la communauté.</p>
+      </header>
+      <div class="bienvenue-content">
+        <ul style="text-align: left; margin: 15px 0; color: #cbd5e1; list-style: none; padding: 0;">
+          <li style="margin-bottom: 8px;">✅ Fournir des avis sincères.</li>
+          <li>✅ Respecter la communauté.</li>
+        </ul>
+      </div>
+      <button type="button" id="btn-onboarding-3" class="btn-submit">Accepter & Valider</button>
+    </section>
+
+    {{-- 3. Écran de succès --}}
+    <section id="succes" class="inscription-card hidden">
+      <header class="inscription-header">
+        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
+        <div class="hero-illustration">🎉</div>
+        <h2 class="inscription-title">Inscription validée !</h2>
+        <p class="inscription-subtitle">Bienvenue dans la communauté.</p>
+      </header>
+      <a href="{{ route('web.accueil') }}" class="btn-submit" style="text-decoration: none;">Continuer vers l'Accueil</a>
+    </section>
+
+  </div>
+  @end
+
+  @slot('page_js')
+  <script type="module" src="{{ asset('resources/js/inscription.js') }}"></script>
+@end
+
+@end
