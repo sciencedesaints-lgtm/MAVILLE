@@ -106,3 +106,38 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 });
+
+// Gestion dynamique Pays -> Villes pour TOUS les formulaires
+const paysSelects = document.querySelectorAll('.select-pays');
+
+const villesParPays = {
+    "RDC": ["Lubumbashi", "Kinshasa", "Kolwezi", "Likasi", "Goma", "Bukavu", "Kisangani", "Matadi"],
+    "Zambie": ["Lusaka", "Ndola", "Kitwe", "Livingstone"],
+    "Angola": ["Luanda", "Lubango", "Benguela", "Cabinda"],
+    "Congo-Brazzaville": ["Brazzaville", "Pointe-Noire", "Dolisie"],
+    "France": ["Paris", "Lyon", "Marseille", "Bordeaux", "Toulouse"]
+};
+
+paysSelects.forEach(selectPays => {
+    // Trouve le select-ville correspondant dans le même conteneur parent
+    const container = selectPays.closest('div').parentElement;
+    const selectVille = container ? container.querySelector('.select-ville') : null;
+
+    if (selectPays && selectVille) {
+        selectPays.addEventListener('change', (e) => {
+            const paysChoisi = e.target.value;
+            const villes = villesParPays[paysChoisi] || [];
+
+            // Réinitialiser le select des villes
+            selectVille.innerHTML = '<option value="" disabled selected>Choisissez la ville</option>';
+
+            // Remplir avec les nouvelles villes
+            villes.forEach(ville => {
+                const option = document.createElement('option');
+                option.value = ville;
+                option.textContent = ville;
+                selectVille.appendChild(option);
+            });
+        });
+    }
+});

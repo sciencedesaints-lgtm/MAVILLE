@@ -66,6 +66,22 @@
           <small style="color: #94a3b8; font-size: 0.75rem; margin-top: 4px; display: block;">Un code de vérification vous y sera envoyé.</small>
         </div>
 
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+  {{-- Sélection du Pays --}}
+  <select name="pays" id="select-pays" class="form-input" style="padding: 12px 8px; cursor: pointer;" required>
+    <option value="" disabled selected>Choisissez le pays</option>
+    <option value="RDC">République Démocratique du Congo (RDC)</option>
+    <option value="Zambie">Zambie</option>
+    <option value="Angola">Angola</option>
+    <option value="Congo-Brazzaville">Congo-Brazzaville</option>
+    <option value="France">France</option>
+  </select>
+
+  {{-- Sélection de la Ville --}}
+  <select name="ville" id="select-ville" class="form-input" style="padding: 12px 8px; cursor: pointer;" required>
+    <option value="" disabled selected>Choisissez d'abord un pays</option>
+  </select>
+</div>
        <div class="form-group">
           <label for="p-password" class="form-label">Mot de passe</label>
           <div class="input-wrapper">
@@ -106,9 +122,21 @@
           <label class="form-label">Localisation professionnelle</label>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-            <input type="text" name="pays" class="form-input" placeholder="Pays (ex: RDC)" required />
-            <input type="text" name="ville" class="form-input" placeholder="Ville (ex: Lubumbashi)" required />
-          </div>
+  {{-- Sélection du Pays --}}
+  <select name="pays" class="form-input select-pays" style="padding: 12px 8px; cursor: pointer;" required>
+    <option value="" disabled selected>Choisissez le pays</option>
+    <option value="RDC">République Démocratique du Congo (RDC)</option>
+    <option value="Zambie">Zambie</option>
+    <option value="Angola">Angola</option>
+    <option value="Congo-Brazzaville">Congo-Brazzaville</option>
+    <option value="France">France</option>
+  </select>
+
+  {{-- Sélection de la Ville --}}
+  <select name="ville" class="form-input select-ville" style="padding: 12px 8px; cursor: pointer;" required>
+    <option value="" disabled selected>Choisissez d'abord un pays</option>
+  </select>
+</div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
             <input type="text" name="commune" class="form-input" placeholder="Commune / Quartier" required />
@@ -116,7 +144,7 @@
           </div>
 
           <div>
-            <input type="text" name="numero" class="form-input" placeholder="N° de la parcelle / porte" required />
+            <input type="text" name="numero" class="form-input" placeholder="N°" required />
           </div>
         </div>
 
@@ -182,10 +210,21 @@
           <label class="form-label">Localisation </label>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-            <input type="text" name="pays" class="form-input" placeholder="Pays" required />
-            <input type="text" name="ville" class="form-input" placeholder="Ville" required />
-          </div>
+  {{-- Sélection du Pays --}}
+  <select name="pays" class="form-input select-pays" style="padding: 12px 8px; cursor: pointer;" required>
+    <option value="" disabled selected>Choisissez le pays</option>
+    <option value="RDC">République Démocratique du Congo (RDC)</option>
+    <option value="Zambie">Zambie</option>
+    <option value="Angola">Angola</option>
+    <option value="Congo-Brazzaville">Congo-Brazzaville</option>
+    <option value="France">France</option>
+  </select>
 
+  {{-- Sélection de la Ville --}}
+  <select name="ville" class="form-input select-ville" style="padding: 12px 8px; cursor: pointer;" required>
+    <option value="" disabled selected>Choisissez d'abord un pays</option>
+  </select>
+</div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
             <input type="text" name="commune" class="form-input" placeholder="Commune / Quartier" required />
             <input type="text" name="avenue" class="form-input" placeholder="Avenue / Rue" required />
