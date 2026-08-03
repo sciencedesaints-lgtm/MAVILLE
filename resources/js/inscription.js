@@ -1,79 +1,108 @@
-/**
- * Page Inscription & Onboarding - MAVILLE
- */
-
 document.addEventListener('DOMContentLoaded', () => {
-    const sectionInscription = document.getElementById('section-inscription')
-    const onboarding1 = document.getElementById('onboarding-1')
-    const onboarding2 = document.getElementById('onboarding-2')
-    const onboarding3 = document.getElementById('onboarding-3')
-    const succesSection = document.getElementById('succes')
+  // Éléments des différentes sections
+  const sectionChoixType = document.getElementById('section-choix-type');
+  const formParticulier = document.getElementById('section-form-particulier');
+  const formIndependant = document.getElementById('section-form-independant');
+  const formEntreprise = document.getElementById('section-form-entreprise');
   
-    const formInscription = document.getElementById('form-inscription')
-    const togglePasswordBtn = document.getElementById('toggle-password-signup')
-    const passwordInput = document.getElementById('signup-password')
-  
-    const btnOnboarding1 = document.getElementById('btn-onboarding-1')
-    const btnOnboarding2 = document.getElementById('btn-onboarding-2')
-    const btnOnboarding3 = document.getElementById('btn-onboarding-3')
-  
-    // Fonction utilitaire pour basculer la visibilité des cartes
-    function switchStep(hideEl, showEl) {
-      if (hideEl) {
-        hideEl.classList.add('hidden')
-        hideEl.classList.remove('active')
+  const onboarding1 = document.getElementById('onboarding-1');
+  const onboarding2 = document.getElementById('onboarding-2');
+  const succesSection = document.getElementById('succes');
+
+  // Boutons de choix de profil
+  const btnTypeChoices = document.querySelectorAll('.btn-type-choice');
+  const btnBackChoices = document.querySelectorAll('.btn-back-choice');
+
+  // Boutons d'onboarding
+  const btnOnboarding1 = document.getElementById('btn-onboarding-1');
+  const btnOnboarding2 = document.getElementById('btn-onboarding-2');
+
+  // Formulaires
+  const reelFormParticulier = document.getElementById('form-inscription-personnel');
+  const reelFormIndependant = document.getElementById('form-inscription-independant');
+  const reelFormEntreprise = document.getElementById('form-inscription-entreprise');
+
+  // Fonction utilitaire pour basculer d'une section à une autre
+  function switchSection(currentSection, nextSection) {
+      if (currentSection) {
+          currentSection.classList.remove('active');
+          currentSection.classList.add('hidden');
       }
-      if (showEl) {
-        showEl.classList.remove('hidden')
-        showEl.classList.add('active')
+      if (nextSection) {
+          nextSection.classList.remove('hidden');
+          nextSection.classList.add('active');
       }
-    }
-  
-    // 1. Afficher / Masquer le mot de passe
-    if (togglePasswordBtn && passwordInput) {
-      togglePasswordBtn.addEventListener('click', () => {
-        const isPassword = passwordInput.getAttribute('type') === 'password'
-        passwordInput.setAttribute('type', isPassword ? 'text' : 'password')
-        togglePasswordBtn.textContent = isPassword ? '🙈' : '👁️'
-      })
-    }
-  
-    // 2. Soumission du formulaire d'inscription (Passe à l'Onboarding 1)
-    if (formInscription) {
-      formInscription.addEventListener('submit', async (e) => {
-        e.preventDefault()
-        const formData = new FormData(formInscription)
-        const payload = Object.fromEntries(formData.entries())
-  
-        try {
-          const res = await window.apiFetch('/register', 'POST', payload)
+  }
+
+  // 1. Gestion du clic sur les choix de type de compte
+  btnTypeChoices.forEach(button => {
+      button.addEventListener('click', () => {
+          const targetType = button.getAttribute('data-target');
           
-          if (window.showToast) {
-            window.showToast('Compte créé avec succès !', 'success')
+          if (targetType === 'particulier') {
+              switchSection(sectionChoixType, formParticulier);
+          } else if (targetType === 'independant') {
+              switchSection(sectionChoixType, formIndependant);
+          } else if (targetType === 'entreprise') {
+              switchSection(sectionChoixType, formEntreprise);
           }
-  
-          // Sauvegarde du Token dans le localStorage
-          const token = res.token?.token || res.token || 'session_active'
-          localStorage.setItem('maville_token', token)
-  
-          // Passage à la première étape d'Onboarding (Pas de redirection vers l'accueil ici)
-          switchStep(sectionInscription, onboarding1)
-        } catch (err) {
-          // L'erreur est gérée et affichée automatiquement par window.apiFetch via toast
-        }
-      })
-    }
-  
-    // 3. Navigation progressive dans le parcours Onboarding -> Succès
-    if (btnOnboarding1) {
-      btnOnboarding1.addEventListener('click', () => switchStep(onboarding1, onboarding2))
-    }
-  
-    if (btnOnboarding2) {
-      btnOnboarding2.addEventListener('click', () => switchStep(onboarding2, onboarding3))
-    }
-  
-    if (btnOnboarding3) {
-      btnOnboarding3.addEventListener('click', () => switchStep(onboarding3, succesSection))
-    }
-  })
+      });
+  });
+
+  // 2. Gestion du bouton "Retour au choix"
+  btnBackChoices.forEach(btn => {
+      btn.addEventListener('click', () => {
+          const activeCard = btn.closest('.inscription-card');
+          switchSection(activeCard, sectionChoixType);
+      });
+  });
+
+  // 3. Simulation de soumission des formulaires pour déclencher l'Onboarding
+  function handleFormSubmit(e, currentFormSection) {
+      e.preventDefault(); 
+      switchSection(currentFormSection, onboarding1);
+  }
+
+  if (reelFormParticulier) {
+      reelFormParticulier.addEventListener('submit', (e) => handleFormSubmit(e, formParticulier));
+  }
+  if (reelFormIndependant) {
+      reelFormIndependant.addEventListener('submit', (e) => handleFormSubmit(e, formIndependant));
+  }
+  if (reelFormEntreprise) {
+      reelFormEntreprise.addEventListener('submit', (e) => handleFormSubmit(e, formEntreprise));
+  }
+
+  // 4. Gestion de la progression de l'Onboarding
+  if (btnOnboarding1) {
+      btnOnboarding1.addEventListener('click', () => {
+          switchSection(onboarding1, onboarding2);
+      });
+  }
+
+  if (btnOnboarding2) {
+      btnOnboarding2.addEventListener('click', () => {
+          switchSection(onboarding2, succesSection);
+      });
+  }
+
+  // 5. Gestion universelle de l'affichage/masquage des mots de passe
+  const toggleButtons = document.querySelectorAll('.btn-toggle');
+  toggleButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+          // Trouve l'input password situé dans le même conteneur parent
+          const wrapper = btn.closest('.input-wrapper');
+          const passwordInput = wrapper ? wrapper.querySelector('input[type="password"], input[type="text"]') : null;
+
+          if (passwordInput) {
+              if (passwordInput.type === 'password') {
+                  passwordInput.type = 'text';
+                  btn.textContent = '👁️‍🗨️';
+              } else {
+                  passwordInput.type = 'password';
+                  btn.textContent = '👁️';
+              }
+          }
+      });
+  });
+});

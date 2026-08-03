@@ -1,262 +1,175 @@
-/* ==========================================
-   1. CONTENEUR ET LAYOUT
-   ========================================== */
-   .inscription-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 32px 20px;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-    color: #ffffff;
-    position: relative;
-    overflow-y: auto;
-  }
-  
-  /* Effet Glow d'arrière-plan */
-  .inscription-container::before {
-    content: '';
-    position: absolute;
-    top: 10%;
-    right: 10%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 1;
-  }
-  
-  .inscription-card {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 460px;
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
-    padding: 32px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-  }
-  
-  /* ==========================================
-     2. EN-TÊTE DU FORMULAIRE
-     ========================================== */
-  .inscription-header {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-  
-  .inscription-logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #ffffff;
-    text-decoration: none;
-  }
-  
-  .inscription-logo b {
-    color: #3b82f6;
-  }
-  
-  .inscription-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  
-  .inscription-subtitle {
-    font-size: 0.9rem;
-    color: #94a3b8;
-  }
-  
-  /* ==========================================
-     3. GROUPS ET CHAMPS DE SAISIE
-     ========================================== */
-  .form-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    text-align: left;
-  }
-  
-  .form-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #e2e8f0;
-  }
-  
-  .input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
-  .input-icon {
-    position: absolute;
-    left: 14px;
-    font-size: 1.1rem;
-    color: #64748b;
-    pointer-events: none;
-    transition: color 0.2s ease;
-  }
-  
-  .form-input {
-    width: 100%;
-    padding: 12px 14px 12px 42px;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 12px;
-    color: #ffffff;
-    font-size: 0.95rem;
-    outline: none;
-    transition: all 0.2s ease;
-  }
-  
-  .form-input::placeholder {
-    color: #64748b;
-  }
-  
-  .form-input:focus {
-    border-color: #3b82f6;
-    background: rgba(15, 23, 42, 0.8);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-  }
-  
-  .form-input:focus + .input-icon,
-  .input-wrapper:focus-within .input-icon {
-    color: #3b82f6;
-  }
-  
-  /* Bouton bascule Mot de passe (Afficher/Masquer) */
-  .toggle-password {
-    position: absolute;
-    right: 12px;
-    background: transparent;
-    border: none;
-    color: #94a3b8;
-    font-size: 1.1rem;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    transition: color 0.2s ease;
-  }
-  
-  .toggle-password:hover {
-    color: #ffffff;
-  }
-  
-  /* ==========================================
-     4. CONDITIONS ET BOUTON DE SOUMISSION
-     ========================================== */
-  .terms-group {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 4px;
-    font-size: 0.82rem;
-    color: #94a3b8;
-  }
-  
-  .terms-group input[type="checkbox"] {
-    margin-top: 2px;
-    accent-color: #2563eb;
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-  }
-  
-  .terms-group a {
-    color: #3b82f6;
-    text-decoration: underline;
-  }
-  
-  .btn-submit {
-    width: 100%;
-    margin-top: 8px;
-    padding: 14px;
-    background: #2563eb;
-    color: #ffffff;
-    border: none;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
-    transition: all 0.25s ease;
-  }
-  
-  .btn-submit:hover {
-    background: #1d4ed8;
-    transform: translateY(-2px);
-    box-shadow: 0 14px 24px -5px rgba(37, 99, 235, 0.5);
-  }
-  
-  .btn-submit:active {
-    transform: translateY(0);
-  }
-  
-  /* ==========================================
-     5. BAS DE CARD & REDIRECTION
-     ========================================== */
-  .inscription-footer {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    text-align: center;
-    font-size: 0.88rem;
-    color: #94a3b8;
-  }
-  
-  .inscription-footer a {
-    color: #3b82f6;
-    font-weight: 600;
-    text-decoration: none;
-    margin-left: 4px;
-    transition: color 0.2s ease;
-  }
-  
-  .inscription-footer a:hover {
-    color: #60a5fa;
-    text-decoration: underline;
-  }
-  
-  /* ==========================================
-     6. RESPONSIVE
-     ========================================== */
-  @media (max-width: 480px) {
-    .inscription-card {
-      padding: 24px 20px;
-      border-radius: 18px;
-    }
-    
-    .inscription-title {
-      font-size: 1.35rem;
-    }
-  }
+/* ========================================= */
+/* CSS INSCRIPTION - MAVILLE                  */
+/* ========================================= */
 
-  /* Gestion du masquage des étapes */
+.inscription-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #0f172a;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+}
+
+.inscription-card {
+  background: #1e293b;
+  width: 100%;
+  max-width: 450px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  color: #f8fafc;
+  box-sizing: border-box;
+}
+
 .inscription-card.hidden {
   display: none !important;
 }
 
 .inscription-card.active {
   display: block !important;
+}
+
+.inscription-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.inscription-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #38bdf8;
+  margin-bottom: 10px;
+}
+
+.inscription-logo span {
+  color: #ffffff;
+}
+
+.inscription-title {
+  font-size: 1.5rem;
+  margin: 0 0 8px 0;
+  color: #f8fafc;
+}
+
+.inscription-subtitle {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Formulaires */
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #cbd5e1;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 1rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.95krem;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+/* Pour les inputs sans icône directe dans la structure */
+input.form-input, select.form-input {
+  padding-left: 12px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #38bdf8;
+}
+
+/* Boutons */
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  opacity: 0.9;
+}
+
+.account-types-grid .btn-submit {
+  background: #334155;
+  border: 1px solid #475569;
+  text-align: left;
+  padding: 15px 20px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.account-types-grid .btn-submit:hover {
+  background: #0284c7;
+  border-color: #38bdf8;
+}
+
+/* Footer et liens */
+.inscription-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.inscription-footer a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+.inscription-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Éléments Onboarding & Succès */
+.bienvenue-content {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.hero-illustration {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+.bienvenue-description {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.5;
 }

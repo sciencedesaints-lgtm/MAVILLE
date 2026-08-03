@@ -7,89 +7,236 @@
   @slot('main')
   <div class="inscription-container">
 
-    {{-- 1. Formulaire d'inscription --}}
-    <section class="inscription-card active" id="section-inscription">
+    {{-- ÉTAPE 0 : Choix du type de compte (Avant d'afficher le formulaire) --}}
+    <section class="inscription-card active" id="section-choix-type">
       <header class="inscription-header">
         <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
-        <h2 class="inscription-title">Créer un compte</h2>
-        <p class="inscription-subtitle">Rejoignez la communauté de votre ville.</p>
+        <h2 class="inscription-title">Rejoignez MAVILLE</h2>
+        <p class="inscription-subtitle">Choisissez le type de compte qui vous correspond.</p>
       </header>
 
-      <form id="form-inscription">
-        {{ csrfField() }}
-        
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="nom" class="form-label">Nom</label>
-            <div class="input-wrapper">
-              <span class="input-icon">👤</span>
-              <input type="text" name="nom" id="nom" class="form-input" placeholder="Votre nom" required />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="prenom" class="form-label">Prénom</label>
-            <div class="input-wrapper">
-              <span class="input-icon">👤</span>
-              <input type="text" name="prenom" id="prenom" class="form-input" placeholder="Votre prénom" required />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="genre" class="form-label">Genre</label>
-            <div class="input-wrapper">
-              <span class="input-icon">⚥</span>
-              <select name="genre" id="genre" class="form-input" required>
-                <option value="" disabled selected>Choisir un genre</option>
-                <option value="homme">Homme</option>
-                <option value="femme">Femme</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="email" class="form-label">Adresse Email</label>
-            <div class="input-wrapper">
-              <span class="input-icon">✉️</span>
-              <input type="email" name="email" id="email" class="form-input" placeholder="exemple@email.com" autocomplete="email" required />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="telephone" class="form-label">Téléphone</label>
-            <div class="input-wrapper">
-              <span class="input-icon">📞</span>
-              <input type="tel" name="telephone" id="telephone" class="form-input" placeholder="+243..." required />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="ville" class="form-label">Ville</label>
-            <div class="input-wrapper">
-              <span class="input-icon">📍</span>
-              <input type="text" name="ville" id="ville" class="form-input" value="Lubumbashi" placeholder="Ville" required />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="signup-password" class="form-label">Mot de passe</label>
-            <div class="input-wrapper">
-              <span class="input-icon">🔒</span>
-              <input type="password" name="password" id="signup-password" class="form-input" placeholder="••••••••" required />
-              <button type="button" id="toggle-password-signup" class="toggle-password">👁️</button>
-            </div>
-          </div>
-
-          <button type="submit" class="btn-submit">Créer mon compte</button>
-        </div>
-      </form>
+      <div class="account-types-grid" style="display: flex; flex-direction: column; gap: 12px; margin: 20px 0;">
+        <button type="button" class="btn-submit btn-type-choice" data-target="particulier">👤 Personnel</button>
+        <button type="button" class="btn-submit btn-type-choice" data-target="independant">🛠️ Particulier</button>
+        <button type="button" class="btn-submit btn-type-choice" data-target="entreprise">🏢 Entreprise</button>
+      </div>
 
       <div class="inscription-footer">
         Vous avez déjà un compte ? <a href="{{ route('web.connexion') }}">Se connecter</a>
       </div>
     </section>
 
-    {{-- 2. Étapes d'Onboarding --}}
+
+    {{-- ÉTAPE 1A : Formulaire Personnel (Particulier) --}}
+    <section class="inscription-card hidden" id="section-form-particulier">
+      <header class="inscription-header">
+        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
+        <h2 class="inscription-title">Compte Personnel</h2>
+        <p class="inscription-subtitle">Profitez de votre ville au quotidien.</p>
+      </header>
+
+      {{-- Option Google OAuth --}}
+      <div class="social-auth-container" style="margin-bottom: 20px;">
+        <a href="{{ route('auth.google') }}" class="btn-submit btn-google" style="background: #ffffff; color: #1e293b; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600;">
+  <span>🌐</span> S'inscrire avec compte Google
+</a>
+        <div style="display: flex; align-items: center; text-align: center; color: #64748b; margin: 15px 0; font-size: 0.85rem;">
+          <hr style="flex: 1; border: none; border-top: 1px solid #334155;">
+          <span style="padding: 0 10px;">OU</span>
+          <hr style="flex: 1; border: none; border-top: 1px solid #334155;">
+        </div>
+      </div>
+
+      <form id="form-inscription-personnel" action="{{ route('web.session.store') }}" method="POST">
+        {{ csrfField() }}
+        <input type="hidden" name="type_compte" value="personnel">
+        
+        <div class="form-group">
+          <label for="p-nom" class="form-label">Nom et Prénom</label>
+          <div class="input-wrapper">
+            <input type="text" name="nom" id="p-nom" class="form-input" placeholder="Votre nom complet" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="p-contact" class="form-label">Adresse Email ou Téléphone</label>
+          <div class="input-wrapper">
+            <input type="text" name="contact" id="p-contact" class="form-input" placeholder="exemple@email.com ou +243..." required />
+          </div>
+          <small style="color: #94a3b8; font-size: 0.75rem; margin-top: 4px; display: block;">Un code de vérification vous y sera envoyé.</small>
+        </div>
+
+       <div class="form-group">
+          <label for="p-password" class="form-label">Mot de passe</label>
+          <div class="input-wrapper">
+            <input type="password" name="password" id="p-password" class="form-input" placeholder= required />
+            <button type="button" id="toggle-password-personnel" class="btn-toggle" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 1rem;">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">S'inscrire et recevoir le code</button>
+        <button type="button" class="btn-link btn-back-choice" style="background:none; border:none; color:#cbd5e1; margin-top:10px; cursor:pointer; width: 100%;">← Retour au choix</button>
+      </form>
+    </section>
+
+
+    {{-- ÉTAPE 1B : Formulaire Indépendant / Prestataire --}}
+    <section class="inscription-card hidden" id="section-form-independant">
+      <header class="inscription-header">
+        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
+        <h2 class="inscription-title">Compte Particulier</h2>
+        <p class="inscription-subtitle">Proposez vos services à la communauté.</p>
+      </header>
+
+      <form id="form-inscription-independant">
+        {{ csrfField() }}
+        <input type="hidden" name="type_compte" value="independant">
+        
+        <div class="form-group">
+          <label for="ind-nom" class="form-label">Nom complet / Nom commercial</label>
+          <input type="text" name="nom" id="ind-nom" class="form-input" placeholder="Ex: Jean Plomberie" required />
+        </div>
+
+        <div class="form-group">
+          <label for="ind-domaine" class="form-label">Domaine d'activité / Expertise</label>
+          <input type="text" name="domaine" id="ind-domaine" class="form-input" placeholder="Ex: Électricité, Coiffure, Graphisme" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Localisation professionnelle</label>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <input type="text" name="pays" class="form-input" placeholder="Pays (ex: RDC)" required />
+            <input type="text" name="ville" class="form-input" placeholder="Ville (ex: Lubumbashi)" required />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <input type="text" name="commune" class="form-input" placeholder="Commune / Quartier" required />
+            <input type="text" name="avenue" class="form-input" placeholder="Avenue / Rue" required />
+          </div>
+
+          <div>
+            <input type="text" name="numero" class="form-input" placeholder="N° de la parcelle / porte" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ind-telephone" class="form-label">Téléphone professionnel</label>
+          <div style="display: flex; gap: 10px;">
+            {{-- Sélecteur d'indicatif --}}
+            <select name="indicatif_pays" class="form-input" style="width: 120px; flex-shrink: 0; padding: 12px 8px; cursor: pointer;" required>
+              <option value="+243">🇨🇩 +243</option>
+              <option value="+242">🇨🇬 +242</option>
+              <option value="+244">🇦🇴 +244</option>
+              <option value="+250">🇷🇼 +250</option>
+              <option value="+257">🇧🇮 +257</option>
+              <option value="+260">🇿🇲 +260</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+32">🇧🇪 +32</option>
+              <option value="+1">🇺🇸 +1</option>
+            </select>
+            
+            {{-- Champ du numéro --}}
+            <input type="tel" name="telephone" id="ind-telephone" class="form-input" placeholder="Numéro" style="flex-grow: 1;" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="p-password" class="form-label">Mot de passe</label>
+          <div class="input-wrapper">
+            <input type="password" name="password" id="p-password" class="form-input" placeholder= required />
+            <button type="button" id="toggle-password-personnel" class="btn-toggle" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 1rem;">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">S'inscrire en tant qu'Indépendant</button>
+        <button type="button" class="btn-link btn-back-choice" style="background:none; border:none; color:#cbd5e1; margin-top:10px; cursor:pointer;">← Retour au choix</button>
+      </form>
+    </section>
+
+
+    {{-- ÉTAPE 1C : Formulaire Entreprise (Allégé) --}}
+    <section class="inscription-card hidden" id="section-form-entreprise">
+      <header class="inscription-header">
+        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
+        <h2 class="inscription-title">Compte Entreprise</h2>
+        <p class="inscription-subtitle">Enregistrez votre structure professionnelle.</p>
+      </header>
+
+      <form id="form-inscription-entreprise">
+        {{ csrfField() }}
+        <input type="hidden" name="type_compte" value="entreprise">
+        
+        <div class="form-group">
+          <label for="ent-nom" class="form-label">Nom de l'entreprise</label>
+          <input type="text" name="nom_entreprise" id="ent-nom" class="form-input" placeholder="Nom de votre société" required />
+        </div>
+
+        <div class="form-group">
+          <label for="ent-domaine" class="form-label">Secteur / Domaine d'activité</label>
+          <input type="text" name="domaine" id="ent-domaine" class="form-input" placeholder="Ex: Commerce, Restauration, Technologie" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Localisation </label>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <input type="text" name="pays" class="form-input" placeholder="Pays" required />
+            <input type="text" name="ville" class="form-input" placeholder="Ville" required />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <input type="text" name="commune" class="form-input" placeholder="Commune / Quartier" required />
+            <input type="text" name="avenue" class="form-input" placeholder="Avenue / Rue" required />
+          </div>
+
+          <div>
+            <input type="text" name="numero" class="form-input" placeholder="N°"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ind-telephone" class="form-label">Téléphone professionnel</label>
+          <div style="display: flex; gap: 10px;">
+            {{-- Sélecteur d'indicatif --}}
+            <select name="indicatif_pays" class="form-input" style="width: 120px; flex-shrink: 0; padding: 12px 8px; cursor: pointer;" required>
+              <option value="+243">🇨🇩 +243</option>
+              <option value="+242">🇨🇬 +242</option>
+              <option value="+244">🇦🇴 +244</option>
+              <option value="+250">🇷🇼 +250</option>
+              <option value="+257">🇧🇮 +257</option>
+              <option value="+260">🇿🇲 +260</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+32">🇧🇪 +32</option>
+              <option value="+1">🇺🇸 +1</option>
+            </select>
+            
+            {{-- Champ du numéro --}}
+            <input type="tel" name="telephone" id="ind-telephone" class="form-input" placeholder="" style="flex-grow: 1;" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ent-email" class="form-label">Email professionnel</label>
+          <input type="email" name="email" id="ent-email" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <label for="p-password" class="form-label">Mot de passe</label>
+          <div class="input-wrapper">
+            <input type="password" name="password" id="p-password" class="form-input" placeholder= required />
+            <button type="button" id="toggle-password-personnel" class="btn-toggle" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 1rem;">👁️</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">Créer le compte Entreprise</button>
+        <button type="button" class="btn-link btn-back-choice" style="background:none; border:none; color:#cbd5e1; margin-top:10px; cursor:pointer;">← Retour au choix</button>
+      </form>
+    </section>
+
+
+    {{-- ÉTAPES D'ONBOARDING (Communes après inscription) --}}
     <section id="onboarding-1" class="inscription-card hidden">
       <header class="inscription-header">
         <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
@@ -98,7 +245,7 @@
       </header>
       <div class="bienvenue-content">
         <div class="hero-illustration">🏙️</div>
-        <p class="bienvenue-description"><strong>MAVILLE</strong> vous permet de découvrir les commerces et services essentiels.</p>
+        <p class="bienvenue-description"><strong>MAVILLE</strong> vous connecte directement avec les acteurs et services de votre environnement.</p>
       </div>
       <button type="button" id="btn-onboarding-1" class="btn-submit">Suivant</button>
     </section>
@@ -106,47 +253,32 @@
     <section id="onboarding-2" class="inscription-card hidden">
       <header class="inscription-header">
         <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
-        <h2 class="inscription-title">Ce que vous pouvez faire</h2>
-        <p class="inscription-subtitle">Des fonctionnalités pensées pour vous.</p>
+        <h2 class="inscription-title">Fonctionnalités</h2>
+        <p class="inscription-subtitle">Tout ce dont vous avez besoin.</p>
       </header>
       <div class="bienvenue-content">
-        <div class="hero-illustration">🛍️</div>
-        <p class="bienvenue-description">Explorez les boutiques locales et profitez des offres exclusives.</p>
+        <div class="hero-illustration">🚀</div>
+        <p class="bienvenue-description">Gérez vos activités ou découvrez les meilleures adresses locales en quelques clics.</p>
       </div>
       <button type="button" id="btn-onboarding-2" class="btn-submit">Suivant</button>
     </section>
 
-    <section id="onboarding-3" class="inscription-card hidden">
-      <header class="inscription-header">
-        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
-        <h2 class="inscription-title">Conditions d'utilisation</h2>
-        <p class="inscription-subtitle">Règles de la communauté.</p>
-      </header>
-      <div class="bienvenue-content">
-        <ul style="text-align: left; margin: 15px 0; color: #cbd5e1; list-style: none; padding: 0;">
-          <li style="margin-bottom: 8px;">✅ Fournir des avis sincères.</li>
-          <li>✅ Respecter la communauté.</li>
-        </ul>
-      </div>
-      <button type="button" id="btn-onboarding-3" class="btn-submit">Accepter & Valider</button>
-    </section>
-
-    {{-- 3. Écran de succès --}}
+    {{-- ÉCRAN DE SUCCÈS --}}
     <section id="succes" class="inscription-card hidden">
       <header class="inscription-header">
         <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
         <div class="hero-illustration">🎉</div>
         <h2 class="inscription-title">Inscription validée !</h2>
-        <p class="inscription-subtitle">Bienvenue dans la communauté.</p>
+        <p class="inscription-subtitle">Votre espace est prêt.</p>
       </header>
-      <a href="{{ route('web.accueil') }}" class="btn-submit" style="text-decoration: none;">Continuer vers l'Accueil</a>
+      <a href="{{ route('web.accueil') }}" class="btn-submit" style="text-decoration: none; display: block; text-align: center;">Accéder à mon tableau de bord</a>
     </section>
 
   </div>
   @end
 
   @slot('page_js')
-  <script type="module" src="{{ asset('resources/js/inscription.js') }}"></script>
-@end
+    @vite(['resources/js/inscription.js'])
+  @end
 
 @end

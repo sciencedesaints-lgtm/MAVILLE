@@ -63,6 +63,35 @@ router.group(() => {
   }).as('auth.logout')
 })
 
+/* ========================================== */
+  /* ROUTES AUTHENTIFICATION GOOGLE (ALLY)     */
+  /* ========================================== */
+
+  // 1. Redirection vers Google
+  router.get('/auth/google', async ({ ally }) => {
+    return ally.use('google').redirect()
+  }).as('auth.google')
+
+  // 2. Callback de retour après authentification Google
+  router.get('/auth/google/callback', async ({ ally, response }) => {
+    const google = ally.use('google')
+
+    if (google.accessDenied()) {
+      return response.redirect().toRoute('web.connexion')
+    }
+
+    if (google.hasError()) {
+      return response.badRequest("Erreur lors de l'authentification avec Google")
+    }
+
+    const googleUser = await google.getUser()
+
+    // TODO: Enregistrer ou connecter l'utilisateur en base de données ici
+
+    return response.redirect().toRoute('web.accueil')
+  }).as('auth.google.callback')
+
+
 
 /* 
 ========================================================================== 

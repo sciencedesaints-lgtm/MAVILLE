@@ -12,6 +12,8 @@ export type ScannedRoutes = {
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }
     'auth.logout': { paramsTuple?: []; params?: {} }
+    'auth.google': { paramsTuple?: []; params?: {} }
+    'auth.google.callback': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'etablissements.index': { paramsTuple?: []; params?: {} }
@@ -39,6 +41,8 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'auth.google': { paramsTuple?: []; params?: {} }
+    'auth.google.callback': { paramsTuple?: []; params?: {} }
     'etablissements.index': { paramsTuple?: []; params?: {} }
     'etablissements.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'produits.index': { paramsTuple?: []; params?: {} }
@@ -52,6 +56,8 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'auth.google': { paramsTuple?: []; params?: {} }
+    'auth.google.callback': { paramsTuple?: []; params?: {} }
     'etablissements.index': { paramsTuple?: []; params?: {} }
     'etablissements.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'produits.index': { paramsTuple?: []; params?: {} }
