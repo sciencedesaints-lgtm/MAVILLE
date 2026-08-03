@@ -17,8 +17,8 @@
 
       <div class="account-types-grid" style="display: flex; flex-direction: column; gap: 12px; margin: 20px 0;">
         <button type="button" class="btn-submit btn-type-choice" data-target="particulier">👤 Personnel</button>
-        <button type="button" class="btn-submit btn-type-choice" data-target="independant">🛠️ Particulier</button>
-        <button type="button" class="btn-submit btn-type-choice" data-target="entreprise">🏢 Entreprise</button>
+        <button type="button" class="btn-submit btn-type-choice" data-target="entreprise">🏢 Entreprise & Agence</button>
+        <button type="button" class="btn-submit btn-type-choice" data-target="administration">🏛️ Administration publique</button>
       </div>
 
       <div class="inscription-footer">
@@ -69,7 +69,7 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
   {{-- Sélection du Pays --}}
   <select name="pays" id="select-pays" class="form-input" style="padding: 12px 8px; cursor: pointer;" required>
-    <option value="" disabled selected>Choisissez le pays</option>
+    <option value="" disabled selected>Choisissez votre pays</option>
     <option value="RDC">République Démocratique du Congo (RDC)</option>
     <option value="Zambie">Zambie</option>
     <option value="Angola">Angola</option>
@@ -90,153 +90,79 @@
           </div>
         </div>
 
-        <button type="submit" class="btn-submit">S'inscrire et recevoir le code</button>
+        <button type="submit" class="btn-submit">S'inscrire</button>
         <button type="button" class="btn-link btn-back-choice" style="background:none; border:none; color:#cbd5e1; margin-top:10px; cursor:pointer; width: 100%;">← Retour au choix</button>
       </form>
     </section>
 
-
-    {{-- ÉTAPE 1B : Formulaire Indépendant / Prestataire --}}
-    <section class="inscription-card hidden" id="section-form-independant">
-      <header class="inscription-header">
-        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
-        <h2 class="inscription-title">Compte Particulier</h2>
-        <p class="inscription-subtitle">Proposez vos services à la communauté.</p>
-      </header>
-
-      <form id="form-inscription-independant">
-        {{ csrfField() }}
-        <input type="hidden" name="type_compte" value="independant">
-        
-        <div class="form-group">
-          <label for="ind-nom" class="form-label">Nom complet / Nom commercial</label>
-          <input type="text" name="nom" id="ind-nom" class="form-input" placeholder="Ex: Jean Plomberie" required />
-        </div>
-
-        <div class="form-group">
-          <label for="ind-domaine" class="form-label">Domaine d'activité / Expertise</label>
-          <input type="text" name="domaine" id="ind-domaine" class="form-input" placeholder="Ex: Électricité, Coiffure, Graphisme" required />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Localisation professionnelle</label>
-          
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-  {{-- Sélection du Pays --}}
-  <select name="pays" class="form-input select-pays" style="padding: 12px 8px; cursor: pointer;" required>
-    <option value="" disabled selected>Choisissez le pays</option>
-    <option value="RDC">République Démocratique du Congo (RDC)</option>
-    <option value="Zambie">Zambie</option>
-    <option value="Angola">Angola</option>
-    <option value="Congo-Brazzaville">Congo-Brazzaville</option>
-    <option value="France">France</option>
-  </select>
-
-  {{-- Sélection de la Ville --}}
-  <select name="ville" class="form-input select-ville" style="padding: 12px 8px; cursor: pointer;" required>
-    <option value="" disabled selected>Choisissez d'abord un pays</option>
-  </select>
-</div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-            <input type="text" name="commune" class="form-input" placeholder="Commune / Quartier" required />
-            <input type="text" name="avenue" class="form-input" placeholder="Avenue / Rue" required />
-          </div>
-
-          <div>
-            <input type="text" name="numero" class="form-input" placeholder="N°" required />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="ind-telephone" class="form-label">Téléphone professionnel</label>
-          <div style="display: flex; gap: 10px;">
-            {{-- Sélecteur d'indicatif --}}
-            <select name="indicatif_pays" class="form-input" style="width: 120px; flex-shrink: 0; padding: 12px 8px; cursor: pointer;" required>
-              <option value="+243">🇨🇩 +243</option>
-              <option value="+242">🇨🇬 +242</option>
-              <option value="+244">🇦🇴 +244</option>
-              <option value="+250">🇷🇼 +250</option>
-              <option value="+257">🇧🇮 +257</option>
-              <option value="+260">🇿🇲 +260</option>
-              <option value="+27">🇿🇦 +27</option>
-              <option value="+33">🇫🇷 +33</option>
-              <option value="+32">🇧🇪 +32</option>
-              <option value="+1">🇺🇸 +1</option>
-            </select>
-            
-            {{-- Champ du numéro --}}
-            <input type="tel" name="telephone" id="ind-telephone" class="form-input" placeholder="Numéro" style="flex-grow: 1;" required />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="p-password" class="form-label">Mot de passe</label>
-          <div class="input-wrapper">
-            <input type="password" name="password" id="p-password" class="form-input" placeholder= required />
-            <button type="button" id="toggle-password-personnel" class="btn-toggle" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 1rem;">👁️</button>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-submit">S'inscrire en tant qu'Indépendant</button>
-        <button type="button" class="btn-link btn-back-choice" style="background:none; border:none; color:#cbd5e1; margin-top:10px; cursor:pointer;">← Retour au choix</button>
-      </form>
-    </section>
-
-
-    {{-- ÉTAPE 1C : Formulaire Entreprise (Allégé) --}}
+{{-- ÉTAPE 1C : Formulaire Entreprise / Agence --}}
     <section class="inscription-card hidden" id="section-form-entreprise">
       <header class="inscription-header">
         <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
-        <h2 class="inscription-title">Compte Entreprise</h2>
+        <h2 class="inscription-title">Entreprise & Agence</h2>
         <p class="inscription-subtitle">Enregistrez votre structure professionnelle.</p>
       </header>
 
       <form id="form-inscription-entreprise">
         {{ csrfField() }}
-        <input type="hidden" name="type_compte" value="entreprise">
+        <input type="hidden" name="type_compte" value="entreprise_agence">
         
+        {{-- Type de structure (Entreprise ou Agence) --}}
         <div class="form-group">
-          <label for="ent-nom" class="form-label">Nom de l'entreprise</label>
-          <input type="text" name="nom_entreprise" id="ent-nom" class="form-input" placeholder="Nom de votre société" required />
+          <label for="ent-type-structure" class="form-label">Type de structure</label>
+          <select name="type_structure" id="ent-type-structure" class="form-input" style="padding: 12px 8px; cursor: pointer;" required>
+            <option value="" disabled selected>Sélectionnez le type</option>
+            <option value="entreprise_privee">Entreprise / Société privée</option>
+            <option value="agence_voyage">Agence de Voyage / Transport</option>
+            <option value="agence_immobiliere">Agence Immobilière</option>
+            <option value="agence_communication">Agence de Communication / Marketing</option>
+            <option value="agence_placement">Agence de Placement / Services</option>
+            <option value="autre_structure">Autre structure / Organisation</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="ent-nom" class="form-label">Nom de l'entreprise ou de l'agence</label>
+          <input type="text" name="nom_entreprise" id="ent-nom" class="form-input" placeholder="Ex: MAVILLE Services, Agence Express..." required />
         </div>
 
         <div class="form-group">
           <label for="ent-domaine" class="form-label">Secteur / Domaine d'activité</label>
-          <input type="text" name="domaine" id="ent-domaine" class="form-input" placeholder="Ex: Commerce, Restauration, Technologie" required />
+          <input type="text" name="domaine" id="ent-domaine" class="form-input" placeholder="Ex: Transport, Immobilier, Commerce..." required />
         </div>
 
         <div class="form-group">
-          <label class="form-label">Localisation </label>
+          <label class="form-label">Localisation</label>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-  {{-- Sélection du Pays --}}
-  <select name="pays" class="form-input select-pays" style="padding: 12px 8px; cursor: pointer;" required>
-    <option value="" disabled selected>Choisissez le pays</option>
-    <option value="RDC">République Démocratique du Congo (RDC)</option>
-    <option value="Zambie">Zambie</option>
-    <option value="Angola">Angola</option>
-    <option value="Congo-Brazzaville">Congo-Brazzaville</option>
-    <option value="France">France</option>
-  </select>
+            {{-- Sélection du Pays --}}
+            <select name="pays" class="form-input select-pays" style="padding: 12px 8px; cursor: pointer;" required>
+              <option value="" disabled selected>Choisissez votre pays</option>
+              <option value="RDC">République Démocratique du Congo (RDC)</option>
+              <option value="Zambie">Zambie</option>
+              <option value="Angola">Angola</option>
+              <option value="Congo-Brazzaville">Congo-Brazzaville</option>
+              <option value="France">France</option>
+            </select>
 
-  {{-- Sélection de la Ville --}}
-  <select name="ville" class="form-input select-ville" style="padding: 12px 8px; cursor: pointer;" required>
-    <option value="" disabled selected>Choisissez d'abord un pays</option>
-  </select>
-</div>
+            {{-- Sélection de la Ville --}}
+            <select name="ville" class="form-input select-ville" style="padding: 12px 8px; cursor: pointer;" required>
+              <option value="" disabled selected>Choisissez d'abord un pays</option>
+            </select>
+          </div>
+
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
             <input type="text" name="commune" class="form-input" placeholder="Commune / Quartier" required />
             <input type="text" name="avenue" class="form-input" placeholder="Avenue / Rue" required />
           </div>
 
           <div>
-            <input type="text" name="numero" class="form-input" placeholder="N°"/>
+            <input type="text" name="numero" class="form-input" placeholder="N° de la porte / parcelle" />
           </div>
         </div>
 
         <div class="form-group">
-          <label for="ind-telephone" class="form-label">Téléphone professionnel</label>
+          <label for="ent-telephone" class="form-label">Téléphone professionnel</label>
           <div style="display: flex; gap: 10px;">
             {{-- Sélecteur d'indicatif --}}
             <select name="indicatif_pays" class="form-input" style="width: 120px; flex-shrink: 0; padding: 12px 8px; cursor: pointer;" required>
@@ -253,24 +179,124 @@
             </select>
             
             {{-- Champ du numéro --}}
-            <input type="tel" name="telephone" id="ind-telephone" class="form-input" placeholder="" style="flex-grow: 1;" required />
+            <input type="tel" name="telephone" id="ent-telephone" class="form-input" placeholder="Numéro" style="flex-grow: 1;" required />
           </div>
         </div>
 
         <div class="form-group">
           <label for="ent-email" class="form-label">Email professionnel</label>
-          <input type="email" name="email" id="ent-email" class="form-input" required />
+          <input type="email" name="email" id="ent-email" class="form-input" placeholder="contact@structure.com" required />
         </div>
 
         <div class="form-group">
-          <label for="p-password" class="form-label">Mot de passe</label>
+          <label for="ent-password" class="form-label">Mot de passe</label>
           <div class="input-wrapper">
-            <input type="password" name="password" id="p-password" class="form-input" placeholder= required />
-            <button type="button" id="toggle-password-personnel" class="btn-toggle" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 1rem;">👁️</button>
+            <input type="password" name="password" id="ent-password" class="form-input" placeholder="••••••••" required />
+            <button type="button" class="btn-toggle" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem;">👁️</button>
           </div>
         </div>
-        <button type="submit" class="btn-submit">Créer le compte Entreprise</button>
-        <button type="button" class="btn-link btn-back-choice" style="background:none; border:none; color:#cbd5e1; margin-top:10px; cursor:pointer;">← Retour au choix</button>
+
+        <button type="submit" class="btn-submit">Créer le compte Entreprise / Agence</button>
+        <button type="button" class="btn-link btn-back-choice" style="background:none; border:none; color:#cbd5e1; margin-top:10px; cursor:pointer; width: 100%;">← Retour au choix</button>
+      </form>
+    </section>
+
+    {{-- ÉTAPE 1D : Formulaire Administration publique --}}
+    <section class="inscription-card hidden" id="section-form-administration">
+      <header class="inscription-header">
+        <div class="inscription-logo"><span>MA</span><b>VILLE</b></div>
+        <h2 class="inscription-title">Administration publique</h2>
+        <p class="inscription-subtitle">Enregistrez un service ou une institution officielle.</p>
+      </header>
+
+      <form id="form-inscription-administration">
+        {{ csrfField() }}
+        <input type="hidden" name="type_compte" value="administration_publique">
+        
+        <div class="form-group">
+          <label for="admin-type" class="form-label">Type d'institution</label>
+          <select name="type_institution" id="admin-type" class="form-input" style="padding: 12px 8px; cursor: pointer;" required>
+            <option value="" disabled selected>Sélectionnez le type</option>
+            <option value="ministere">Ministère / Division Provinciale</option>
+            <option value="mairie">Mairie / Ville</option>
+            <option value="commune">Maison Communale / Commune</option>
+            <option value="regie_financiere">Régie Financière (Impôts, Douane...)</option>
+            <option value="police_securité">Service de Sécurité / Police</option>
+            <option value="autre_service">Autre service étatique</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-nom" class="form-label">Nom officiel de l'institution</label>
+          <input type="text" name="nom_institution" id="admin-nom" class="form-input" placeholder="Ex: Mairie de Lubumbashi, Commune de Kampemba..." required />
+        </div>
+
+        <div class="form-group">
+          <label for="admin-tutelle" class="form-label">Ministère de tutelle / Hiérarchie (Optionnel)</label>
+          <input type="text" name="tutelle" id="admin-tutelle" class="form-input" placeholder="Ex: Ministère de l'Intérieur" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Localisation du bureau</label>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            {{-- Sélection du Pays --}}
+            <select name="pays" class="form-input select-pays" style="padding: 12px 8px; cursor: pointer;" required>
+              <option value="" disabled selected>Choisissez votre pays</option>
+              <option value="RDC">République Démocratique du Congo (RDC)</option>
+              <option value="Zambie">Zambie</option>
+              <option value="Angola">Angola</option>
+              <option value="Congo-Brazzaville">Congo-Brazzaville</option>
+              <option value="France">France</option>
+            </select>
+
+            {{-- Sélection de la Ville --}}
+            <select name="ville" class="form-input select-ville" style="padding: 12px 8px; cursor: pointer;" required>
+              <option value="" disabled selected>Choisissez d'abord un pays</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <input type="text" name="commune" class="form-input" placeholder="Commune / Quartier" required />
+            <input type="text" name="avenue" class="form-input" placeholder="Avenue / Rue" required />
+          </div>
+
+          <div>
+            <input type="text" name="numero" class="form-input" placeholder="N° du bâtiment officiel" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-telephone" class="form-label">Téléphone institutionnel</label>
+          <div style="display: flex; gap: 10px;">
+            <select name="indicatif_pays" class="form-input" style="width: 120px; flex-shrink: 0; padding: 12px 8px; cursor: pointer;" required>
+              <option value="+243">🇨🇩 +243</option>
+              <option value="+242">🇨🇬 +242</option>
+              <option value="+244">🇦🇴 +244</option>
+              <option value="+250">🇷🇼 +250</option>
+              <option value="+257">🇧🇮 +257</option>
+              <option value="+260">🇿🇲 +260</option>
+              <option value="+27">🇿🇦 +27</option>
+            </select>
+            <input type="tel" name="telephone" id="admin-telephone" class="form-input" placeholder="Numéro officiel" style="flex-grow: 1;" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-email" class="form-label">Email institutionnel</label>
+          <input type="email" name="email" id="admin-email" class="form-input" placeholder="contact@administration.gouv.cd" required />
+        </div>
+
+        <div class="form-group">
+          <label for="admin-password" class="form-label">Mot de passe de sécurité</label>
+          <div class="input-wrapper">
+            <input type="password" name="password" id="admin-password" class="form-input" placeholder="••••••••" required />
+            <button type="button" class="btn-toggle" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem;">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Créer le compte Administration</button>
+        <button type="button" class="btn-link btn-back-choice" style="background:none; border:none; color:#cbd5e1; margin-top:10px; cursor:pointer; width: 100%;">← Retour au choix</button>
       </form>
     </section>
 
