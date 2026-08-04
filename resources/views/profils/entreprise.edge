@@ -1,0 +1,45 @@
+@component('layouts/main', { title: 'Espace Entreprise - MAVILLE' })
+  @slot('page_css')
+    @vite(['resources/css/profil-entreprise.css'])
+  @end
+
+  @slot('main')
+  <div class="dashboard-container">
+    <aside class="sidebar empresa-sidebar">
+      <div class="sidebar-logo"><span>MA</span><b>VILLE</b> <small>PRO</small></div>
+      <ul class="sidebar-menu">
+        <li class="active">📊 Vue d'ensemble</li>
+        <li>🏢 Mon Entreprise</li>
+        <li>📢 Annonces & Offres</li>
+        <li>📈 Statistiques</li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="dashboard-header">
+        <h1>Espace Professionnel</h1>
+        
+        <form action="{{ route('auth.logout') }}" method="POST">
+          {{ csrfField() }}
+          <button type="submit" class="btn-logout" style="background: none; border: none; cursor: pointer;">Déconnexion</button>
+        </form>
+      </header>
+
+      <section class="dashboard-grid">
+        <div class="card">
+          <h3>Visibilité de la structure</h3>
+          <p>Gérez vos services et touchez vos clients locaux efficacement.</p>
+        </div>
+        <div class="card">
+          <h3>Gestion des offres</h3>
+          <p>Publiez vos nouveautés, promotions ou annonces officielles.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  @end
+
+  @slot('page_js')
+    @vite(['resources/js/profil-entreprise.js'])
+  @end
+@end

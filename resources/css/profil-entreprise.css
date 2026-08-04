@@ -1,0 +1,13 @@
+.dashboard-container { display: flex; min-height: 100vh; background: #090d16; color: #f8fafc; font-family: sans-serif; }
+.empresa-sidebar { background: #111827; border-right: 1px solid #1f2937; width: 280px; padding: 20px; }
+.sidebar-logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 30px; }
+.sidebar-logo span { color: #10b981; }
+.sidebar-logo small { font-size: 0.75rem; background: #10b981; color: #fff; padding: 2px 6px; border-radius: 4px; vertical-align: middle; }
+.sidebar-menu { list-style: none; padding: 0; }
+.sidebar-menu li { padding: 12px 15px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+.sidebar-menu li:hover, .sidebar-menu li.active { background: #10b981; color: #0f172a; font-weight: 600; }
+.main-content { flex: 1; padding: 30px; }
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.btn-logout { background: #ef4444; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; }
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.card { background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1f2937; }

@@ -157,3 +157,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialisation au chargement
     loadDashboardData()
   })
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Gestion du menu déroulant du profil dans le header
+    const userMenuToggle = document.getElementById('user-menu-toggle');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    if (userMenuToggle && userDropdown) {
+        userMenuToggle.addEventListener('click', (event) => {
+            // Empêche la propagation pour éviter de fermer immédiatement au clic
+            event.stopPropagation();
+            
+            // Alterne l'affichage du menu (block / none)
+            if (userDropdown.style.display === 'block') {
+                userDropdown.style.display = 'none';
+            } else {
+                userDropdown.style.display = 'block';
+            }
+        });
+
+        // Fermer le menu si l'on clique n'importe où ailleurs sur la page
+        document.addEventListener('click', () => {
+            if (userDropdown.style.display === 'block') {
+                userDropdown.style.display = 'none';
+            }
+        });
+
+        // Empêcher la fermeture si l'on clique à l'intérieur du menu lui-même
+        userDropdown.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    }
+});

@@ -1,0 +1,13 @@
+.dashboard-container { display: flex; min-height: 100vh; background: #030712; color: #f8fafc; font-family: sans-serif; }
+.admin-sidebar { background: #0f172a; border-right: 1px solid #1e293b; width: 280px; padding: 20px; }
+.sidebar-logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 30px; }
+.sidebar-logo span { color: #f59e0b; }
+.sidebar-logo small { font-size: 0.75rem; background: #f59e0b; color: #000; padding: 2px 6px; border-radius: 4px; vertical-align: middle; font-weight: bold; }
+.sidebar-menu { list-style: none; padding: 0; }
+.sidebar-menu li { padding: 12px 15px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+.sidebar-menu li:hover, .sidebar-menu li.active { background: #f59e0b; color: #030712; font-weight: 600; }
+.main-content { flex: 1; padding: 30px; }
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.btn-logout { background: #ef4444; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; }
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.card { background: #0f172a; padding: 20px; border-radius: 12px; border: 1px solid #1e293b; }

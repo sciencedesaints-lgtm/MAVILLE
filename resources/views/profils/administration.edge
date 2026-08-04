@@ -1,0 +1,45 @@
+@component('layouts/main', { title: 'Portail Administration - MAVILLE' })
+  @slot('page_css')
+    @vite(['resources/css/profil-administration.css'])
+  @end
+
+  @slot('main')
+  <div class="dashboard-container">
+    <aside class="sidebar admin-sidebar">
+      <div class="sidebar-logo"><span>MA</span><b>VILLE</b> <small>GOUV</small></div>
+      <ul class="sidebar-menu">
+        <li class="active">🏛️ Tableau de bord officiel</li>
+        <li>📋 Services & Communiqués</li>
+        <li>👥 Requêtes Citoyennes</li>
+        <li>🔒 Paramètres de Sécurité</li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="dashboard-header">
+        <h1>Portail Institutionnel</h1>
+        
+        <form action="{{ route('auth.logout') }}" method="POST">
+          {{ csrfField() }}
+          <button type="submit" class="btn-logout" style="background: none; border: none; cursor: pointer;">Déconnexion</button>
+        </form>
+      </header>
+
+      <section class="dashboard-grid">
+        <div class="card">
+          <h3>Communications Officielles</h3>
+          <p>Diffusez des communiqués et alertes directement aux citoyens abonnés.</p>
+        </div>
+        <div class="card">
+          <h3>Suivi et Traitement</h3>
+          <p>Gérez les signalements et les demandes administratives centralisées.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  @end
+
+  @slot('page_js')
+    @vite(['resources/js/profil-administration.js'])
+  @end
+@end

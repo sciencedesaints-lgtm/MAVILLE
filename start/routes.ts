@@ -29,8 +29,13 @@ router.on('/connexion').render('pages/connexion').as('web.connexion')
 // Page d'Inscription
 router.on('/inscription').render('pages/inscription').as('web.inscription')
 
-// Page d'Accueil Dashboard
+// Page d'Accueil Dashboard (Générale)
 router.on('/accueil').render('pages/accueil').as('web.accueil')
+
+/* --- Vues des Profils Spécifiques --- */
+router.on('/profil/personnel').render('profils/personnel').as('profil.personnel')
+router.on('/profil/entreprise').render('profils/entreprise').as('profil.entreprise')
+router.on('/profil/administration').render('profils/administration').as('profil.administration')
 
 
 /* 
@@ -47,14 +52,23 @@ router.group(() => {
     })
   }).as('web.session.store')
 
-  // Inscription Web
+  // Inscription Web (Redirection dynamique selon le type de compte)
   router.post('/register', async ({ request, response }) => {
-    const data = request.all()
-    
-    return response.ok({
-      success: true,
-      message: 'Compte créé avec succès',
-    })
+    const typeCompte = request.input('type_compte')
+
+    // TODO: Enregistrer l'utilisateur en base de données ici selon son type
+
+    // Redirection vers le profil correspondant
+    if (typeCompte === 'personnel') {
+      return response.redirect().toRoute('profil.personnel')
+    } else if (typeCompte === 'entreprise_agence') {
+      return response.redirect().toRoute('profil.entreprise')
+    } else if (typeCompte === 'administration_publique') {
+      return response.redirect().toRoute('profil.administration')
+    }
+
+    // Fallback par défaut vers l'accueil général
+    return response.redirect().toRoute('web.accueil')
   }).as('web.new_account.store')
 
   // Déconnexion Web

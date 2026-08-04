@@ -1,0 +1,45 @@
+@component('layouts/main', { title: 'Mon Profil Personnel - MAVILLE' })
+  @slot('page_css')
+    @vite(['resources/css/profil-personnel.css'])
+  @end
+
+  @slot('main')
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><span>MA</span><b>VILLE</b></div>
+      <ul class="sidebar-menu">
+        <li class="active">🏠 Tableau de bord</li>
+        <li>👤 Mes Informations</li>
+        <li>🔔 Notifications</li>
+        <li>⚙️ Paramètres</li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="dashboard-header">
+        <h1>Bienvenue, <span id="user-name">{{ auth.user ? auth.user.prenom : 'Citoyen' }}</span></h1>
+        
+        <form action="{{ route('auth.logout') }}" method="POST">
+          {{ csrfField() }}
+          <button type="submit" class="btn-logout" style="background: none; border: none; cursor: pointer;">Déconnexion</button>
+        </form>
+      </header>
+
+      <section class="dashboard-grid">
+        <div class="card">
+          <h3>Services à proximité</h3>
+          <p>Découvrez les services publics et commerciaux autour de chez vous.</p>
+        </div>
+        <div class="card">
+          <h3>Mes Activités</h3>
+          <p>Historique de vos requêtes et interactions avec la ville.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  @end
+
+  @slot('page_js')
+    @vite(['resources/js/profil-personnel.js'])
+  @end
+@end

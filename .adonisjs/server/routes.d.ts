@@ -9,6 +9,9 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'profil.personnel': { paramsTuple?: []; params?: {} }
+    'profil.entreprise': { paramsTuple?: []; params?: {} }
+    'profil.administration': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }
     'auth.logout': { paramsTuple?: []; params?: {} }
@@ -41,6 +44,9 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'profil.personnel': { paramsTuple?: []; params?: {} }
+    'profil.entreprise': { paramsTuple?: []; params?: {} }
+    'profil.administration': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
     'etablissements.index': { paramsTuple?: []; params?: {} }
@@ -56,6 +62,9 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'profil.personnel': { paramsTuple?: []; params?: {} }
+    'profil.entreprise': { paramsTuple?: []; params?: {} }
+    'profil.administration': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
     'etablissements.index': { paramsTuple?: []; params?: {} }
