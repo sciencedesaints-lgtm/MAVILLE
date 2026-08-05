@@ -9,16 +9,6 @@
     
     <!-- BARRE DE NAVIGATION LATÉRALE (SIDEBAR) -->
     <aside class="sidebar">
-      <div class="sidebar-header">
-        <button class="menu-toggle" id="menu-toggle">☰</button>
-        <div class="brand-logo">
-          <span class="logo-icon">📍</span>
-          <div class="logo-text">
-            <span class="logo-title">MA<b>VILLE</b></span>
-            <span class="logo-subtitle">Ma ville, ma vie</span>
-          </div>
-        </div>
-      </div>
 
       <nav class="sidebar-nav">
         <a href="{{ route('web.accueil') }}" class="nav-item active"><span>🏠</span> Accueil</a>
@@ -47,65 +37,31 @@
     <main class="main-wrapper">
       
       <!-- HEADER SUPÉRIEUR -->
-      <header class="top-header">
-        <div class="global-search-bar">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="Rechercher un produit, un service, un établissement...">
-          <button class="btn-search">Rechercher</button>
-        </div>
-
-        <div class="header-right">
+      <header class="top-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+        
+        <!-- PARTIE GAUCHE : Localisation, Langue -->
+        <div class="header-left" style="display: flex; align-items: center; gap: 15px;">
           <div class="location-select">
-            📍 Lubumbashi <span>∨</span>
+           Lubumbashi 
           </div>
           <div class="lang-select">
-            FR <span>∨</span>
+            FR 
           </div>
-          <div class="notification-btn">
-            🔔<span class="notif-badge">3</span>
+        </div>
+
+        <!-- PARTIE CENTRE : MAVILLE Logo & Slogan -->
+        <div class="header-center-brand" style="display: flex; align-items: center; gap: 10px;">
+          <div class="logo-text" style="display: flex; flex-direction: column;">
+            <span class="logo-title" style="font-size: 3.2rem; font-weight: bold; letter-spacing: 0.5px;">MA<b>VILLE</b></span>
           </div>
+        </div>
 
-          <!-- PROFIL UTILISATEUR & MENU DÉROULANT DU COMPTE -->
-<div class="user-profile-dropdown" style="position: relative;">
-  <div class="user-profile" id="user-menu-toggle" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
-    <img src="https://i.pravatar.cc/100?img=33" alt="Avatar" class="avatar">
-    <div class="user-info">
-  <span class="user-name">{{ auth.user ? (auth.user.prenom ? auth.user.prenom + ' ' + auth.user.nom : auth.user.nom) : 'Mon Compte' }}</span>
-  <span class="user-role">
-    @if(auth.user && auth.user.typeCompte === 'entreprise_agence')
-      Entreprise ∨
-    @elseif(auth.user && auth.user.typeCompte === 'administration_publique')
-      Administration ∨
-    @else
-      Personnel ∨
-    @endif
-  </span>
-</div>
-  ...
+        <!-- PARTIE DROITE : Compte Monétaire / Solde rapide -->
+        <div class="header-right-money" style="display: flex; align-items: center; background: #f1f5f9; padding: 6px 14px; border-radius: 20px; border: 1px solid #e2e8f0;">
+          <span style="font-size: 0.85rem; color: #475569; font-weight: 500;">Solde : <strong style="color: #0f172a;">125,500 FC</strong></span>
+        </div>
 
-            <!-- Menu contextuel dynamique -->
-<div class="dropdown-menu-content" id="user-dropdown" style="display: none; position: absolute; right: 0; top: 110%; background: #1e293b; border: 1px solid #334155; border-radius: 8px; width: 240px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); z-index: 100; padding: 8px 0;">
-  
-  @if(auth.user && auth.user.typeCompte === 'entreprise_agence')
-    <a href="{{ route('profil.entreprise') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">🏢 Mon Profil Entreprise</a>
-  @elseif(auth.user && auth.user.typeCompte === 'administration_publique')
-    <a href="{{ route('profil.administration') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">🏛️ Portail Administration</a>
-  @else
-    <a href="{{ route('profil.personnel') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">👤 Mon Profil Personnel</a>
-  @endif
-
-  <div style="height: 1px; background: #334155; margin: 6px 0;"></div>
-  
-  <!-- Formulaire POST sécurisé pour éviter l'erreur de route -->
-  <form action="{{ route('auth.logout') }}" method="POST">
-    {{ csrfField() }}
-    <button type="submit" style="width: 100%; text-align: left; background: none; border: none; padding: 12px 16px; color: #ef4444; cursor: pointer; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-      🚪 Déconnexion
-    </button>
-  </form>
-
-</div>
-</header>
+      </header>
 
       <!-- GRILLE COMPOSÉE DE L'ACCUEIL -->
       <div class="dashboard-grid">
@@ -113,49 +69,88 @@
         <!-- CONTENU CENTRAL GAUCHE -->
         <div class="dashboard-main">
           
-          <!-- HERO BANNER -->
-          <section class="hero-banner">
-            <div class="hero-overlay">
-              <h1 class="hero-title">Découvrez tout <br>dans <span>votre ville</span></h1>
-              <p class="hero-subtitle">La meilleure façon de vivre votre ville</p>
+          <!-- CONTENEUR GLOBAL HERO AVEC MARGE POUR LE PROFIL FLOTTANT -->
+          <div class="hero-container-wrapper" style="position: relative; margin-top: 25px;">
+            
+           <!-- PROFIL UTILISATEUR 100% CARRÉ FLOTTANT -->
+            <div class="hero-user-badge-outside" style="position: absolute; top: -32px; left: 10px; z-index: 12;">
+              <div class="user-profile-dropdown" style="position: relative;">
+                <div class="user-profile" id="user-menu-toggle" style="cursor: pointer; display: flex; align-items: center; gap: 12px; background: #ffffff; padding: 14px; border-radius: 0px; box-shadow: 0 16px 16px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0;">
+                  <img src="https://i.pravatar.cc/100?img=33" alt="Avatar" class="avatar" style="width: 36px; height: 36px; border-radius: 0px;">
+                  <div class="user-info" style="display: flex; flex-direction: column;">
+                    <span class="user-name" style="font-weight: 600; font-size: 0.85rem; color: #0f172a;">{{ auth.user ? (auth.user.prenom ? auth.user.prenom + ' ' + auth.user.nom : auth.user.nom) : 'Mon Compte' }}</span>
+                    <span class="user-role" style="font-size: 0.75rem; color: #64748b;">
+                      @if(auth.user && auth.user.typeCompte === 'entreprise_agence')
+                        Entreprise ∨
+                      @elseif(auth.user && auth.user.typeCompte === 'administration_publique')
+                        Administration ∨
+                      @else
+                        Personnel ∨
+                      @endif
+                    </span>
+                  </div>
+                </div>
 
-              <div class="hero-search-tabs">
-                <button class="tab-btn active">🔍 Recherche texte</button>
-                <button class="tab-btn">🎙️ Recherche vocale</button>
-                <button class="tab-btn">📷 Recherche par image</button>
-              </div>
+                <!-- Menu contextuel dynamique -->
+                <div class="dropdown-menu-content" id="user-dropdown" style="display: none; position: absolute; left: 0; top: 120%; background: #1e293b; border: 1px solid #334155; border-radius: 6px; width: 240px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.4); z-index: 100; padding: 8px 0;">
+                  @if(auth.user && auth.user.typeCompte === 'entreprise_agence')
+                    <a href="{{ route('profil.entreprise') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">🏢 Mon Profil Entreprise</a>
+                  @elseif(auth.user && auth.user.typeCompte === 'administration_publique')
+                    <a href="{{ route('profil.administration') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">🏛️ Portail Administration</a>
+                  @else
+                    <a href="{{ route('profil.personnel') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">👤 Mon Profil Personnel</a>
+                  @endif
 
-              <div class="hero-filters">
-                <button class="filter-btn active">✈️ Autour de moi</button>
-                <button class="filter-btn">🌐 Toute la ville</button>
-                <button class="filter-btn">🌐 Autre ville / pays</button>
-                <button class="filter-btn">🌍 Monde entier</button>
+                  <div style="height: 1px; background: #334155; margin: 6px 0;"></div>
+                  
+                  <form action="{{ route('auth.logout') }}" method="POST">
+                    {{ csrfField() }}
+                    <button type="submit" style="width: 100%; text-align: left; background: none; border: none; padding: 12px 16px; color: #ef4444; cursor: pointer; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                      🚪 Déconnexion
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
 
-            <!-- MÉTÉO FLOATING CARD -->
-            <div class="weather-widget">
-              <div class="weather-header">
-                <div class="weather-city">Lubumbashi</div>
-                <div class="weather-temp">27°C <span class="sun-icon">☀️</span></div>
-                <div class="weather-desc">Ensoleillé<br><small>32° / 18°</small></div>
-              </div>
-              <div class="weather-info-box">
-                <span class="leaf-icon">🍃</span>
-                <div>
-                  <strong>Qualité de l'air</strong>
-                  <p class="text-green">Bonne</p>
+            <!-- HERO BANNER -->
+            <section class="hero-banner" style="position: relative;">
+              <div class="hero-overlay" style="padding-top: 25px;">
+                <h1 class="hero-title">Découvrez tout <br>dans <span>votre ville</span></h1>
+                <p class="hero-subtitle">La meilleure façon de vivre votre ville</p>
+
+              <!-- MÉTÉO FLOATING CARD -->
+              <div class="weather-widget">
+                <div class="weather-header">
+                  <div class="weather-city">Lubumbashi</div>
+                  <div class="weather-temp">27°C <span class="sun-icon">☀️</span></div>
+                  <div class="weather-desc">Ensoleillé<br><small>32° / 18°</small></div>
+                </div>
+                <div class="weather-info-box">
+                  <span class="leaf-icon">🍃</span>
+                  <div>
+                    <strong>Qualité de l'air</strong>
+                    <p class="text-green">Bonne</p>
+                  </div>
+                </div>
+                <div class="weather-info-box">
+                  <span class="car-icon">🚗</span>
+                  <div>
+                    <strong>Trafic</strong>
+                    <p class="text-green">Fluide</p>
+                  </div>
                 </div>
               </div>
-              <div class="weather-info-box">
-                <span class="car-icon">🚗</span>
-                <div>
-                  <strong>Trafic</strong>
-                  <p class="text-green">Fluide</p>
+
+              <!-- GROS BOUTON / BARRE DE RECHERCHE PRINCIPALE (Déclencheur de la page de recherche) -->
+              <div class="hero-massive-search-container" style="margin: 20px 0; max-width: calc(100% - 320px);">
+                <div id="open-search-overlay" class="global-search-bar" style="display: flex; background: #ffffff; padding: 8px 12px; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); align-items: center; border: 2px solid #e2e8f0; cursor: pointer;">
+                  <span class="search-icon" style="font-size: 1.2rem; margin-left: 10px;">🔍</span>
+                  <span style="color: #64748b; width: 100%; padding: 12px 15px; font-size: 1rem;">Rechercher un produit, un service, un établissement...</span>
+                  <button type="button" class="btn-search" style="background: #10b981; color: white; border: none; padding: 12px 28px; border-radius: 30px; font-weight: 600; cursor: pointer; white-space: nowrap;">Rechercher</button>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
           <!-- GRILLE CATEGORIES RAPIDES -->
           <section class="categories-grid">
@@ -226,86 +221,6 @@
               </div>
             </div>
 
-            <!-- SERVICES POPULAIRES -->
-            <div class="content-box">
-              <div class="box-header">
-                <h3>Services populaires</h3>
-                <a href="#" class="see-all">Voir tout</a>
-              </div>
-              <div class="services-list-mini">
-                <div class="service-item">
-                  <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=150&q=80" alt="Électriciens">
-                  <span>Électriciens</span>
-                  <small>À partir de 15,000 FC</small>
-                </div>
-                <div class="service-item">
-                  <img src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=150&q=80" alt="Plombiers">
-                  <span>Plombiers</span>
-                  <small>À partir de 10,000 FC</small>
-                </div>
-              </div>
-            </div>
-
-          </section>
-
-          <!-- LIGNE DES PETITS SECTIONS DU BAS -->
-          <section class="bottom-widgets-grid">
-            
-            <div class="content-box">
-              <div class="box-header"><h3>Emplois</h3><a href="#" class="see-all">Voir tout</a></div>
-              <div class="mini-list-item">
-                <span class="icon-square">💻</span>
-                <div>
-                  <strong>Développeur Web</strong>
-                  <p>Tech Solutions - Lubumbashi</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="content-box">
-              <div class="box-header"><h3>Immobilier</h3><a href="#" class="see-all">Voir tout</a></div>
-              <div class="mini-list-item">
-                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=100&q=80" class="thumb">
-                <div>
-                  <strong>Appartement à louer</strong>
-                  <p>Golf • 500,000 FC/mois</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="content-box">
-              <div class="box-header"><h3>Événements</h3><a href="#" class="see-all">Voir tout</a></div>
-              <div class="mini-list-item">
-                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=100&q=80" class="thumb">
-                <div>
-                  <strong>Concert Fally Ipupa</strong>
-                  <p>12 Mai • Stade TP Mazembe</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="content-box">
-              <div class="box-header"><h3>Vie citoyenne</h3><a href="#" class="see-all">Voir tout</a></div>
-              <div class="mini-list-item">
-                <span class="icon-square red">📍</span>
-                <div>
-                  <strong>Signaler un problème</strong>
-                  <p>Aidez à améliorer votre ville</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="content-box">
-              <div class="box-header"><h3>Vos alertes</h3><a href="#" class="see-all">Voir toutes</a></div>
-              <div class="mini-list-item">
-                <span class="icon-square green">📦</span>
-                <div>
-                  <strong>Commande #CMD123</strong>
-                  <p>En cours de livraison • Il y a 10 min</p>
-                </div>
-              </div>
-            </div>
-
           </section>
 
         </div>
@@ -313,21 +228,6 @@
         <!-- COLONNE DROITE (PORTEFEUILLE & RACCOURCIS) -->
         <aside class="dashboard-right">
           
-          <!-- COMPTE & SOLDE -->
-          <div class="account-card">
-            <h3>Mon compte</h3>
-            <div class="balance-box">
-              <div class="balance-title">Solde MAVILLE <span class="eye-icon">👁️</span></div>
-              <div class="balance-amount">125,500 FC</div>
-            </div>
-            <div class="account-actions">
-              <button class="action-btn"><span>👛</span>Portefeuille</button>
-              <button class="action-btn"><span>💳</span>Mes cartes</button>
-              <button class="action-btn"><span>🔄</span>Transferts</button>
-              <button class="action-btn"><span>🕒</span>Historique</button>
-            </div>
-          </div>
-
           <!-- RACCOURCIS -->
           <div class="shortcuts-card">
             <div class="box-header">
@@ -359,6 +259,171 @@
     </main>
 
   </div>
+
+  <!-- ========================================== -->
+  <!-- PAGE ENTIÈRE / MODALE DE RECHERCHE DÉDIÉE   -->
+  <!-- ========================================== -->
+  <div id="search-overlay-page" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #f8fafc; z-index: 9999; padding: 40px; box-sizing: border-box; overflow-y: auto;">
+    
+    <div style="max-width: 800px; margin: 0 auto; position: relative;">
+      
+      <!-- Bouton pour fermer la page de recherche -->
+      <button id="close-search-overlay" style="position: absolute; right: 0; top: 0; background: #e2e8f0; border: none; font-size: 1.2rem; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-weight: bold;">✕</button>
+
+      <h2 style="font-size: 2rem; color: #0f172a; margin-bottom: 30px; text-align: center;">Que recherchez-vous aujourd'hui ?</h2>
+
+      <!-- ÉTAPE 1 : Les 3 Boutons Principaux -->
+      <div id="search-choices-container" style="display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 40px;">
+        
+        <!-- Bouton 1 : Taper votre demande -->
+        <button id="btn-choice-text" style="width: 100%; max-width: 500px; padding: 22px 30px; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1.1rem; font-weight: 600; color: #1e293b; cursor: pointer; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.2s;">
+          <span style="font-size: 1.5rem;">⌨️</span> Taper votre demande / recherche
+        </button>
+
+        <!-- Bouton 2 : Placez votre image -->
+        <button id="btn-choice-image" style="width: 100%; max-width: 500px; padding: 22px 30px; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1.1rem; font-weight: 600; color: #1e293b; cursor: pointer; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.2s;">
+          <span style="font-size: 1.5rem;">📷</span> Placez votre image
+        </button>
+
+        <!-- Bouton 3 : Recherche vocale (Très remarquable en bas) -->
+        <button id="btn-choice-voice" style="width: 100%; max-width: 500px; padding: 25px 30px; background: linear-gradient(135deg, #10b981, #059669); border: none; border-radius: 16px; font-size: 1.25rem; font-weight: bold; color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 15px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); margin-top: 20px; transition: transform 0.2s;">
+          <span style="font-size: 1.8rem;">🎙️</span> Recherche vocale
+        </button>
+      </div>
+
+      <!-- ÉTAPE 2 : Page exclusive de saisie de texte avec propositions -->
+      <div id="text-search-exclusive-view" style="display: none; margin-top: 20px;">
+        <button id="back-to-choices" style="background: none; border: none; color: #2563eb; font-weight: 600; cursor: pointer; margin-bottom: 15px; font-size: 0.95rem;">← Retour aux options</button>
+        
+        <div style="background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;">
+          <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 10px;">Entrez votre recherche textuelle :</label>
+          
+          <div style="position: relative;">
+            <input type="text" id="live-search-input" placeholder="ex: Ma..." style="width: 100%; padding: 15px 20px; font-size: 1.1rem; border: 2px solid #cbd5e1; border-radius: 10px; outline: none; box-sizing: border-box;">
+            
+            <!-- Liste de propositions dynamique -->
+            <div id="suggestions-box" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-top: none; border-radius: 0 0 10px 10px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); z-index: 50;">
+              <div class="suggestion-item" style="padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #1e293b;" data-value="Maison à louer, à vendre ou à acheter">🏠 <strong>Ma</strong>ison à louer, à vendre ou à acheter</div>
+              <div class="suggestion-item" style="padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #1e293b;" data-value="Marché central de Lubumbashi">🛒 <strong>Ma</strong>rché central de Lubumbashi</div>
+              <div class="suggestion-item" style="padding: 12px 20px; cursor: pointer; color: #1e293b;" data-value="Matériel informatique et bureautique">💻 <strong>Ma</strong>tériel informatique et bureautique</div>
+            </div>
+          </div>
+
+          <!-- Bouton de validation final -->
+          <button id="btn-submit-search" style="width: 100%; margin-top: 25px; padding: 16px; background: #0f172a; color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background 0.2s;">
+            Lancer votre recherche
+          </button>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 3 : Vue exclusive Image -->
+      <div id="image-search-exclusive-view" style="display: none; margin-top: 20px;">
+        <button id="back-to-choices-img" style="background: none; border: none; color: #2563eb; font-weight: 600; cursor: pointer; margin-bottom: 15px; font-size: 0.95rem;">← Retour aux options</button>
+        <div style="background: #ffffff; padding: 40px; border-radius: 16px; text-align: center; border: 2px dashed #cbd5e1;">
+          <span style="font-size: 3rem;">📁</span>
+          <h3 style="margin: 15px 0 10px 0; color: #1e293b;">Glissez ou placez votre image ici</h3>
+          <p style="color: #64748b; margin-bottom: 20px;">Recherchez un produit ou un lieu à partir d'une photo</p>
+          <input type="file" accept="image/*" style="margin: 0 auto; display: block;">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {{-- Gestion interactive de l'ouverture de la recherche et des choix --}}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const openBtn = document.getElementById('open-search-overlay');
+      const overlay = document.getElementById('search-overlay-page');
+      const closeBtn = document.getElementById('close-search-overlay');
+      
+      const choicesContainer = document.getElementById('search-choices-container');
+      const textView = document.getElementById('text-search-exclusive-view');
+      const imageView = document.getElementById('image-search-exclusive-view');
+      
+      const btnChoiceText = document.getElementById('btn-choice-text');
+      const btnChoiceImage = document.getElementById('btn-choice-image');
+      const btnChoiceVoice = document.getElementById('btn-choice-voice');
+      
+      const backToChoices = document.getElementById('back-to-choices');
+      const backToChoicesImg = document.getElementById('back-to-choices-img');
+
+      const searchInput = document.getElementById('live-search-input');
+      const suggestionsBox = document.getElementById('suggestions-box');
+      const submitSearch = document.getElementById('btn-submit-search');
+
+      // Ouvrir la page entière de recherche
+      openBtn.addEventListener('click', () => {
+        overlay.style.display = 'block';
+        choicesContainer.style.display = 'flex';
+        textView.style.display = 'none';
+        imageView.style.display = 'none';
+      });
+
+      // Fermer la page de recherche
+      closeBtn.addEventListener('click', () => {
+        overlay.style.display = 'none';
+      });
+
+      // Cliquer sur "Taper votre demande"
+      btnChoiceText.addEventListener('click', () => {
+        choicesContainer.style.display = 'none';
+        textView.style.display = 'block';
+        searchInput.focus();
+      });
+
+      // Cliquer sur "Placez votre image"
+      btnChoiceImage.addEventListener('click', () => {
+        choicesContainer.style.display = 'none';
+        imageView.style.display = 'block';
+      });
+
+      // Cliquer sur "Recherche vocale"
+      btnChoiceVoice.addEventListener('click', () => {
+        alert('Écoute vocale activée... Parlez maintenant.');
+      });
+
+      // Retour aux options depuis le texte
+      backToChoices.addEventListener('click', () => {
+        textView.style.display = 'none';
+        choicesContainer.style.display = 'flex';
+      });
+
+      // Retour aux options depuis l'image
+      backToChoicesImg.addEventListener('click', () => {
+        imageView.style.display = 'none';
+        choicesContainer.style.display = 'flex';
+      });
+
+      // Gestion des propositions en direct (ex: Ma...)
+      searchInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        if (val.toLowerCase().startsWith('ma') && val.length > 0) {
+          suggestionsBox.style.display = 'block';
+        } else {
+          suggestionsBox.style.display = 'none';
+        }
+      });
+
+      // Cliquer sur une proposition
+      document.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('click', function() {
+          searchInput.value = this.getAttribute('data-value');
+          suggestionsBox.style.display = 'none';
+        });
+      });
+
+      // Lancer la recherche finale
+      submitSearch.addEventListener('click', () => {
+        if(searchInput.value.trim() !== '') {
+          alert('Recherche lancée pour : ' + searchInput.value);
+          overlay.style.display = 'none';
+        } else {
+          alert('Veuillez saisir ou sélectionner une recherche.');
+        }
+      });
+    });
+  </script>
 
   {{-- Chargement correct du script via l'assistant Vite d'AdonisJS v6 --}}
   @slot('page_js')

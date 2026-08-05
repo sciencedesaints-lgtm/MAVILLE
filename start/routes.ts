@@ -17,22 +17,12 @@ const AiController = () => import('#controllers/ai_controller')
 ========================================================================== 
 */
 
-// Page de Bienvenue (Racine du site)
 router.on('/').render('pages/bienvenue').as('web.bienvenue')
-
-// Page de Sélection d'Authentification
 router.on('/authentification').render('pages/authentification').as('web.authentification')
-
-// Page de Connexion
 router.on('/connexion').render('pages/connexion').as('web.connexion')
-
-// Page d'Inscription
 router.on('/inscription').render('pages/inscription').as('web.inscription')
-
-// Page d'Accueil Dashboard (Générale)
 router.on('/accueil').render('pages/accueil').as('web.accueil')
 
-/* --- Vues des Profils Spécifiques --- */
 router.on('/profil/personnel').render('profils/personnel').as('profil.personnel')
 router.on('/profil/entreprise').render('profils/entreprise').as('profil.entreprise')
 router.on('/profil/administration').render('profils/administration').as('profil.administration')
@@ -45,20 +35,13 @@ router.on('/profil/administration').render('profils/administration').as('profil.
 */
 
 router.group(() => {
-  // Connexion Web
   router.post('/login', async ({ response }) => {
-    return response.ok({
-      message: 'Connexion réussie !',
-    })
+    return response.ok({ message: 'Connexion réussie !' })
   }).as('web.session.store')
 
-  // Inscription Web (Redirection dynamique selon le type de compte)
   router.post('/register', async ({ request, response }) => {
     const typeCompte = request.input('type_compte')
 
-    // TODO: Enregistrer l'utilisateur en base de données ici selon son type
-
-    // Redirection vers le profil correspondant
     if (typeCompte === 'personnel') {
       return response.redirect().toRoute('profil.personnel')
     } else if (typeCompte === 'entreprise_agence') {
@@ -67,43 +50,35 @@ router.group(() => {
       return response.redirect().toRoute('profil.administration')
     }
 
-    // Fallback par défaut vers l'accueil général
     return response.redirect().toRoute('web.accueil')
   }).as('web.new_account.store')
 
-  // Déconnexion Web
   router.post('/logout', async ({ response }) => {
     return response.redirect().toRoute('web.connexion')
   }).as('auth.logout')
 })
 
 /* ========================================== */
-  /* ROUTES AUTHENTIFICATION GOOGLE (ALLY)     */
-  /* ========================================== */
+/* ROUTES AUTHENTIFICATION GOOGLE (ALLY)     */
+/* ========================================== */
 
-  // 1. Redirection vers Google
-  router.get('/auth/google', async ({ ally }) => {
-    return ally.use('google').redirect()
-  }).as('auth.google')
+router.get('/auth/google', async ({ ally }) => {
+  return ally.use('google').redirect()
+}).as('auth.google')
 
-  // 2. Callback de retour après authentification Google
-  router.get('/auth/google/callback', async ({ ally, response }) => {
-    const google = ally.use('google')
+router.get('/auth/google/callback', async ({ ally, response }) => {
+  const google = ally.use('google')
 
-    if (google.accessDenied()) {
-      return response.redirect().toRoute('web.connexion')
-    }
+  if (google.accessDenied()) {
+    return response.redirect().toRoute('web.connexion')
+  }
 
-    if (google.hasError()) {
-      return response.badRequest("Erreur lors de l'authentification avec Google")
-    }
+  if (google.hasError()) {
+    return response.badRequest("Erreur lors de l'authentification avec Google")
+  }
 
-    const googleUser = await google.getUser()
-
-    // TODO: Enregistrer ou connecter l'utilisateur en base de données ici
-
-    return response.redirect().toRoute('web.accueil')
-  }).as('auth.google.callback')
+  return response.redirect().toRoute('web.accueil')
+}).as('auth.google.callback')
 
 
 
@@ -116,28 +91,29 @@ router.group(() => {
 router.group(() => {
 
   /* --- API PUBLIQUE --- */
-  
-  // Auth API
   router.post('/auth/register', [NewAccountController, 'store'])
   router.post('/auth/login', [SessionController, 'store'])
 
-  // Établissements
   router.get('/etablissements', [EtablissementsController, 'index'])
   router.get('/etablissements/:id', [EtablissementsController, 'show'])
 
-  // Produits & Catalogue
   router.get('/produits', [ProduitsController, 'index'])
   router.get('/produits/:id', [ProduitsController, 'show'])
 
-  // Recherche IA & Conversationnelle
-  router.post('/ai/search', [AiController, 'search'])
+  // Recherche IA Publique (Nom explicite unique)
+  router.post('/ai/search', [AiController, 'search']).as('api.ai.search')
 
 
   /* --- API PROTÉGÉE (JWT / Auth requise) --- */
-  
   router.group(() => {
-    // Déconnexion API
     router.delete('/auth/logout', [SessionController, 'destroy'])
+
+    // --- RECHERCHE MULTICRITÈRE & GÉOLOCALISATION ---
+    // Nom explicite unique pour éviter le conflit
+    router.post('/recherches', [AiController, 'search']).as('api.recherches.store')
+
+    // Gestion des réponses aux notifications (Approuver / Décliner)
+    router.patch('/notifications/:id/repondre', [AiController, 'repondreDemande']).as('api.notifications.repondre')
 
     // Uploads
     router.post('/uploads/image', [UploadsController, 'uploadImage'])

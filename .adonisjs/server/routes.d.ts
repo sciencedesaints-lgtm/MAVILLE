@@ -23,8 +23,10 @@ export type ScannedRoutes = {
     'etablissements.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'produits.index': { paramsTuple?: []; params?: {} }
     'produits.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'ai.search': { paramsTuple?: []; params?: {} }
+    'api.ai.search': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
+    'api.recherches.store': { paramsTuple?: []; params?: {} }
+    'api.notifications.repondre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'uploads.upload_image': { paramsTuple?: []; params?: {} }
     'uploads.upload_video': { paramsTuple?: []; params?: {} }
     'etablissements.store': { paramsTuple?: []; params?: {} }
@@ -80,7 +82,8 @@ export type ScannedRoutes = {
     'auth.logout': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
-    'ai.search': { paramsTuple?: []; params?: {} }
+    'api.ai.search': { paramsTuple?: []; params?: {} }
+    'api.recherches.store': { paramsTuple?: []; params?: {} }
     'uploads.upload_image': { paramsTuple?: []; params?: {} }
     'uploads.upload_video': { paramsTuple?: []; params?: {} }
     'etablissements.store': { paramsTuple?: []; params?: {} }
@@ -91,13 +94,14 @@ export type ScannedRoutes = {
   DELETE: {
     'session.destroy': { paramsTuple?: []; params?: {} }
   }
+  PATCH: {
+    'api.notifications.repondre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'commandes.update_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'demandes_services.update_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+  }
   PUT: {
     'etablissements.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'produits.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-  }
-  PATCH: {
-    'commandes.update_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'demandes_services.update_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {
