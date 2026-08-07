@@ -257,7 +257,39 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 7. CHARGEMENT DYNAMIQUE DES DONNÉES DU DASHBOARD
+  // 7. GESTION DU MENU DÉROULANT DE LOCALISATION (VILLE / PAYS)
+  // ==========================================
+  const locToggle = document.getElementById('location-menu-toggle');
+  const locMenu = document.getElementById('location-dropdown-menu');
+  const locText = document.getElementById('current-location-text');
+
+  if (locToggle && locMenu) {
+    locToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      locMenu.style.display = locMenu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.querySelectorAll('.location-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const selectedValue = this.getAttribute('data-value');
+        if (locText) locText.textContent = selectedValue;
+        locMenu.style.display = 'none';
+        if (window.showToast) window.showToast(`Localisation modifiée : ${selectedValue}`, 'success');
+      });
+    });
+
+    // Fermeture globale du menu de localisation au clic extérieur
+    document.addEventListener('click', () => {
+      if (locMenu) locMenu.style.display = 'none';
+    });
+
+    locMenu.addEventListener('click', (event) => {
+      event.stopPropagation();
+    });
+  }
+
+  // ==========================================
+  // 8. CHARGEMENT DYNAMIQUE DES DONNÉES DU DASHBOARD
   // ==========================================
   async function loadDashboardData() {
     try {
