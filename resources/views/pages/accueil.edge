@@ -29,39 +29,102 @@
     <main class="main-wrapper">
       
       <!-- HEADER SUPÉRIEUR -->
-      <header class="top-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+      <!-- HEADER SUPÉRIEUR -->
+<header class="top-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #ffffff; border-bottom: 1px solid #e2e8f0;">
+  
+  <!-- 1. PARTIE GAUCHE : Logo MAVILLE -->
+  <div class="header-left-brand" style="display: flex; align-items: center;">
+    <span class="logo-title" style="font-size: 2.2rem; font-weight: bold; letter-spacing: 0.5px; line-height: 1; color: green;">MA<b>VILLE</b></span>
+  </div>
 
-          <!-- PARTIE CENTRE : MAVILLE Logo, Ville et Pays cliquables avec menu déroulant -->
-        <div class="header-center-brand" style="display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center;">
-          <div class="logo-text" style="display: flex; flex-direction: column;">
-            <span class="logo-title" style="font-size: 2rem; font-weight: bold; letter-spacing: 0.5px; line-height: 1;">MA<b>VILLE</b></span>
-          </div>
+      <!-- Sélecteur de localisation dynamique (Ville et Pays) -->
+            <div class="location-dropdown-container" style="position: relative; margin-top: 6px;">
+              <div id="location-menu-toggle" style="display: flex; align-items: center; gap: 6px; font-size: 1.1rem; color: #475569; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 4px 12px; border-radius: 20px; border: 1px solid #e2e8f0; transition: background 0.2s;">
+                <span>📍</span>
+                <span id="current-location-text">Lubumbashi, RDC</span>
+                <span style="font-size: 0.8rem; color: #94a3b8;">▼</span>
+              </div>
 
-          <!-- Sélecteur de localisation dynamique (Ville et Pays) -->
-          <div class="location-dropdown-container" style="position: relative; margin-top: 6px;">
-            <div id="location-menu-toggle" style="display: flex; align-items: center; gap: 6px; font-size: 1.1rem; color: #475569; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 4px 12px; border-radius: 20px; border: 1px solid #e2e8f0; transition: background 0.2s;">
-              <span>📍</span>
-              <span id="current-location-text">Lubumbashi, RDC</span>
-              <span style="font-size: 0.8rem; color: #94a3b8;">▼</span>
-            </div>
+              <!-- Menu déroulant des villes et pays organisés par pays -->
+              <div id="location-dropdown-menu" style="display: none; position: absolute; left: 50%; transform: translateX(-50%); top: 115%; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; width: 240px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); z-index: 100; padding: 6px 0; text-align: left; max-height: 300px; overflow-y: auto;">
+                
+                <!-- SECTION : République Démocratique du Congo (RDC) -->
+                <div style="padding: 6px 16px; font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase; background: #f8fafc; border-bottom: 1px solid #f1f5f9;">République Démocratique du Congo</div>
+                <div class="location-option" data-value="Lubumbashi, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Lubumbashi, RDC</div>
+                <div class="location-option" data-value="Kinshasa, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Kinshasa, RDC</div>
+                <div class="location-option" data-value="Kolwezi, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Kolwezi, RDC</div>
+                <div class="location-option" data-value="Likasi, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #e2e8f0;">📍 Likasi, RDC</div>
+                <div class="location-option" data-value="Kalemie, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #e2e8f0;">📍 Kalemie, RDC</div>
+                <div class="location-option" data-value="Goma, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #e2e8f0;">📍 Goma, RDC</div>
+                <div class="location-option" data-value="Bukavu, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #e2e8f0;">📍 Bukavu, RDC</div>
+                <div class="location-option" data-value="Kananga, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #e2e8f0;">📍 Kananga, RDC</div>
+                <div class="location-option" data-value="Kisangani, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #e2e8f0;">📍 Kisangani, RDC</div>
+                <div class="location-option" data-value="Mbuji-Mayi, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #e2e8f0;">📍 Mbuji-Mayi, RDC</div>
 
-            <!-- Menu déroulant des villes et pays organisés par pays -->
-            <div id="location-dropdown-menu" style="display: none; position: absolute; left: 50%; transform: translateX(-50%); top: 115%; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; width: 240px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); z-index: 100; padding: 6px 0; text-align: left; max-height: 300px; overflow-y: auto;">
-              
-              <!-- SECTION : République Démocratique du Congo (RDC) -->
-              <div style="padding: 6px 16px; font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase; background: #f8fafc; border-bottom: 1px solid #f1f5f9;">République Démocratique du Congo</div>
-              <div class="location-option" data-value="Lubumbashi, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Lubumbashi, RDC</div>
-              <div class="location-option" data-value="Kinshasa, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Kinshasa, RDC</div>
-              <div class="location-option" data-value="Kolwezi, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Kolwezi, RDC</div>
-              <div class="location-option" data-value="Likasi, RDC" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #e2e8f0;">📍 Likasi, RDC</div>
+                <!-- SECTION : République du Congo -->
+                <div style="padding: 6px 16px; font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase; background: #f8fafc; border-bottom: 1px solid #f1f5f9; border-top: 1px solid #e2e8f0;">République du Congo</div>
+                <div class="location-option" data-value="Brazzaville, Congo" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Brazzaville, Congo</div>
+                <div class="location-option" data-value="Pointe-Noire, Congo" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b;">📍 Pointe-Noire, Congo</div>
 
-              <!-- SECTION : République du Congo (Exemple d'un autre pays d'extension) -->
-              <div style="padding: 6px 16px; font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase; background: #f8fafc; border-bottom: 1px solid #f1f5f9; border-top: 1px solid #e2e8f0;">République du Congo</div>
-              <div class="location-option" data-value="Brazzaville, Congo" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Brazzaville, Congo</div>
-              <div class="location-option" data-value="Pointe-Noire, Congo" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b;">📍 Pointe-Noire, Congo</div>
-            </div>
-          </div>
-      </header>
+                <!-- SECTION : CANADA -->
+                <div style="padding: 6px 16px; font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase; background: #f8fafc; border-bottom: 1px solid #f1f5f9; border-top: 1px solid #e2e8f0;">Canada</div>
+                <div class="location-option" data-value="Ottawa, Canada" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Ottawa, Canada</div>
+                <div class="location-option" data-value="Quebec, Canada" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b;">📍 Quebec, Canada</div>
+
+                <!-- SECTION : Zambie-->
+                <div style="padding: 6px 16px; font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase; background: #f8fafc; border-bottom: 1px solid #f1f5f9; border-top: 1px solid #e2e8f0;">Zambie</div>
+                <div class="location-option" data-value="Ndola, Zambie" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Ndola, Zambie</div>
+                <div class="location-option" data-value="Lusaka, Zambie" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b;">📍 Kitwe, Zambie</div>
+
+                <!-- SECTION : Afrique du sud -->
+                <div style="padding: 6px 16px; font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase; background: #f8fafc; border-bottom: 1px solid #f1f5f9; border-top: 1px solid #e2e8f0;">Afrique du sud</div>
+                <div class="location-option" data-value="Pretoria, Afrique du sud" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;">📍 Pretoria, Afrique du sud</div>
+                <div class="location-option" data-value="Cap-Town, Afrique du sud" style="padding: 10px 16px; cursor: pointer; font-size: 0.95rem; color: #1e293b;">📍 Cap-Town, Afrique du sud</div>
+    </div>
+  </div>
+
+  <!-- 3. PARTIE DROITE : Profil Utilisateur -->
+  <div class="header-right-profile" style="position: relative; z-index: 12;">
+    <div class="user-profile-dropdown" style="position: relative;">
+      <div class="user-profile" id="user-menu-toggle" style="cursor: pointer; display: flex; align-items: center; text-align: left; gap: 12px; background: #ffffff; padding: 6px 12px; border-radius: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;">
+        <img src="https://i.pravatar.cc/100?img=33" alt="Avatar" class="avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        <div class="user-info" style="display: flex; flex-direction: column; gap: 2px;">
+          <span class="user-name" style="font-weight: 600; font-size: 0.85rem; color: #0f172a;">{{ auth.user ? (auth.user.prenom ? auth.user.prenom + ' ' + auth.user.nom : auth.user.nom) : 'Mon Compte' }}</span>
+          <span class="user-role" style="font-size: 0.75rem; color: #64748b;">
+            @if(auth.user && auth.user.typeCompte === 'entreprise_agence')
+              Entreprise ∨
+            @elseif(auth.user && auth.user.typeCompte === 'administration_publique')
+              Administration ∨
+            @else
+              Personnel ∨
+            @endif
+          </span>
+        </div>
+      </div>
+
+      <!-- Menu contextuel dynamique du profil -->
+      <div class="dropdown-menu-content" id="user-dropdown" style="display: none; position: absolute; right: 0; top: 120%; background: #1e293b; border: 1px solid #334155; border-radius: 8px; width: 240px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 100; padding: 8px 0;">
+        @if(auth.user && auth.user.typeCompte === 'entreprise_agence')
+          <a href="{{ route('profil.entreprise') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">🏢 Mon Profil Entreprise</a>
+        @elseif(auth.user && auth.user.typeCompte === 'administration_publique')
+          <a href="{{ route('profil.administration') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">🏛️ Portail Administration</a>
+        @else
+          <a href="{{ route('profil.personnel') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">👤 Mon Profil Personnel</a>
+        @endif
+
+        <div style="height: 1px; background: #334155; margin: 6px 0;"></div>
+        
+        <form action="{{ route('auth.logout') }}" method="POST">
+          {{ csrfField() }}
+          <button type="submit" style="width: 100%; text-align: left; background: none; border: none; padding: 12px 16px; color: #ef4444; cursor: pointer; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            🚪 Déconnexion
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</header>
 
       <!-- GRILLE COMPOSÉE DE L'ACCUEIL -->
       <div class="dashboard-grid">
@@ -74,89 +137,60 @@
 
             <!-- HERO BANNER RESTRUCTURÉ (Profil à gauche | Texte au milieu | Météo à droite + Barre de recherche en bas de bannière) -->
             <section class="hero-banner" style="position: relative;">
-              <div class="hero-overlay" style="display: flex; flex-direction: column; padding: 25px; gap: 20px;">
+              <div class="hero-overlay" style="display: flex; flex-direction: column; padding: 25px 25px 85px 25px; gap: 20px; position: relative;">
                 
                 <!-- LIGNE SUPÉRIEURE DE LA BANNIÈRE (3 éléments : Profil | Texte | Météo) -->
                 <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; width: 100%;">
                   
-                  <!-- 1. PROFIL UTILISATEUR À GAUCHE (Rectangle vertical) -->
-                  <div class="hero-user-badge-vertical" style="flex: 0 0 220px; z-index: 12;">
-                    <div class="user-profile-dropdown" style="position: relative;">
-                      <div class="user-profile" id="user-menu-toggle" style="cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; background: #ffffff; padding: 20px 14px; border-radius: 8px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); border: 1px solid #e2e8f0; height: 100%;">
-                        <img src="https://i.pravatar.cc/100?img=33" alt="Avatar" class="avatar" style="width: 50px; height: 50px; border-radius: 50%;">
-                        <div class="user-info" style="display: flex; flex-direction: column; gap: 4px;">
-                          <span class="user-name" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">{{ auth.user ? (auth.user.prenom ? auth.user.prenom + ' ' + auth.user.nom : auth.user.nom) : 'Mon Compte' }}</span>
-                          <span class="user-role" style="font-size: 0.75rem; color: #64748b;">
-                            @if(auth.user && auth.user.typeCompte === 'entreprise_agence')
-                              Entreprise ∨
-                            @elseif(auth.user && auth.user.typeCompte === 'administration_publique')
-                              Administration ∨
-                            @else
-                              Personnel ∨
-                            @endif
-                          </span>
-                        </div>
-                      </div>
-
-                      <!-- Menu contextuel dynamique -->
-                      <div class="dropdown-menu-content" id="user-dropdown" style="display: none; position: absolute; left: 0; top: 120%; background: #1e293b; border: 1px solid #334155; border-radius: 6px; width: 240px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.4); z-index: 100; padding: 8px 0;">
-                        @if(auth.user && auth.user.typeCompte === 'entreprise_agence')
-                          <a href="{{ route('profil.entreprise') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">🏢 Mon Profil Entreprise</a>
-                        @elseif(auth.user && auth.user.typeCompte === 'administration_publique')
-                          <a href="{{ route('profil.administration') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">🏛️ Portail Administration</a>
-                        @else
-                          <a href="{{ route('profil.personnel') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">👤 Mon Profil Personnel</a>
-                        @endif
-
-                        <div style="height: 1px; background: #334155; margin: 6px 0;"></div>
-                        
-                        <form action="{{ route('auth.logout') }}" method="POST">
-                          {{ csrfField() }}
-                          <button type="submit" style="width: 100%; text-align: left; background: none; border: none; padding: 12px 16px; color: #ef4444; cursor: pointer; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                            🚪 Déconnexion
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
 
                   <!-- 2. TEXTE PRINCIPAL AU MILIEU -->
                   <div class="hero-text-center" style="flex: 1; text-align: center; min-width: 250px;">
-                    <h1 class="hero-title" style="margin-bottom: 10px;">Découvrez tout <br>dans <span>votre ville</span></h1>
+                    <h1 class="hero-title" style="margin-bottom: 10px;">Votre ville dans les moindres details</h1>
                     <p class="hero-subtitle">La meilleure façon de vivre votre ville</p>
                   </div>
 
-                  <!-- 3. MÉTÉO À DROITE (après le texte) -->
-                  <div class="weather-widget" style="flex: 0 0 240px; background: #ffffff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+                  <!-- 3. MÉTÉO À DROITE (après le texte) avec fond 100% transparent et sans effet -->
+                  <div class="weather-widget" style="flex: 0 0 240px; background: transparent; padding: 15px; border-radius: 12px; border: none; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none;">
                     <div class="weather-header" style="margin-bottom: 10px;">
                       <div class="weather-city" style="font-weight: bold; color: #0f172a;">Lubumbashi</div>
                       <div class="weather-temp" style="font-size: 1.2rem; color: #059669;">27°C <span class="sun-icon">☀️</span></div>
-                      <div class="weather-desc" style="font-size: 0.85rem; color: #64748b;">Ensoleillé<br><small>32° / 18°</small></div>
+                      <div class="weather-desc" style="font-size: 0.85rem; color: #475569;">Ensoleillé<br><small>32° / 18°</small></div>
                     </div>
                     <div class="weather-info-box" style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; margin-top: 6px;">
                       <span class="leaf-icon">🍃</span>
                       <div>
                         <strong>Qualité de l'air</strong>
-                        <p class="text-green" style="margin: 0; color: #10b981;">Bonne</p>
+                        <p class="text-green" style="margin: 0; color: #047857;">Bonne</p>
                       </div>
                     </div>
                     <div class="weather-info-box" style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; margin-top: 6px;">
                       <span class="car-icon">🚗</span>
                       <div>
                         <strong>Trafic</strong>
-                        <p class="text-green" style="margin: 0; color: #10b981;">Fluide</p>
+                        <p class="text-green" style="margin: 0; color: #047857;">Fluide</p>
                       </div>
                     </div>
                   </div>
 
                 </div>
 
-                <!-- GROS BOUTON / BARRE DE RECHERCHE PRINCIPALE (Bas de la bannière) -->
-                <div class="hero-massive-search-container" style="width: 100%; margin-top: 5px;">
-                  <div id="open-search-overlay" class="global-search-bar" style="display: flex; background: #ffffff; padding: 8px 12px; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); align-items: center; border: 2px solid #e2e8f0; cursor: pointer;">
-                    <span class="search-icon" style="font-size: 1.2rem; margin-left: 10px;">🔍</span>
-                    <span style="color: #64748b; width: 100%; padding: 12px 15px; font-size: 1rem;">Rechercher un produit, un service, un établissement...</span>
-                    <button type="button" class="btn-search" style="background: #10b981; color: white; border: none; padding: 12px 28px; border-radius: 30px; font-weight: 600; cursor: pointer; white-space: nowrap;">Rechercher</button>
+                <!-- GROS BOUTON / BARRE DE RECHERCHE PRINCIPALE (Élargie et intégrée en bas de bannière) -->
+                <div class="hero-massive-search-container" style="position: absolute; bottom: 20px; left: 20px; right: 20px; z-index: 10;">
+                  <div id="open-search-overlay" class="global-search-bar" style="display: flex; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 12px 16px; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); align-items: center; border: 2px solid #10b981; cursor: pointer; transition: all 0.2s;">
+                    
+                    <!-- Icône de recherche dans un cercle -->
+                    <div style="background: rgba(255, 255, 255, 0.1); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 4px;">
+                      <span class="search-icon" style="font-size: 1.2rem; color: #ffffff;">🔍</span>
+                    </div>
+
+                    <!-- Texte / Placeholder sur deux lignes -->
+                    <span style="color: #94a3b8; width: 100%; padding: 0 16px; font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                      <span style="color: #f8fafc; font-weight: 500;">Lancez votre Recherche</span>
+                    </span>
+
+                    <!-- Bouton Rechercher vert -->
+                    <button type="button" class="btn-search" style="background: #059669; color: white; border: none; padding: 12px 28px; border-radius: 30px; font-weight: 600; font-size: 0.95rem; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 15px rgba(5, 150, 105, 0.5);">Rechercher</button>
+                  
                   </div>
                 </div>
 
