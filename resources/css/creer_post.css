@@ -1,0 +1,57 @@
+/* Style global pour votre application MAVILLE */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9fafb;
+    color: #1f2937;
+    line-height: 1.5;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input, 
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.btn-submit {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #2563eb; /* Bleu MAVILLE */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-submit:hover {
+    background-color: #1d4ed8;
+}
+
+.error-message {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
