@@ -1,4 +1,5 @@
 import router from '@adonisjs/core/services/router'
+import MediasController from '#controllers/medias_controller'
 import { middleware } from '#start/kernel'
 
 // Lazy loading des contrôleurs
@@ -10,7 +11,7 @@ const CommandesController = () => import('#controllers/commandes_controller')
 const DemandesServicesController = () => import('#controllers/demandes_services_controller')
 const UploadsController = () => import('#controllers/uploads_controller')
 const AiController = () => import('#controllers/ai_controller')
-
+const MediasController = () => import('#controllers/medias_controller')
 /* 
 ========================================================================== 
 1. VUES ET AFFICHAGE WEB (PAGE PAR PAGE)
@@ -22,6 +23,15 @@ router.on('/authentification').render('pages/authentification').as('web.authenti
 router.on('/connexion').render('pages/connexion').as('web.connexion')
 router.on('/inscription').render('pages/inscription').as('web.inscription')
 router.on('/accueil').render('pages/accueil').as('web.accueil')
+
+// Remplacez la ligne existante par celle-ci pour correspondre à votre lien dans le menu
+router.get('/actualite', [MediasController, 'index']).as('web.actualite')
+router.get('/actualite/creer', [MediasController, 'create']).as('web.actualite.create')
+router.post('/actualite', [MediasController, 'store']).as('web.actualite.store')
+
+// Route pour afficher le profil de l'utilisateur connecté
+// Retirez temporairement .use(middleware.auth()) pour tester
+router.get('/profil', [MediasController, 'profil']).as('web.profil')
 
 router.on('/profil/personnel').render('profils/personnel').as('profil.personnel')
 router.on('/profil/entreprise').render('profils/entreprise').as('profil.entreprise')

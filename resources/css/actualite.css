@@ -1,0 +1,105 @@
+/* Styles généraux de la page d'actualités */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8fafc;
+    margin: 0;
+    color: #1e293b;
+  }
+  
+  /* Conteneur principal du fil d'actualité */
+  .feed-container {
+    max-width: 650px;
+    margin: 30px auto;
+    padding: 0 15px;
+  }
+  
+  .feed-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 24px;
+  }
+  
+  /* Carte de publication */
+  .post-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .post-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* En-tête de la publication (Auteur & Date) */
+  .post-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    gap: 12px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  
+  .post-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #cbd5e1;
+  }
+  
+  .post-author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .post-author {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #0f172a;
+  }
+  
+  .post-date {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+  
+  /* Contenu textuel / Légende */
+  .post-content {
+    padding: 16px 18px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #334155;
+  }
+  
+  .post-content p {
+    margin: 0;
+  }
+  
+  /* Médias (Images et Vidéos) */
+  .post-media-container {
+    width: 100%;
+    background: #000000;
+    max-height: 500px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .post-media {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    display: block;
+  }
+  
+  video.post-media {
+    outline: none;
+    background: #000000;
+  }

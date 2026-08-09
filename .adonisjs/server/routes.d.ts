@@ -9,6 +9,10 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'web.actualite': { paramsTuple?: []; params?: {} }
+    'web.actualite.create': { paramsTuple?: []; params?: {} }
+    'web.actualite.store': { paramsTuple?: []; params?: {} }
+    'web.profil': { paramsTuple?: []; params?: {} }
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
@@ -46,6 +50,9 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'web.actualite': { paramsTuple?: []; params?: {} }
+    'web.actualite.create': { paramsTuple?: []; params?: {} }
+    'web.profil': { paramsTuple?: []; params?: {} }
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
@@ -64,6 +71,9 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'web.actualite': { paramsTuple?: []; params?: {} }
+    'web.actualite.create': { paramsTuple?: []; params?: {} }
+    'web.profil': { paramsTuple?: []; params?: {} }
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
@@ -77,6 +87,7 @@ export type ScannedRoutes = {
     'demandes_services.index': { paramsTuple?: []; params?: {} }
   }
   POST: {
+    'web.actualite.store': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }
     'auth.logout': { paramsTuple?: []; params?: {} }

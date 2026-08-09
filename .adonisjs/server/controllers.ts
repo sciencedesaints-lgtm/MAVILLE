@@ -8,6 +8,7 @@ export const controllers = {
   Commandes: () => import('#controllers/commandes_controller'),
   DemandesServices: () => import('#controllers/demandes_services_controller'),
   Etablissements: () => import('#controllers/etablissements_controller'),
+  Medias: () => import('#controllers/medias_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Produits: () => import('#controllers/produits_controller'),
   Recherche: () => import('#controllers/recherche_controller'),

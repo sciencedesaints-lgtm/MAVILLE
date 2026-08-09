@@ -1,0 +1,253 @@
+@component('layouts/main', { title: 'Actualités - MAVILLE' })
+
+  @slot('page_css')
+    @vite(['resources/css/actualite.css'])
+  @end
+
+  <style>
+    /* Reset & Layout global style MAVILLE */
+    body { background-color: #f8fafc; font-family: 'Inter', sans-serif; color: #0f172a; margin: 0; }
+    .maville-layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar Gauche */
+    .sidebar { width: 260px; background: #ffffff; border-right: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; height: 100vh; }
+    .sidebar-menu { display: flex; flex-direction: column; gap: 8px; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; text-decoration: none; color: #475569; font-weight: 500; font-size: 0.95rem; transition: background 0.2s, color 0.2s; }
+    .nav-item:hover, .nav-item.active { background: #eff6ff; color: #2563eb; }
+    .nav-item.active { font-weight: 600; }
+
+    /* Contenu Principal (Centre + Droite) */
+    .main-wrapper { margin-left: 260px; display: flex; width: calc(100% - 260px); justify-content: center; padding: 30px; gap: 25px; }
+    .feed-column { flex: 1; max-width: 650px; }
+    .right-column { width: 340px; display: flex; flex-direction: column; gap: 20px; }
+
+    /* Top bar utilisateur */
+    .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: #fff; padding: 15px 25px; border-radius: 12px; border: 1px solid #e2e8f0; }
+    .logo { font-size: 1.5rem; font-weight: 800; color: #16a34a; letter-spacing: -0.5px; }
+    .location-badge { background: #f1f5f9; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; color: #334155; display: flex; align-items: center; gap: 6px; }
+
+    /* Boîte de publication */
+    .post-creator { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+    .creator-top { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+    .avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; background: #cbd5e1; }
+    .creator-input { width: 100%; border: 1px solid #e2e8f0; border-radius: 25px; padding: 12px 20px; background: #f8fafc; font-size: 0.95rem; resize: none; outline: none; }
+    .creator-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 15px; margin-top: 10px; }
+    .action-btn { background: none; border: none; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; color: #64748b; cursor: pointer; padding: 6px 10px; border-radius: 8px; transition: background 0.2s; }
+    .action-btn:hover { background: #f1f5f9; }
+    .btn-submit-post { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; }
+
+    /* Onglets du fil */
+    .feed-tabs { display: flex; gap: 20px; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px; background: #fff; padding: 0 20px; border-radius: 12px 12px 0 0; }
+    .tab { padding: 12px 0; font-weight: 600; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; text-decoration: none; font-size: 0.95rem; }
+    .tab.active { color: #16a34a; border-bottom-color: #16a34a; }
+
+    /* Carte de Publication */
+    .post-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); overflow: hidden; }
+    .post-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; }
+    .post-user-info { display: flex; align-items: center; gap: 12px; }
+    .post-author { font-weight: 600; font-size: 0.95rem; color: #0f172a; display: flex; align-items: center; gap: 4px; }
+    .post-date { font-size: 0.75rem; color: #64748b; }
+    .post-body { padding: 0 20px 15px 20px; font-size: 0.95rem; line-height: 1.5; color: #334155; }
+    .post-media-container { width: 100%; max-height: 420px; background: #000; overflow: hidden; }
+    .post-media { width: 100%; height: 100%; object-fit: cover; display: block; }
+    
+    /* Statistiques et Interactions du post */
+    .post-stats { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; font-size: 0.85rem; color: #64748b; border-bottom: 1px solid #f1f5f9; }
+    .post-actions-bar { display: flex; justify-content: space-around; padding: 6px 10px; }
+    .post-action-item { flex: 1; text-align: center; padding: 8px; font-weight: 600; font-size: 0.9rem; color: #64748b; background: none; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .post-action-item:hover { background: #f8fafc; color: #0f172a; }
+
+    /* Colonne de droite Widgets */
+    .widget-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+    .wallet-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-top: 12px; }
+    .wallet-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; text-align: center; }
+    .wallet-icon-item { font-size: 0.8rem; font-weight: 500; color: #475569; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+    .wallet-icon-circle { width: 40px; height: 40px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    
+    .shortcuts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; text-align: center; }
+    .shortcut-item { font-size: 0.75rem; font-weight: 500; color: #475569; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .shortcut-badge { position: relative; width: 40px; height: 40px; background: #fef2f2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .badge-count { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; font-weight: bold; }
+
+    .boost-card { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #bbf7d0; border-radius: 16px; padding: 20px; }
+    .btn-boost { background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 12px; }
+  </style>
+
+  <div class="maville-layout">
+
+    <!-- 1. SIDEBAR GAUCHE -->
+    <aside class="sidebar">
+      <div class="sidebar-menu">
+        <div class="logo" style="margin-bottom: 25px; padding-left: 10px;">MAVILLE</div>
+        <a href="{{ route('web.accueil') }}" class="nav-item"><span>🏠</span> Accueil</a>
+       <a href="{{ route('web.profil') }}" class="nav-item"><span>👤</span> Profil</a>
+        <a href="#" class="nav-item"><span>🔍</span> Recherche</a>
+        <a href="#" class="nav-item"><span>⏱️</span> Historique</a>
+        <a href="#" class="nav-item"><span>🔔</span> Notifications</a>
+        <a href="#" class="nav-item"><span>⚙️</span> Paramètres</a>
+        <a href="#" class="nav-item"><span>✍️</span> Publier</a>
+      </div>
+      <div>
+        <form action="{{ route('auth.logout') }}" method="POST">
+          {{ csrfField() }}
+          <button type="submit" class="nav-item" style="border:none; background:none; width:100%; color: #dc2626; cursor:pointer;">
+            <span>🚪</span> Déconnexion
+          </button>
+        </form>
+      </div>
+    </aside>
+
+    <!-- 2. CONTENEUR PRINCIPAL -->
+    <div class="main-wrapper">
+      
+      <!-- COLONNE CENTRALE : FIL D'ACTUALITÉ -->
+      <div class="feed-column">
+
+        <!-- En-tête supérieur (Localisation + Compte mobile/responsive) -->
+        <div class="top-header" style="display: none;"> <!-- Visible si besoin -->
+          <div class="logo">MAVILLE</div>
+          <div class="location-badge">📍 Lubumbashi, RDC</div>
+        </div>
+
+        <!-- FORMULAIRE DE PUBLICATION -->
+        <form action="{{ route('web.actualite.store') }}" method="POST" enctype="multipart/form-data" class="post-creator">
+          {{ csrfField() }}
+          <div class="creator-top">
+            <div class="avatar" style="background: #cbd5e1;"></div>
+            <textarea name="legend" class="creator-input" placeholder="Quoi de neuf à Lubumbashi ?" rows="1"></textarea>
+          </div>
+          <div class="creator-actions">
+            <div style="display: flex; gap: 10px;">
+              <label class="action-btn" style="cursor: pointer;">
+                🖼️ Photo / Vidéo <input type="file" name="media" accept="image/*,video/*" style="display:none">
+              </label>
+              <button type="button" class="action-btn">📊 Sondage</button>
+              <button type="button" class="action-btn">😊 Humeur</button>
+            </div>
+            <button type="submit" class="btn-submit-post">Publier</button>
+          </div>
+        </form>
+
+        <!-- ONGLETS DE FIL -->
+        <div class="feed-tabs">
+          <a href="#" class="tab active">Pour vous</a>
+          <a href="#" class="tab">Abonnements</a>
+          <a href="#" class="tab">Lubumbashi</a>
+          <a href="#" class="tab">Populaires</a>
+        </div>
+
+        <!-- LISTE DES PUBLICATIONS (DYNAMIQUE) -->
+        @each(post in posts)
+          <div class="post-card">
+            <div class="post-header">
+              <div class="post-user-info">
+                <div class="avatar"></div>
+                <div>
+                  <div class="post-author">{{ post.user.prenom }} {{ post.user.nom }} <span style="color:#16a34a; font-size:0.8rem;">✔</span></div>
+                  <div class="post-date">à Lubumbashi • {{ post.createdAt }}</div>
+                </div>
+              </div>
+              <span style="color: #94a3b8; cursor: pointer; font-weight: bold;">···</span>
+            </div>
+
+            <div class="post-body">
+              <p style="margin: 0 0 10px 0;">{{ post.legend }}</p>
+            </div>
+
+            @if(post.mediaUrl)
+              <div class="post-media-container">
+                @if(post.type === 'video')
+                  <video class="post-media" controls src="{{ post.mediaUrl }}"></video>
+                @else
+                  <img class="post-media" src="{{ post.mediaUrl }}" alt="Média actualité">
+                @endif
+              </div>
+            @endif
+
+            <div class="post-stats">
+              <div>👍 💙 😮 128</div>
+              <div>24 commentaires • 15 partages</div>
+            </div>
+
+            <div class="post-actions-bar">
+              <button class="post-action-item">👍 J'aime</button>
+              <button class="post-action-item">💬 Commenter</button>
+              <button class="post-action-item">↗️ Partager</button>
+              <button class="post-action-item">🔖 Enregistrer</button>
+            </div>
+          </div>
+        @endeach
+
+      </div>
+
+      <!-- COLONNE DE DROITE : WIDGETS & PORTEFEUILLE -->
+      <div class="right-column">
+        
+        <!-- Widget Mon Compte / Portefeuille -->
+        <div class="widget-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 700; font-size: 1.05rem;">Mon compte</span>
+            <span style="font-size: 0.85rem; color: #2563eb; font-weight: 600; cursor: pointer;">Personnel ▾</span>
+          </div>
+          
+          <div class="wallet-box">
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 500;">Solde MAVILLE 👁️</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-top: 4px;">125,500 FC</div>
+            
+            <div class="wallet-grid">
+              <div class="wallet-icon-item"><div class="wallet-icon-circle">👛</div>Portefeuille</div>
+              <div class="wallet-icon-item"><div class="wallet-icon-circle">💳</div>Mes cartes</div>
+              <div class="wallet-icon-item"><div class="wallet-icon-circle">🔄</div>Transferts</div>
+              <div class="wallet-icon-item"><div class="wallet-icon-circle">⏱️</div>Historique</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Widget Raccourcis -->
+        <div class="widget-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 700; font-size: 1rem;">Mes raccourcis</span>
+            <span style="font-size: 0.85rem; color: #16a34a; font-weight: 600; cursor: pointer;">Modifier</span>
+          </div>
+
+          <div class="shortcuts-grid">
+            <div class="shortcut-item">
+              <div class="shortcut-badge" style="background: #f0fdf4;">🛍️</div>
+              Mes commandes
+            </div>
+            <div class="shortcut-item">
+              <div class="shortcut-badge" style="background: #fef2f2;">❤️</div>
+              Mes favoris
+            </div>
+            <div class="shortcut-item">
+              <div class="shortcut-badge" style="background: #eff6ff;">
+                💬
+                <span class="badge-count">5</span>
+              </div>
+              Messages
+            </div>
+            <div class="shortcut-item">
+              <div class="shortcut-badge" style="background: #fffbeb;">📢</div>
+              Mes annonces
+            </div>
+          </div>
+        </div>
+
+        <!-- Widget Boostez votre visibilité -->
+        <div class="boost-card">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-weight: 700; font-size: 1rem; color: #065f46;">Boostez votre visibilité</span>
+            <span style="font-size: 1.5rem;">🚀</span>
+          </div>
+          <p style="font-size: 0.85rem; color: #047857; margin: 8px 0 0 0; line-height: 1.4;">
+            Attirez plus de clients avec nos offres premium.
+          </p>
+          <button class="btn-boost">Voir les offres</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+@end
