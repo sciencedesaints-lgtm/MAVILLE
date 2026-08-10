@@ -104,3 +104,10 @@
   #menu-overlay.is-active {
     display: block;
   }
+  
+  /* ==========================================
+     4. DIRECTIVES TAILWIND
+     ========================================== */
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;

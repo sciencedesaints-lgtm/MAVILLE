@@ -1,0 +1,68 @@
+@component('layouts/main', { title: 'Mes Notifications - MAVILLE' })
+
+  @slot('main')
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <div class="bg-white p-8 rounded-lg shadow-md border border-gray-100">
+            <h1 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-4">Mes Notifications & Demandes</h1>
+
+            @if(notifications.length > 0)
+                <div class="space-y-4">
+                    @each(notif in notifications)
+                        <div class="notification-card p-4 border rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 {{ notif.lu ? 'bg-gray-50 border-gray-200' : 'bg-blue-50/50 border-blue-200' }}">
+                            <div>
+                                <h3 class="font-semibold text-gray-800">{{ notif.titre }}</h3>
+                                <p class="text-sm text-gray-600 mt-1">{{ notif.message }}</p>
+                                <span class="text-xs text-gray-400 mt-2 block">{{ notif.createdAt.toFormat('dd/MM/yyyy à HH:mm') }}</span>
+                            </div>
+
+                            @if(notif.type === 'DEMANDE_MISE_EN_RELATION' && !notif.lu)
+                                <div class="flex gap-2 w-full sm:w-auto">
+                                    <button onclick="repondre({{ notif.id }}, 'approuve')" class="btn-action-success flex-1 sm:flex-none px-4 py-1.5 text-xs">
+                                        Accepter
+                                    </button>
+                                    <button onclick="repondre({{ notif.id }}, 'decline')" class="btn-action-danger flex-1 sm:flex-none px-4 py-1.5 text-xs">
+                                        Refuser
+                                    </button>
+                                </div>
+                            @else
+                                <span class="text-xs font-medium px-2.5 py-1 rounded {{ notif.lu ? 'bg-gray-200 text-gray-700' : 'bg-blue-100 text-blue-700' }}">
+                                    {{ notif.lu ? 'Traitée' : 'Lue' }}
+                                </span>
+                            @end
+                        </div>
+                    @end
+                </div>
+            @else
+                <p class="text-gray-500 text-center py-8">Vous n'avez aucune notification pour le moment.</p>
+            @end
+        </div>
+    </div>
+
+    <script>
+        async function repondre(id, statut) {
+            try {
+                const response = await fetch(`/api/v1/notifications/${id}/repondre`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    },
+                    body: JSON.stringify({ statut })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert(result.message || 'Une erreur est survenue.');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Impossible de contacter le serveur.');
+            }
+        }
+    </script>
+  @end
+
+@end

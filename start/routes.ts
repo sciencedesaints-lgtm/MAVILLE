@@ -1,5 +1,4 @@
 import router from '@adonisjs/core/services/router'
-import MediasController from '#controllers/medias_controller'
 import { middleware } from '#start/kernel'
 
 // Lazy loading des contrôleurs
@@ -12,6 +11,7 @@ const DemandesServicesController = () => import('#controllers/demandes_services_
 const UploadsController = () => import('#controllers/uploads_controller')
 const AiController = () => import('#controllers/ai_controller')
 const MediasController = () => import('#controllers/medias_controller')
+
 /* 
 ========================================================================== 
 1. VUES ET AFFICHAGE WEB (PAGE PAR PAGE)
@@ -24,13 +24,18 @@ router.on('/connexion').render('pages/connexion').as('web.connexion')
 router.on('/inscription').render('pages/inscription').as('web.inscription')
 router.on('/accueil').render('pages/accueil').as('web.accueil')
 
-// Remplacez la ligne existante par celle-ci pour correspondre à votre lien dans le menu
+// Gestion des actualités
 router.get('/actualite', [MediasController, 'index']).as('web.actualite')
 router.get('/actualite/creer', [MediasController, 'create']).as('web.actualite.create')
 router.post('/actualite', [MediasController, 'store']).as('web.actualite.store')
 
+// Route pour la page de recherche interactive (Sidebar)
+router.get('/recherche', [AiController, 'index']).as('web.recherche')
+
+// Route pour afficher la page des notifications et demandes (Sidebar)
+router.get('/profil/demandes', [AiController, 'notifications']).as('notifications.index').use(middleware.auth())
+
 // Route pour afficher le profil de l'utilisateur connecté
-// Retirez temporairement .use(middleware.auth()) pour tester
 router.get('/profil', [MediasController, 'profil']).as('web.profil')
 
 router.on('/profil/personnel').render('profils/personnel').as('profil.personnel')
@@ -119,7 +124,6 @@ router.group(() => {
     router.delete('/auth/logout', [SessionController, 'destroy'])
 
     // --- RECHERCHE MULTICRITÈRE & GÉOLOCALISATION ---
-    // Nom explicite unique pour éviter le conflit
     router.post('/recherches', [AiController, 'search']).as('api.recherches.store')
 
     // Gestion des réponses aux notifications (Approuver / Décliner)

@@ -12,6 +12,8 @@ export type ScannedRoutes = {
     'web.actualite': { paramsTuple?: []; params?: {} }
     'web.actualite.create': { paramsTuple?: []; params?: {} }
     'web.actualite.store': { paramsTuple?: []; params?: {} }
+    'web.recherche': { paramsTuple?: []; params?: {} }
+    'notifications.index': { paramsTuple?: []; params?: {} }
     'web.profil': { paramsTuple?: []; params?: {} }
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
@@ -52,6 +54,8 @@ export type ScannedRoutes = {
     'web.accueil': { paramsTuple?: []; params?: {} }
     'web.actualite': { paramsTuple?: []; params?: {} }
     'web.actualite.create': { paramsTuple?: []; params?: {} }
+    'web.recherche': { paramsTuple?: []; params?: {} }
+    'notifications.index': { paramsTuple?: []; params?: {} }
     'web.profil': { paramsTuple?: []; params?: {} }
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
@@ -73,6 +77,8 @@ export type ScannedRoutes = {
     'web.accueil': { paramsTuple?: []; params?: {} }
     'web.actualite': { paramsTuple?: []; params?: {} }
     'web.actualite.create': { paramsTuple?: []; params?: {} }
+    'web.recherche': { paramsTuple?: []; params?: {} }
+    'notifications.index': { paramsTuple?: []; params?: {} }
     'web.profil': { paramsTuple?: []; params?: {} }
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }

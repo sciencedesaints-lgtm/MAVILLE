@@ -6,6 +6,29 @@ import Notification from '#models/notification'
 
 export default class AiController {
   /**
+   * GET /recherche
+   * Affiche la page interactive de recherche (Écrire, parler, présenter une image)
+   */
+  public async index({ view }: HttpContext) {
+    return view.render('pages/recherche')
+  }
+
+  /**
+   * GET /profil/demandes
+   * Affiche la liste des notifications et demandes de mise en relation de l'utilisateur
+   */
+  public async notifications({ view, auth }: HttpContext) {
+    const user = auth.user!
+
+    // Récupérer toutes les notifications de l'utilisateur, de la plus récente à la plus ancienne
+    const notifications = await Notification.query()
+      .where('utilisateurId', user.id)
+      .orderBy('createdAt', 'desc')
+
+    return view.render('pages/notifications', { notifications })
+  }
+
+  /**
    * POST /api/v1/ai/search
    * Endpoint de recherche intelligente et mise en relation
    */
@@ -130,9 +153,9 @@ export default class AiController {
     notification.lu = true
     await notification.save()
 
-    // Si approuvé, on peut initier la mise en relation (ex: créer un accès ou une conversation)
+    // Si approuvé, on peut initier la mise en relation
     if (statut === 'approuve') {
-      // TODO: Logique additionnelle (ex: création d'une ligne dans une table de relations acceptées)
+      // TODO: Logique additionnelle si nécessaire
     }
 
     return response.ok({
