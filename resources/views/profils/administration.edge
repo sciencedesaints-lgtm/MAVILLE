@@ -1,66 +1,235 @@
-@component('layouts/main', { title: 'Portail Administration - MAVILLE' })
-  @slot('page_css')
-    @vite(['resources/css/profil-administration.css'])
-  @end
+@component('layouts/main', { title: 'Profil Administration Publique - MAVILLE' })
 
   @slot('main')
-  <div class="dashboard-container">
-    <aside class="sidebar admin-sidebar">
-      <div class="sidebar-logo"><span>MA</span><b>VILLE</b> <small>GOUV</small></div>
-      <ul class="sidebar-menu">
-        <li class="active">🏛️ Tableau de bord officiel</li>
-        <li>📋 Services & Communiqués</li>
-        <li>👥 Requêtes Citoyennes</li>
-        <li>🔒 Paramètres de Sécurité</li>
-      </ul>
+  <div class="flex min-h-screen">
+    
+    <!-- Sidebar Gauche (Administration Publique) -->
+    <aside class="w-64 bg-white border-r border-gray-200 p-6 flex flex-col justify-between">
+      <div>
+        <div class="text-2xl font-bold text-green-700 mb-8">MAVILLE</div>
+        <nav class="space-y-2 text-sm">
+          <a href="/accueil" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">Accueil</a>
+          <a href="/profil/administration" class="flex items-center gap-3 p-3 rounded-lg bg-green-50 text-green-700 font-medium">Profil</a>
+          <a href="/actualite" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">Actualité</a>
+          <a href="/services-publics" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">Services publics</a>
+          <a href="/communiques" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">Communiqués</a>
+          <a href="/evenements" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">Événements</a>
+          <a href="/signalements" class="flex items-center justify-between p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+            <span>Signalements</span>
+            <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">124</span>
+          </a>
+          <a href="/documents" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">Documents</a>
+          <a href="/statistiques" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">Statistiques</a>
+          <a href="/parametres" class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">Paramètres</a>
+        </nav>
+      </div>
+      <div>
+        <a href="/logout" class="flex items-center gap-3 p-3 rounded-lg text-red-600 hover:bg-red-50">Déconnexion</a>
+      </div>
     </aside>
 
-    <main class="main-content">
-      <header class="dashboard-header">
-        <div class="user-profile-summary" style="display: flex; align-items: center; gap: 15px;">
-          <img src="{{ user.avatar || '/images/default-avatar.png' }}" alt="Logo Administration" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #f59e0b;" />
-          <div>
-            <h1>Portail Institutionnel : <span id="user-name">{{ user.nom }}</span></h1>
-            <p style="font-size: 0.85rem; color: #666;">Administration Publique</p>
+    <!-- Contenu Principal -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      
+      <!-- En-tête de Profil Administration Publique -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+        <!-- Bannière Institutionnelle -->
+        <div class="h-48 bg-gray-900 relative">
+          <img src="/images/mairie-banner.jpg" alt="Mairie de Lubumbashi" class="w-full h-full object-cover opacity-80">
+          <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-medium">
+            Lubumbashi, RDC
           </div>
         </div>
-        
-        <form action="{{ route('auth.logout') }}" method="POST">
-          {{ csrfField() }}
-          <button type="submit" class="btn-logout" style="background: none; border: none; cursor: pointer;">Déconnexion</button>
-        </form>
-      </header>
 
-      <section class="dashboard-grid">
-        <div class="card">
-          <h3>Communications Officielles</h3>
-          <p>Diffusez des communiqués et alertes directement aux citoyens abonnés.</p>
-        </div>
-        <div class="card">
-          <h3>Suivi et Traitement</h3>
-          <p>Gérez les signalements et les demandes administratives centralisées.</p>
-        </div>
-      </section>
+        <!-- Infos Mairie -->
+        <div class="px-8 pb-6 relative">
+          <div class="flex justify-between items-end -mt-16 mb-4">
+           <img src="{{ user?.avatar || '/images/mairie-logo.png' }}" alt="Logo Mairie" class="w-32 h-32 rounded-full border-4 border-white object-cover shadow-md bg-white">
+            <div class="flex gap-3">
+              <button class="px-5 py-2 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition">Modifier</button>
+              <button class="px-5 py-2 bg-green-700 text-white rounded-full text-sm font-medium hover:bg-green-800 transition">Publier</button>
+            </div>
+          </div>
 
-      <!-- Modal d'upload d'avatar -->
-<div id="avatar-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-  <div class="modal-content" style="background: white; padding: 25px; border-radius: 12px; width: 350px; text-align: center;">
-    <h3>Modifier votre photo / logo</h3>
-    <form id="avatar-form" enctype="multipart/form-data" style="margin-top: 15px;">
-      {{ csrfField() }}
-      <input type="file" id="avatar-file-input" name="avatar" accept="image/*" required style="margin-bottom: 15px; width: 100%;" />
-      <div style="display: flex; gap: 10px; justify-content: center;">
-        <button type="submit" class="btn-primary" style="background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">Télécharger</button>
-        <button type="button" id="close-modal-btn" style="background: #e5e7eb; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">Annuler</button>
+          <div class="flex items-center gap-2">
+            <h1 class="text-2xl font-bold">{{ user?.nom || 'Mairie de Lubumbashi' }}</h1>
+            <span class="text-green-600">✔</span>
+          </div>
+          <p class="text-gray-500 text-sm">@{{ user?.username || 'mairie.lubumbashi' }}</p>
+          <p class="text-gray-500 text-sm">Administration publique</p>
+          <p class="text-gray-600 mt-2 text-sm">{{ user?.bio || 'Au service des citoyens pour une ville propre, sûre et moderne.' }}</p>
+
+          <!-- Statistiques Administratives -->
+          <div class="grid grid-cols-4 gap-6 mt-6 pt-6 border-t border-gray-100 text-center">
+            <div>
+              <div class="font-bold text-lg">2,540</div>
+              <div class="text-xs text-gray-500">abonnés</div>
+            </div>
+            <div>
+              <div class="font-bold text-lg">98</div>
+              <div class="text-xs text-gray-500">communiqués</div>
+            </div>
+            <div>
+              <div class="font-bold text-lg">45</div>
+              <div class="text-xs text-gray-500">services</div>
+            </div>
+            <div>
+              <div class="font-bold text-lg">23</div>
+              <div class="text-xs text-gray-500">signalements</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Onglets -->
+        <div class="flex border-t border-gray-200 px-8 gap-8 text-sm font-medium">
+          <a href="#" class="py-4 border-b-2 border-green-700 text-green-700">Communiqués</a>
+          <a href="#" class="py-4 text-gray-500 hover:text-gray-800">Services</a>
+          <a href="#" class="py-4 text-gray-500 hover:text-gray-800">Événements</a>
+          <a href="#" class="py-4 text-gray-500 hover:text-gray-800">À propos</a>
+          <a href="#" class="py-4 text-gray-500 hover:text-gray-800">Documents</a>
+        </div>
       </div>
-    </form>
-  </div>
-</div>
+
+      <!-- Grille centrale (Flux des communiqués à gauche + Widgets à droite) -->
+      <div class="grid grid-cols-3 gap-6">
+        
+        <!-- Flux des communiqués (2 colonnes) -->
+        <div class="col-span-2 space-y-6">
+          <!-- Communiqué 1 -->
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <div class="flex items-center gap-3 mb-4">
+              <img src="{{ user?.avatar || '/images/mairie-logo.png' }}" class="w-10 h-10 rounded-full object-cover">
+              <div>
+                <h3 class="font-bold text-sm">Mairie de Lubumbashi</h3>
+                <span class="text-xs text-gray-400">Travaux routiers sur l'avenue Kassandru</span>
+              </div>
+            </div>
+            <p class="text-sm mb-4 text-gray-600">À partir du lundi 20 juin, des travaux seront effectués sur l'avenue Kassandru.<br>Merci de votre compréhension.</p>
+            <div class="rounded-xl overflow-hidden bg-gray-100 h-64 mb-4">
+              <img src="/images/travaux.jpg" class="w-full h-full object-cover" alt="Travaux routiers">
+            </div>
+            <div class="flex justify-between items-center text-xs text-gray-500 pt-3 border-t border-gray-100">
+              <span>👍 84</span>
+              <span>12 commentaires • 28 partages</span>
+            </div>
+          </div>
+
+          <!-- Communiqué 2 -->
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <div class="flex items-center gap-3 mb-4">
+              <img src="{{ user?.avatar || '/images/mairie-logo.png' }}" class="w-10 h-10 rounded-full object-cover">
+              <div>
+                <h3 class="font-bold text-sm">Mairie de Lubumbashi</h3>
+                <span class="text-xs text-gray-400">Collecte des déchets ce week-end</span>
+              </div>
+            </div>
+            <p class="text-sm mb-4 text-gray-600">La collecte se fera normalement ce samedi dans tous les quartiers.</p>
+            <div class="rounded-xl overflow-hidden bg-green-900 text-white p-6 mb-4 flex items-center justify-between">
+              <div>
+                <h4 class="font-bold text-lg mb-1">Propreté de notre ville, responsabilité de tous !</h4>
+              </div>
+              <span class="text-4xl">♻️</span>
+            </div>
+            <div class="flex justify-between items-center text-xs text-gray-500 pt-3 border-t border-gray-100">
+              <span>👍 61</span>
+              <span>8 commentaires • 10 partages</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Widgets de droite (1 colonne) -->
+        <div class="space-y-6">
+          <!-- Services rapides -->
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <h3 class="font-bold text-base mb-4">Services rapides</h3>
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <div class="p-3 border border-gray-100 bg-gray-50 rounded-xl text-center hover:bg-green-50 cursor-pointer">
+                <span class="text-xl">📄</span>
+                <div class="text-xs font-medium mt-1">Retrait d'état civil</div>
+              </div>
+              <div class="p-3 border border-gray-100 bg-gray-50 rounded-xl text-center hover:bg-green-50 cursor-pointer">
+                <span class="text-xl">💳</span>
+                <div class="text-xs font-medium mt-1">Paiement taxe</div>
+              </div>
+              <div class="p-3 border border-gray-100 bg-gray-50 rounded-xl text-center hover:bg-green-50 cursor-pointer">
+                <span class="text-xl">⚠️</span>
+                <div class="text-xs font-medium mt-1">Demande certificat</div>
+              </div>
+              <div class="p-3 border border-gray-100 bg-gray-50 rounded-xl text-center hover:bg-green-50 cursor-pointer">
+                <span class="text-xl">💡</span>
+                <div class="text-xs font-medium mt-1">Réclamation / Suggestion</div>
+              </div>
+            </div>
+            <button class="w-full py-2 bg-green-700 text-white rounded-xl text-sm font-medium hover:bg-green-800 transition">Voir tous les services</button>
+          </div>
+
+          <!-- Signalements -->
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-bold text-base">Signalements</h3>
+              <span class="text-xs text-green-700 font-medium cursor-pointer">Voir tout</span>
+            </div>
+            <ul class="space-y-3 text-sm text-gray-600">
+              <li class="flex justify-between items-center">
+                <span>🛣️ Voirie</span>
+                <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">12 en cours</span>
+              </li>
+              <li class="flex justify-between items-center">
+                <span>💡 Éclairage public</span>
+                <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">7 en cours</span>
+              </li>
+              <li class="flex justify-between items-center">
+                <span>⚡ Eau potable</span>
+                <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">24 en cours</span>
+              </li>
+              <li class="flex justify-between items-center">
+                <span>🧹 Assainissement</span>
+                <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">9 en cours</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Prochains événements -->
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <h3 class="font-bold text-base mb-4">Prochains événements</h3>
+            <div class="space-y-4">
+              <div class="flex gap-4 items-center">
+                <div class="bg-green-50 text-green-700 p-3 rounded-xl text-center min-w-[60px]">
+                  <div class="font-bold text-lg">15</div>
+                  <div class="text-[10px] uppercase">Juin</div>
+                </div>
+                <div>
+                  <div class="text-sm font-bold">Journée de salubrité</div>
+                  <div class="text-xs text-gray-400">🕒 08h00 - 12h00<br>📍 Place de la Poste</div>
+                </div>
+              </div>
+              <div class="flex gap-4 items-center">
+                <div class="bg-green-50 text-green-700 p-3 rounded-xl text-center min-w-[60px]">
+                  <div class="font-bold text-lg">22</div>
+                  <div class="text-[10px] uppercase">Juin</div>
+                </div>
+                <div>
+                  <div class="text-sm font-bold">Forum citoyen</div>
+                  <div class="text-xs text-gray-400">🕒 10h00 - 14h00<br>📍 Hôtel de Ville</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </main>
+
   </div>
+  @end
+
+  @slot('page_css')
+    @vite(['resources/css/profil-administration.css'])
   @end
 
   @slot('page_js')
     @vite(['resources/js/profil-administration.js'])
   @end
+
 @end

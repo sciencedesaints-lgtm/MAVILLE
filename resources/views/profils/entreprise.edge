@@ -1,66 +1,191 @@
-@component('layouts/main', { title: 'Espace Entreprise - MAVILLE' })
-  @slot('page_css')
-    @vite(['resources/css/profil-entreprise.css'])
-  @end
+@component('layouts/main', { title: 'Profil Entreprise - MAVILLE' })
 
   @slot('main')
-  <div class="dashboard-container">
-    <aside class="sidebar empresa-sidebar">
-      <div class="sidebar-logo"><span>MA</span><b>VILLE</b> <small>PRO</small></div>
-      <ul class="sidebar-menu">
-        <li class="active">📊 Vue d'ensemble</li>
-        <li>🏢 Mon Entreprise</li>
-        <li>📢 Annonces & Offres</li>
-        <li>📈 Statistiques</li>
-      </ul>
+  <div class="app-layout">
+    
+    <!-- Sidebar Gauche (Entreprise) -->
+    <aside class="sidebar">
+      <div>
+        <div class="sidebar-brand">MAVILLE</div>
+        <nav class="sidebar-nav text-sm">
+          <a href="/accueil" class="nav-link">Accueil</a>
+          <a href="/profil/entreprise" class="nav-link active">Profil</a>
+          <a href="/actualite" class="nav-link">Actualité</a>
+          <a href="/catalogue" class="nav-link">Catalogue / Produits</a>
+          <a href="/commandes" class="nav-link flex justify-between items-center">
+            <span>Commandes</span>
+            <span class="badge-count">5</span>
+          </a>
+          <a href="/offres" class="nav-link">Offres d'emploi</a>
+          <a href="/messages" class="nav-link">Messages</a>
+          <a href="/statistiques" class="nav-link">Statistiques</a>
+          <a href="/parametres" class="nav-link">Paramètres</a>
+        </nav>
+      </div>
+      <div>
+        <a href="/logout" class="nav-link nav-link-danger">Déconnexion</a>
+      </div>
     </aside>
 
+    <!-- Contenu Principal -->
     <main class="main-content">
-      <header class="dashboard-header">
-        <div class="user-profile-summary" style="display: flex; align-items: center; gap: 15px;">
-          <img src="{{ user.avatar || '/images/default-avatar.png' }}" alt="Logo Entreprise" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #10b981;" />
-          <div>
-            <h1>Espace Professionnel : <span id="user-name">{{ user.nom }} {{ user.prenom ? '(' + user.prenom + ')' : '' }}</span></h1>
-            <p style="font-size: 0.85rem; color: #666;">Compte Entreprise / Agence</p>
+      
+      <!-- En-tête de Profil Entreprise -->
+      <div class="profile-header-card">
+        <!-- Bannière Commerciale -->
+        <div class="profile-banner">
+          <img src="/images/entreprise-banner.jpg" alt="Bannière Entreprise" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+          <div class="absolute-badge">
+            Lubumbashi, RDC
           </div>
         </div>
-        
-        <form action="{{ route('auth.logout') }}" method="POST">
-          {{ csrfField() }}
-          <button type="submit" class="btn-logout" style="background: none; border: none; cursor: pointer;">Déconnexion</button>
-        </form>
-      </header>
 
-      <section class="dashboard-grid">
-        <div class="card">
-          <h3>Visibilité de la structure</h3>
-          <p>Gérez vos services et touchez vos clients locaux efficacement.</p>
-        </div>
-        <div class="card">
-          <h3>Gestion des offres</h3>
-          <p>Publiez vos nouveautés, promotions ou annonces officielles.</p>
-        </div>
-      </section>
+        <!-- Infos Entreprise -->
+        <div class="profile-details-container">
+          <div class="profile-actions-row">
+            <img src="{{ user?.avatar || '/images/entreprise-logo.png' }}" alt="Logo Entreprise" class="entreprise-logo profile-avatar-wrapper">
+            <div class="flex gap-3">
+              <button class="btn-outline">Modifier</button>
+              <button class="btn-primary" onclick="document.querySelector('#logo-input').click()">Changer le logo</button>
+              <input type="file" id="logo-input" class="hidden" accept="image/*">
+            </div>
+          </div>
 
-      <!-- Modal d'upload d'avatar -->
-<div id="avatar-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-  <div class="modal-content" style="background: white; padding: 25px; border-radius: 12px; width: 350px; text-align: center;">
-    <h3>Modifier votre photo / logo</h3>
-    <form id="avatar-form" enctype="multipart/form-data" style="margin-top: 15px;">
-      {{ csrfField() }}
-      <input type="file" id="avatar-file-input" name="avatar" accept="image/*" required style="margin-bottom: 15px; width: 100%;" />
-      <div style="display: flex; gap: 10px; justify-content: center;">
-        <button type="submit" class="btn-primary" style="background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">Télécharger</button>
-        <button type="button" id="close-modal-btn" style="background: #e5e7eb; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">Annuler</button>
+          <div class="profile-name-row">
+            <h1 class="profile-name">{{ user?.nom || 'Katanga Tech & Services' }}</h1>
+            <span class="verified-badge">✔</span>
+          </div>
+          <p class="profile-username">@{{ user?.username || 'katanga.tech' }}</p>
+          <p class="profile-username">Entreprise de services numériques & logistiques</p>
+          <p class="profile-bio">{{ user?.bio || 'Solutions logicielles et transformation digitale pour les entreprises du Haut-Katanga.' }}</p>
+
+          <!-- Statistiques Commerciales -->
+          <div class="profile-stats">
+            <div class="stat-item">
+              <div class="stat-value">1,820</div>
+              <div class="stat-label">clients</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">45</div>
+              <div class="stat-label">produits</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">4.8 ⭐</div>
+              <div class="stat-label">évaluation</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">12</div>
+              <div class="stat-label">offres actives</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Onglets -->
+        <div class="profile-tabs">
+          <a href="#" class="profile-tab tab-item active">Publications</a>
+          <a href="#" class="profile-tab tab-item">Produits & Services</a>
+          <a href="#" class="profile-tab tab-item">Offres d'emploi</a>
+          <a href="#" class="profile-tab tab-item">À propos</a>
+          <a href="#" class="profile-tab tab-item">Avis clients</a>
+        </div>
       </div>
-    </form>
-  </div>
-</div>
+
+      <!-- Grille centrale (Flux de l'entreprise + Widgets latéraux) -->
+      <div class="content-grid">
+        
+        <!-- Flux de publications de l'entreprise (2 colonnes) -->
+        <div class="feed-column">
+          <!-- Publication 1 -->
+          <div class="card">
+            <div class="post-header">
+              <img src="{{ user?.avatar || '/images/entreprise-logo.png' }}" class="entreprise-logo post-avatar" alt="Avatar">
+              <div>
+                <h3 class="post-author-name">Katanga Tech & Services</h3>
+                <span class="post-time">Lancement de notre nouvelle application mobile MAVILLE Pro</span>
+              </div>
+            </div>
+            <p class="post-text">Nous sommes fiers d'annoncer la sortie de notre nouvelle solution de gestion dédiée aux commerçants de Lubumbashi. Simplifiez vos ventes dès aujourd'hui ! 🚀</p>
+            <div class="post-media">
+              <img src="/images/app-launch.jpg" alt="Lancement Application">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); padding-top: 12px; border-top: 1px solid var(--border-color);">
+              <span>👍 142 j'aime</span>
+              <span>24 commentaires • 18 partages</span>
+            </div>
+          </div>
+
+          <!-- Publication 2 (Produit phare) -->
+          <div class="card">
+            <div class="post-header">
+              <img src="{{ user?.avatar || '/images/entreprise-logo.png' }}" class="entreprise-logo post-avatar" alt="Avatar">
+              <div>
+                <h3 class="post-author-name">Katanga Tech & Services</h3>
+                <span class="post-time">Pack Matériel Bureautique & Connexion</span>
+              </div>
+            </div>
+            <p class="post-text">Profitez de notre offre spéciale ce mois-ci : routeur 4G + onduleur haute performance à prix réduit pour toutes les PME partenaires.</p>
+            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h4 style="font-weight: 700; color: #166534; font-size: 0.95rem;">Pack PME Connect</h4>
+                <p style="font-size: 0.85rem; color: #15803d;">Stock limité - Disponible en agence</p>
+              </div>
+              <button class="add-to-cart-btn" data-product="Pack PME Connect" style="background-color: var(--primary-color); color: white; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Commander</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); padding-top: 12px; border-top: 1px solid var(--border-color);">
+              <span>👍 89 j'aime</span>
+              <span>7 commentaires • 5 partages</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Widgets de droite (1 colonne) -->
+        <div class="sidebar-column">
+          <!-- Infos de contact -->
+          <div class="card">
+            <h3 class="card-title">Informations professionnelles</h3>
+            <ul class="about-list">
+              <li>📍 Avenue de la పాఠ L, Lubumbashi</li>
+              <li>📞 +243 970 000 000</li>
+              <li>🌐 www.katangatech.cd</li>
+              <li>⏰ Lun - Ven : 08h00 - 17h00</li>
+            </ul>
+          </div>
+
+          <!-- Produits Phares / Vitrine -->
+          <div class="card">
+            <h3 class="card-title">Vitrine de services</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; gap: 10px; align-items: center; font-size: 0.9rem;">
+                <span style="font-size: 1.2rem;">💻</span>
+                <div>
+                  <div style="font-weight: 600;">Développement Web & Mobile</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Sur mesure pour entreprises</div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center; font-size: 0.9rem;">
+                <span style="font-size: 1.2rem;">☁️</span>
+                <div>
+                  <div style="font-weight: 600;">Hébergement Cloud Local</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Sécurisé et ultra rapide</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </main>
+
   </div>
+  @end
+
+  @slot('page_css')
+    @vite(['resources/css/profil-entreprise.css'])
   @end
 
   @slot('page_js')
     @vite(['resources/js/profil-entreprise.js'])
   @end
+
 @end

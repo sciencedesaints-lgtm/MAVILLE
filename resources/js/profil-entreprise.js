@@ -1,58 +1,61 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Espace Entreprise & Agence initialisé.");
+  // 1. Gestion de l'upload dynamique du logo de l'entreprise
+  const logoInput = document.querySelector('#logo-input')
+  
+  if (logoInput) {
+    logoInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0]
+      if (!file) return
 
-    // 1. Gestion de l'upload du logo de l'entreprise
-    setupEnterpriseLogoUpload();
+      const formData = new FormData()
+      formData.append('avatar', file) // Champ géré par votre backend
 
-    // 2. Chargement des statistiques de leads et prospects en temps réel
-    loadEnterpriseStats();
-});
+      try {
+        const response = await fetch('/profil/avatar', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
 
-function setupEnterpriseLogoUpload() {
-    const logoContainer = document.querySelector('.user-profile-summary img');
-    if (!logoContainer) return;
+        const data = await response.json()
 
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/png, image/jpeg, image/jpg';
-    fileInput.style.display = 'none';
-    document.body.appendChild(fileInput);
-
-    logoContainer.style.cursor = 'pointer';
-    logoContainer.title = 'Cliquez pour modifier le logo de l\'entreprise';
-
-    logoContainer.addEventListener('click', () => {
-        fileInput.click();
-    });
-
-    fileInput.addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append('avatar', file);
-
-        try {
-            const response = await fetch('/api/v1/profil/avatar', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
-                },
-                body: formData
-            });
-
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert("Erreur lors de la mise à jour du logo.");
-            }
-        } catch (error) {
-            console.error("Erreur réseau:", error);
+        if (data.success) {
+          // Met à jour instantanément toutes les images de logo sur la page
+          const logoImages = document.querySelectorAll('.entreprise-logo')
+          logoImages.forEach(img => {
+            img.src = data.avatarUrl
+          })
+        } else {
+          alert(data.message || 'Erreur lors de la mise à jour du logo')
         }
-    });
-}
+      } catch (error) {
+        console.error('Erreur réseau :', error)
+      }
+    })
+  }
 
-async function loadEnterpriseStats() {
-    // Logique pour récupérer le nombre de clients notifiés et d'offres actives
-    console.log("Chargement des leads professionnels...");
-}
+  // 2. Gestion de la navigation par onglets du profil entreprise
+  const tabs = document.querySelectorAll('.profile-tab')
+  tabs.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      e.preventDefault()
+      // Retire la classe active de tous les onglets
+      tabs.forEach(t => t.classList.remove('active', 'text-green-700'))
+      tabs.forEach(t => t.style.borderBottomColor = 'transparent')
+
+      // Active l'onglet sélectionné
+      e.currentTarget.classList.add('active', 'text-green-700')
+    })
+  })
+
+  // 3. Gestion des boutons d'ajout au panier / commande de produits phares
+  const addToCartButtons = document.querySelectorAll('.add-to-cart-btn')
+  addToCartButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      const productName = e.currentTarget.getAttribute('data-product')
+      alert(`Produit "${productName}" ajouté aux commandes de l'entreprise avec succès !`)
+    })
+  })
+})

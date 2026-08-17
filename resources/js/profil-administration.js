@@ -1,58 +1,55 @@
+/**
+ * Script pour le Profil Administration Publique - MAVILLE
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Portail Administration publique initialisé.");
+  // 1. Gestion des onglets de navigation du profil
+  const tabItems = document.querySelectorAll('.profile-tabs .tab-item');
+  
+  tabItems.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // Retirer la classe active de tous les onglets
+      tabItems.forEach(t => {
+        t.classList.remove('active', 'border-b-2', 'border-green-700', 'text-green-700', 'font-600');
+        t.classList.add('text-gray-500');
+      });
+      
+      // Activer l'onglet cliqué
+      tab.classList.add('active', 'border-b-2', 'border-green-700', 'text-green-700', 'font-600');
+      tab.classList.remove('text-gray-500');
+    });
+  });
 
-    // 1. Gestion de l'upload du sceau / avatar institutionnel
-    setupAdminAvatarUpload();
+  // 2. Gestion des clics sur les services rapides
+  const serviceBoxes = document.querySelectorAll('.service-box');
+  
+  serviceBoxes.forEach(box => {
+    box.addEventListener('click', () => {
+      const serviceName = box.querySelector('.text-xs').textContent;
+      console.log(`Action rapide sélectionnée : ${serviceName}`);
+      
+      // Exemple de retour visuel ou ouverture de modale de formulaire
+      // alert(`Ouverture du service : ${serviceName}`);
+    });
+  });
 
-    // 2. Initialisation des flux de signalements et alertes citoyennes
-    loadAdminDashboardData();
+  // 3. Boutons d'action du profil (Modifier / Publier)
+  const editProfileBtn = document.querySelector('button.border-gray-300');
+  const publishBtn = document.querySelector('button.bg-green-700');
+
+  if (editProfileBtn) {
+    editProfileBtn.addEventListener('click', () => {
+      console.log("Ouverture du mode édition de l'administration...");
+      // Logique pour basculer en mode édition des informations de la mairie
+    });
+  }
+
+  if (publishBtn) {
+    publishBtn.addEventListener('click', () => {
+      console.log("Ouverture de la fenêtre de création de communiqué...");
+      // Logique pour ouvrir l'éditeur de publication
+    });
+  }
 });
-
-function setupAdminAvatarUpload() {
-    const adminAvatar = document.querySelector('.user-profile-summary img');
-    if (!adminAvatar) return;
-
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/png, image/jpeg, image/jpg';
-    fileInput.style.display = 'none';
-    document.body.appendChild(fileInput);
-
-    adminAvatar.style.cursor = 'pointer';
-    adminAvatar.title = 'Cliquez pour modifier l\'emblème officiel';
-
-    adminAvatar.addEventListener('click', () => {
-        fileInput.click();
-    });
-
-    fileInput.addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append('avatar', file);
-
-        try {
-            const response = await fetch('/api/v1/profil/avatar', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
-                },
-                body: formData
-            });
-
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert("Erreur lors de la mise à jour de l'emblème.");
-            }
-        } catch (error) {
-            console.error("Erreur réseau:", error);
-        }
-    });
-}
-
-async function loadAdminDashboardData() {
-    // Logique pour récupérer les rapports et requêtes citoyennes en attente
-    console.log("Chargement du tableau de bord institutionnel...");
-}

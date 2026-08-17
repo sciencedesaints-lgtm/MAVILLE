@@ -1,65 +1,135 @@
-@component('layouts/main', { title: 'Mon Profil Personnel - MAVILLE' })
-  @slot('page_css')
-    @vite(['resources/css/profil-personnel.css'])
-  @end
+@component('layouts/main', { title: 'Profil Personnel - MAVILLE' })
 
   @slot('main')
-  <div class="dashboard-container">
+  <div class="app-layout">
+    
+    <!-- Sidebar fixe à gauche -->
     <aside class="sidebar">
-      <div class="sidebar-logo"><span>MA</span><b>VILLE</b></div>
-      <ul class="sidebar-menu">
-        <li class="active">🏠 Tableau de bord</li>
-        <li>👤 Mes Informations</li>
-        <li>🔔 Notifications</li>
-        <li>⚙️ Paramètres</li>
-      </ul>
+      <div>
+        <div class="sidebar-brand">MAVILLE</div>
+        <nav class="sidebar-nav">
+          <a href="/accueil" class="nav-link">Accueil</a>
+          <a href="/profil/personnel" class="nav-link active">Profil</a>
+          <a href="/actualite" class="nav-link">Actualité</a>
+          <a href="/recherche" class="nav-link">Recherche</a>
+          <a href="/abonnements" class="nav-link">Abonnements</a>
+          <a href="/historique" class="nav-link">Historique</a>
+          <a href="/notifications" class="nav-link">Notifications</a>
+          <a href="/parametres" class="nav-link">Paramètres</a>
+        </nav>
+      </div>
+      <div>
+        <a href="/logout" class="nav-link nav-link-danger">Déconnexion</a>
+      </div>
     </aside>
 
+    <!-- Contenu Principal -->
     <main class="main-content">
-      <div class="user-profile-summary" style="display: flex; align-items: center; gap: 15px;">
-  <img id="user-avatar" src="{{ user?.avatar || '/images/default-avatar.png' }}" alt="Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #2563eb;" />
-  <div>
-    <h1>Bienvenue, <span id="user-name">Chargement...</span></h1>
-    <p id="user-email" style="font-size: 0.85rem; color: #666;"></p>
-  </div>
-</div>
-        
-        <form action="{{ route('auth.logout') }}" method="POST">
-          {{ csrfField() }}
-          <button type="submit" class="btn-logout" style="background: none; border: none; cursor: pointer;">Déconnexion</button>
-        </form>
-      </header>
-
-      <section class="dashboard-grid">
-        <div class="card">
-          <h3>Services à proximité</h3>
-          <p>Découvrez les services publics et commerciaux autour de chez vous.</p>
+      
+      <!-- En-tête de Profil -->
+      <div class="profile-header-card">
+        <!-- Bannière -->
+        <div class="profile-banner">
+          <div style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 500;">
+            Lubumbashi, RDC
+          </div>
         </div>
-        <div class="card">
-          <h3>Mes Activités</h3>
-          <p>Historique de vos requêtes et interactions avec la ville.</p>
-        </div>
-      </section>
 
-      <!-- Modal d'upload d'avatar -->
-<div id="avatar-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-  <div class="modal-content" style="background: white; padding: 25px; border-radius: 12px; width: 350px; text-align: center;">
-    <h3>Modifier votre photo / logo</h3>
-    <form id="avatar-form" enctype="multipart/form-data" style="margin-top: 15px;">
-      {{ csrfField() }}
-      <input type="file" id="avatar-file-input" name="avatar" accept="image/*" required style="margin-bottom: 15px; width: 100%;" />
-      <div style="display: flex; gap: 10px; justify-content: center;">
-        <button type="submit" class="btn-primary" style="background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">Télécharger</button>
-        <button type="button" id="close-modal-btn" style="background: #e5e7eb; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">Annuler</button>
+        <!-- Infos Utilisateur -->
+        <div class="profile-details-container">
+          <div class="profile-actions-row">
+            <div class="profile-avatar-wrapper">
+              <img src="{{ user?.avatar || '/images/default-avatar.png' }}" alt="Avatar">
+            </div>
+            <button class="btn-outline">
+              Modifier le profil
+            </button>
+          </div>
+
+          <div class="profile-name-row">
+            <h1 class="profile-name">{{ user?.prenom || '' }} {{ user?.nom || 'Utilisateur' }}</h1>
+            <span class="verified-badge">✔</span>
+          </div>
+
+          <p class="profile-username">@{{ user ? user.username : 'username' }}</p>
+          <p class="profile-bio">{{ user?.bio || 'Aucune biographie pour le moment.' }}</p>
+
+          <!-- Statistiques -->
+          <div class="profile-stats">
+            <div class="stat-item">
+              <div class="stat-value">125</div>
+              <div class="stat-label">Publications</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">340</div>
+              <div class="stat-label">Abonnés</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">210</div>
+              <div class="stat-label">Abonnements</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">42</div>
+              <div class="stat-label">Favoris</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Onglets -->
+        <div class="profile-tabs">
+          <a href="#" class="tab-item active">Publications</a>
+          <a href="#" class="tab-item">À propos</a>
+          <a href="#" class="tab-item">Photos</a>
+          <a href="#" class="tab-item">Vidéos</a>
+        </div>
       </div>
-    </form>
-  </div>
-</div>
+
+      <!-- Grille centrale (Flux + Sidebar Droite) -->
+      <div class="content-grid">
+        
+        <!-- Flux de publications (2 colonnes) -->
+        <div class="feed-column">
+          <div class="card">
+            <div class="post-header">
+             <img src="{{ user?.avatar || '/images/default-avatar.png' }}" class="post-avatar" alt="Avatar">
+             <div>
+               <h3 class="post-author-name">{{ user?.prenom || '' }} {{ user?.nom || 'Utilisateur' }}</h3>
+               <span class="post-time">2 h · Lubumbashi</span>
+             </div>
+            </div>
+            <p class="post-text">Magnifique coucher de soleil sur Lubumbashi 🌅<br>Ma ville, ma vie 💚</p>
+            <div class="post-media">
+              <img src="/images/coucher-soleil.jpg" alt="Publication">
+            </div>
+          </div>
+        </div>
+
+        <!-- Widgets de droite (1 colonne) -->
+        <div class="sidebar-column">
+          <div class="card">
+            <h3 class="card-title">À propos</h3>
+            <ul class="about-list">
+              <li>💻 Développeur Web</li>
+              <li>📍 Lubumbashi, RDC</li>
+              <li>🗣️ Français, Swahili, Anglais</li>
+              <li>📅 Membre depuis mai 2023</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
     </main>
+
   </div>
+  @end
+
+  @slot('page_css')
+    @vite(['resources/css/profil-personnel.css'])
   @end
 
   @slot('page_js')
     @vite(['resources/js/profil-personnel.js'])
   @end
+
 @end

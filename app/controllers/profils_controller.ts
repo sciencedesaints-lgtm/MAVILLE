@@ -3,18 +3,30 @@ import app from '@adonisjs/core/services/app'
 import string from '@adonisjs/core/helpers/string'
 
 export default class ProfilsController {
-  async personnel({ view }: HttpContext) {
-    return view.render('profils/personnel')
-  }
+  async personnel({ view, auth }: HttpContext) {
+    const user = auth.user
+    if (user) {
+      await user.refresh()
+    }
+    return view.render('profils/personnel', { user })
+  } // <-- Une seule accolade fermante pour la méthode personnel
 
-  async entreprise({ view }: HttpContext) {
-    return view.render('profils/entreprise')
-  }
+  async entreprise({ view, auth }: HttpContext) {
+    const user = auth.user
+    if (user) {
+      await user.refresh()
+    }
+    return view.render('profils/entreprise', { user })
+  } // <-- Une seule accolade fermante pour la méthode entreprise
 
-  async administration({ view }: HttpContext) {
-    return view.render('profils/administration')
+  async administration({ view, auth }: HttpContext) {
+    const user = auth.user
+    if (user) {
+      await user.refresh()
+    }
+    return view.render('profils/administration', { user })
   }
-
+ // <-- Accolade finale de la classe
   async updateAvatar({ request, response, auth }: HttpContext) {
     const user = auth.user
     if (!user) {

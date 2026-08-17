@@ -1,113 +1,106 @@
-/* ==========================================
-   1. VARIABLES & REINITIALISATION (RESET)
-   ========================================== */
+   /* ==========================================
+      2. VARIABLES & REINITIALISATION (RESET)
+      ========================================== */
    :root {
-    --primary-color: #2563eb;
-    --primary-hover: #1d4ed8;
-    --secondary-color: #10b981;
-    --bg-color: #f8fafc;
-    --card-bg: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border-color: #e2e8f0;
-    --danger-color: #ef4444;
-    --success-color: #22c55e;
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  }
-  
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    font-family: var(--font-sans);
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    line-height: 1.5;
-    min-height: 100vh;
-  }
-  
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-  
-  button {
-    cursor: pointer;
-    border: none;
-    font-family: inherit;
-  }
-  
-  /* ==========================================
-     2. SYSTÈME DE TOAST (GÉRÉ PAR JS)
-     ========================================== */
-  #toast-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .toast {
-    padding: 12px 20px;
-    border-radius: var(--radius-md);
-    color: #fff;
-    font-weight: 500;
-    font-size: 0.9rem;
-    box-shadow: var(--shadow-md);
-    animation: slideIn 0.3s ease-out forwards;
-  }
-  
-  .toast-error {
-    background-color: var(--danger-color);
-  }
-  
-  .toast-success {
-    background-color: var(--success-color);
-  }
-  
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  /* ==========================================
-     3. OVERLAY MENU BURGER RESPONSIVE
-     ========================================== */
-  #menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 900;
-  }
-  
-  #menu-overlay.is-active {
-    display: block;
-  }
-  
-  /* ==========================================
-     4. DIRECTIVES TAILWIND
-     ========================================== */
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+     --primary-color: #2563eb;
+     --primary-hover: #1d4ed8;
+     --secondary-color: #10b981;
+     --bg-color: #f8fafc;
+     --card-bg: #ffffff;
+     --text-main: #1e293b;
+     --text-muted: #64748b;
+     --border-color: #e2e8f0;
+     --danger-color: #ef4444;
+     --success-color: #22c55e;
+     --radius-sm: 6px;
+     --radius-md: 10px;
+     --radius-lg: 16px;
+     --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+     --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+   }
+   
+   * {
+     box-sizing: border-box;
+     margin: 0;
+     padding: 0;
+   }
+   
+   body {
+     font-family: var(--font-sans);
+     background-color: var(--bg-color);
+     color: var(--text-main);
+     line-height: 1.5;
+     min-height: 100vh;
+   }
+   
+   a {
+     color: inherit;
+     text-decoration: none;
+   }
+   
+   button {
+     cursor: pointer;
+     border: none;
+     font-family: inherit;
+   }
+   
+   /* ==========================================
+      3. SYSTÈME DE TOAST (GÉRÉ PAR JS)
+      ========================================== */
+   #toast-container {
+     position: fixed;
+     bottom: 20px;
+     right: 20px;
+     z-index: 9999;
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+   }
+   
+   .toast {
+     padding: 12px 20px;
+     border-radius: var(--radius-md);
+     color: #fff;
+     font-weight: 500;
+     font-size: 0.9rem;
+     box-shadow: var(--shadow-md);
+     animation: slideIn 0.3s ease-out forwards;
+   }
+   
+   .toast-error {
+     background-color: var(--danger-color);
+   }
+   
+   .toast-success {
+     background-color: var(--success-color);
+   }
+   
+   @keyframes slideIn {
+     from {
+       transform: translateX(100%);
+       opacity: 0;
+     }
+     to {
+       transform: translateX(0);
+       opacity: 1;
+     }
+   }
+   
+   /* ==========================================
+      4. OVERLAY MENU BURGER RESPONSIVE
+      ========================================== */
+   #menu-overlay {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100vw;
+     height: 100vh;
+     background: rgba(0, 0, 0, 0.5);
+     display: none;
+     z-index: 900;
+   }
+   
+   #menu-overlay.is-active {
+     display: block;
+   }
