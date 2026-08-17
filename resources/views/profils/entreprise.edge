@@ -17,7 +17,13 @@
 
     <main class="main-content">
       <header class="dashboard-header">
-        <h1>Espace Professionnel</h1>
+        <div class="user-profile-summary" style="display: flex; align-items: center; gap: 15px;">
+          <img src="{{ user.avatar || '/images/default-avatar.png' }}" alt="Logo Entreprise" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #10b981;" />
+          <div>
+            <h1>Espace Professionnel : <span id="user-name">{{ user.nom }} {{ user.prenom ? '(' + user.prenom + ')' : '' }}</span></h1>
+            <p style="font-size: 0.85rem; color: #666;">Compte Entreprise / Agence</p>
+          </div>
+        </div>
         
         <form action="{{ route('auth.logout') }}" method="POST">
           {{ csrfField() }}
@@ -35,6 +41,21 @@
           <p>Publiez vos nouveautés, promotions ou annonces officielles.</p>
         </div>
       </section>
+
+      <!-- Modal d'upload d'avatar -->
+<div id="avatar-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
+  <div class="modal-content" style="background: white; padding: 25px; border-radius: 12px; width: 350px; text-align: center;">
+    <h3>Modifier votre photo / logo</h3>
+    <form id="avatar-form" enctype="multipart/form-data" style="margin-top: 15px;">
+      {{ csrfField() }}
+      <input type="file" id="avatar-file-input" name="avatar" accept="image/*" required style="margin-bottom: 15px; width: 100%;" />
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button type="submit" class="btn-primary" style="background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">Télécharger</button>
+        <button type="button" id="close-modal-btn" style="background: #e5e7eb; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>
     </main>
   </div>
   @end

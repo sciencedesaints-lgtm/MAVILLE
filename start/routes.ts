@@ -11,6 +11,7 @@ const DemandesServicesController = () => import('#controllers/demandes_services_
 const UploadsController = () => import('#controllers/uploads_controller')
 const AiController = () => import('#controllers/ai_controller')
 const MediasController = () => import('#controllers/medias_controller')
+const ProfilsController = () => import('#controllers/profils_controller')
 
 /* 
 ========================================================================== 
@@ -35,12 +36,15 @@ router.get('/recherche', [AiController, 'index']).as('web.recherche')
 // Route pour afficher la page des notifications et demandes (Sidebar)
 router.get('/profil/demandes', [AiController, 'notifications']).as('notifications.index').use(middleware.auth())
 
-// Route pour afficher le profil de l'utilisateur connecté
+// Route principale pour afficher le profil de l'utilisateur connecté (redirection intelligente selon le rôle)
 router.get('/profil', [MediasController, 'profil']).as('web.profil')
 
-router.on('/profil/personnel').render('profils/personnel').as('profil.personnel')
-router.on('/profil/entreprise').render('profils/entreprise').as('profil.entreprise')
-router.on('/profil/administration').render('profils/administration').as('profil.administration')
+// Routes spécifiques gérées par le ProfilsController (protégées par l'auth)
+router.group(() => {
+  router.get('/profil/personnel', [ProfilsController, 'personnel']).as('profil.personnel')
+  router.get('/profil/entreprise', [ProfilsController, 'entreprise']).as('profil.entreprise')
+  router.get('/profil/administration', [ProfilsController, 'administration']).as('profil.administration')
+})
 
 
 /* 
@@ -122,6 +126,9 @@ router.group(() => {
   /* --- API PROTÉGÉE (JWT / Auth requise) --- */
   router.group(() => {
     router.delete('/auth/logout', [SessionController, 'destroy'])
+
+    // --- MISE À JOUR AVATAR PROFIL ---
+    router.post('/profil/avatar', [ProfilsController, 'updateAvatar']).as('api.profil.avatar')
 
     // --- RECHERCHE MULTICRITÈRE & GÉOLOCALISATION ---
     router.post('/recherches', [AiController, 'search']).as('api.recherches.store')

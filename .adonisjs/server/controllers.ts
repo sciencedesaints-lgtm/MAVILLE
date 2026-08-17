@@ -11,7 +11,7 @@ export const controllers = {
   Medias: () => import('#controllers/medias_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Produits: () => import('#controllers/produits_controller'),
-  Recherche: () => import('#controllers/recherche_controller'),
   Session: () => import('#controllers/session_controller'),
   Uploads: () => import('#controllers/uploads_controller'),
+  Profils: () => import('#controllers/profils_controller'),
 }

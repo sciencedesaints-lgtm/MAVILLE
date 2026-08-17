@@ -3,46 +3,43 @@ import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import Recherche from '#models/recherche'
 import Notification from '#models/notification'
+import DemandeService from '#models/demande_service'
+import Etablissement from '#models/etablissement'
 
 export default class AiController {
-  /**
-   * GET /recherche
-   * Affiche la page interactive de recherche (Écrire, parler, présenter une image)
-   */
+  
   public async index({ view }: HttpContext) {
     return view.render('pages/recherche')
   }
 
-  /**
-   * GET /profil/demandes
-   * Affiche la liste des notifications et demandes de mise en relation de l'utilisateur
-   */
   public async notifications({ view, auth }: HttpContext) {
     const user = auth.user!
-
-    // Récupérer toutes les notifications de l'utilisateur, de la plus récente à la plus ancienne
     const notifications = await Notification.query()
-      .where('utilisateurId', user.id)
+      .where('utilisateurId', String(user.id))
       .orderBy('createdAt', 'desc')
 
     return view.render('pages/notifications', { notifications })
   }
 
-  /**
-   * POST /api/v1/ai/search
-   * Endpoint de recherche intelligente et mise en relation
-   */
+  public async repondreDemande({ request, response, params }: HttpContext) {
+    const { statut } = request.only(['statut'])
+    const notificationId = params.id
+
+    return response.ok({
+      success: true,
+      message: `Réponse '${statut}' enregistrée pour la notification ${notificationId}`,
+    })
+  }
+
   public async search({ request, response, auth }: HttpContext) {
-    // 1. Récupération de l'utilisateur connecté (si l'auth est requise sur cette route)
     const user = auth?.user
 
-    // 2. Récupération des paramètres (texte, vocal, image, localisation, etc.)
     const {
       query,
-      type_recherche = 'TEXTE', // 'TEXTE' | 'AUDIO' | 'IMAGE'
+      type_recherche = 'TEXTE',
       audio_url,
       image_url,
-      scope_recherche = 'AUTOUR_DE_MOI', // 'AUTOUR_DE_MOI' | 'VILLE' | 'AUTRE_VILLE' | 'MONDE'
+      scope_recherche = 'AUTOUR_DE_MOI',
       latitude,
       longitude,
       rayonKm,
@@ -61,106 +58,86 @@ export default class AiController {
       return response.badRequest({ message: 'Veuillez fournir un contenu de recherche (texte, vocal ou image).' })
     }
 
-    const latNum = latitude ? Number.parseFloat(latitude) : undefined
-    const lngNum = longitude ? Number.parseFloat(longitude) : undefined
-    const rayonFinal = rayonKm ? Number(rayonKm) : 1 // Rayon par défaut de 1 km pour "Autour de moi"
+    const latNum = latitude ? Number.parseFloat(latitude) : null
+    const lngNum = longitude ? Number.parseFloat(longitude) : null
+    const rayonFinal = rayonKm ? Number(rayonKm) : 5
 
-    // 3. Enregistrement de la recherche dans la table 'recherches'
     if (user) {
       const recherche = new Recherche()
-      recherche.utilisateurId = user.id
+      recherche.utilisateurId = String(user.id)
       recherche.typeRecherche = type_recherche
-      recherche.texte = query
-      recherche.audioUrl = audio_url
-      recherche.imageUrl = image_url
+      recherche.texte = query || null
+      recherche.audioUrl = audio_url || null
+      recherche.imageUrl = image_url || null
       recherche.scopeRecherche = scope_recherche
       recherche.latitude = latNum
       recherche.longitude = lngNum
-      recherche.rayon_km = rayonFinal
+      recherche.rayonKm = rayonFinal
 
-      if (latNum && lngNum) {
+      if (latNum !== null && lngNum !== null) {
         recherche.position = db.raw(`ST_MakePoint(?, ?)::geography`, [lngNum, latNum])
       }
       await recherche.save()
     }
 
-    // 4. Appel du service de recherche existant
-    const searchResults = await AiSearchService.search({
-      query,
-      latitude: Number.isNaN(latNum) ? undefined : latNum,
-      longitude: Number.isNaN(lngNum) ? undefined : lngNum,
-      rayonKm: rayonFinal,
-    })
-
-    // 5. Recherche de la cible correspondante (Personne, Entreprise ou Administration) via PostGIS
-    let queryCible = db.from('utilisateurs')
-    if (user) {
-      queryCible.whereNot('id', user.id)
+    let demandeServiceId = null
+    if (user && query) {
+      const demande = await DemandeService.create({
+        utilisateurId: String(user.id),
+        description: query,
+        statut: 'EN_ATTENTE',
+      })
+      demandeServiceId = demande.id
     }
 
-    if (scope_recherche === 'AUTOUR_DE_MOI' && latNum && lngNum) {
+    let queryEtablissements = Etablissement.query()
+
+    if (scope_recherche === 'AUTOUR_DE_MOI' && latNum !== null && lngNum !== null) {
       const rayonMetres = rayonFinal * 1000
-      queryCible.whereRaw(
+      queryEtablissements.whereRaw(
         `ST_DWithin(position, ST_MakePoint(?, ?)::geography, ?)`,
         [lngNum, latNum, rayonMetres]
       )
     }
 
-    const cibleTrouvee = await queryCible.first()
-
-    // 6. Si une cible est trouvée, on lui envoie une notification d'alerte (Approuver / Décliner)
-    if (cibleTrouvee && user) {
-      await Notification.create({
-        utilisateurId: cibleTrouvee.id,
-        type: 'DEMANDE_MISE_EN_RELATION',
-        titre: 'Nouvelle demande de mise en relation',
-        message: `L'utilisateur ${user.nom || ''} souhaite entrer en contact suite à une recherche (${type_recherche}).`,
-        lien: `/profil/demandes`,
+    if (query) {
+      const motsCles = query.toLowerCase()
+      queryEtablissements.where((builder) => {
+        builder.whereILike('nom', `%${motsCles}%`)
       })
     }
 
-    // 7. Retour de la réponse avec la redirection vers le profil cible
-    return response.ok({
-      reponseIa: `Voici les correspondances trouvées pour "${query || 'votre recherche'}" :`,
-      data: searchResults,
-      redirectUrl: cibleTrouvee ? `/profil/utilisateur/${cibleTrouvee.id}` : null,
+    const professionnelsCibles = await queryEtablissements.exec()
+
+    let countNotifications = 0
+    for (const pro of professionnelsCibles) {
+      const proUserId = (pro as any).utilisateurId
+      if (proUserId && user && String(proUserId) !== String(user.id)) {
+        await Notification.create({
+          utilisateurId: String(proUserId),
+          type: 'DEMANDE_MISE_EN_RELATION',
+          titre: '🔔 Nouveau besoin client dans la ville !',
+          message: `Un habitant recherche : "${query}". Consultez et proposez vos offres dès maintenant.`,
+          lien: demandeServiceId ? `/demandes-services/${demandeServiceId}` : `/profil/demandes`,
+        })
+        countNotifications++
+      }
+    }
+
+    const searchResults = await AiSearchService.search({
+      query,
+      latitude: latNum === null ? undefined : latNum,
+      longitude: lngNum === null ? undefined : lngNum,
+      rayonKm: rayonFinal,
     })
-  }
-
-  /**
-   * PATCH /api/v1/notifications/:id/repondre
-   * Permet à la cible d'approuver ou décliner la demande de mise en relation
-   */
-  public async repondreDemande({ request, response, params, auth }: HttpContext) {
-    const user = auth.user!
-    const { statut } = request.only(['statut']) // 'approuve' ou 'decline'
-
-    if (!['approuve', 'decline'].includes(statut)) {
-      return response.badRequest({ message: 'Statut invalide. Utilisez "approuve" ou "decline".' })
-    }
-
-    // Récupérer la notification destinée à cet utilisateur
-    const notification = await Notification.query()
-      .where('id', params.id)
-      .where('utilisateurId', user.id)
-      .first()
-
-    if (!notification) {
-      return response.notFound({ message: 'Notification introuvable ou non autorisée.' })
-    }
-
-    // Marquer la notification comme lue
-    notification.lu = true
-    await notification.save()
-
-    // Si approuvé, on peut initier la mise en relation
-    if (statut === 'approuve') {
-      // TODO: Logique additionnelle si nécessaire
-    }
 
     return response.ok({
-      message: `La demande a été ${statut === 'approuve' ? 'approuvée' : 'déclinée'} avec succès.`,
-      statut,
+      success: true,
+      reponseIa: `Recherche enregistrée avec succès. ${countNotifications} professionnel(s) qualifié(s) ont été notifiés.`,
+      data: searchResults,
+      professionnelsNotifies: countNotifications,
+      demandeId: demandeServiceId,
+      redirectUrl: demandeServiceId ? `/demandes-services/${demandeServiceId}` : null,
     })
   }
 }

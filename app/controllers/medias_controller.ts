@@ -1,11 +1,10 @@
-// app/controllers/medias_controller.ts
 import type { HttpContext } from '@adonisjs/core/http'
 import Media from '#models/media'
 import app from '@adonisjs/core/services/app'
 import string from '@adonisjs/core/helpers/string'
 
 export default class MediasController {
-  
+
   // 1. Afficher le fil d'actualité avec les médias postés par les utilisateurs
   async index({ view }: HttpContext) {
     const posts = await Media.query()
@@ -51,7 +50,7 @@ export default class MediasController {
       // Génération d'un nom de fichier unique et sécurisé
       const uniqueSuffix = string.generateRandom(32)
       const fileName = `${uniqueSuffix}.${file.extname}`
-      
+
       if (['mp4', 'mov', 'avi'].includes(file.extname!)) {
         typeMedia = 'VIDEO'
         await file.move(app.makePath('public/uploads/videos'), { name: fileName })
@@ -63,9 +62,9 @@ export default class MediasController {
       }
     }
 
-    // Enregistrement dans la table "medias"
+    // Enregistrement dans la table "medias" (conversion de l'ID en string)
     await Media.create({
-      utilisateurId: auth.user?.id || null,
+      utilisateurId: auth.user?.id ? String(auth.user.id) : null,
       typeMedia: typeMedia,
       nomFichier: legend,
       url: url,
@@ -77,18 +76,20 @@ export default class MediasController {
   }
 
   // 4. Afficher le profil dynamique selon le type d'utilisateur connecté
-  // 4. Afficher le profil dynamique selon le type d'utilisateur connecté
   async profil({ view, auth }: HttpContext) {
     const user = auth.user
-    
+
     // Si l'utilisateur n'est pas authentifié, on le redirige proprement vers la page de connexion
     if (!user) {
       return view.render('pages/connexion')
     }
 
-    // Récupérer les publications spécifiques de cet utilisateur (en utilisant son vrai UUID)
+    // Charger les rôles de l'utilisateur pour la gestion dynamique du profil
+    await user.load('roles')
+
+    // Récupérer les publications spécifiques de cet utilisateur
     const posts = await Media.query()
-      .where('utilisateurId', user.id)
+      .where('utilisateurId', String(user.id))
       .preload('utilisateur')
       .orderBy('createdAt', 'desc')
 
@@ -104,14 +105,14 @@ export default class MediasController {
       createdAt: media.createdAt.toRelative()
     }))
 
-    // Redirection conditionnelle selon le rôle ou type de profil de l'utilisateur
-    const userType = user.role || 'personnel'
+    // Déterminer le type de profil basé sur les rôles associés
+    const premierRole = user.roles?.[0]?.nom?.toLowerCase() || 'personnel'
 
-    if (userType === 'entreprise') {
+    if (premierRole.includes('entreprise') || premierRole.includes('agence')) {
       return view.render('profils/entreprise', { user, posts: formattedPosts })
     } 
-    
-    if (userType === 'administration') {
+
+    if (premierRole.includes('administration') || premierRole.includes('public')) {
       return view.render('profils/administration', { user, posts: formattedPosts })
     }
 
