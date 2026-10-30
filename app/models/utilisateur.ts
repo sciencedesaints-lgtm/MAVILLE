@@ -53,11 +53,49 @@ export default class Utilisateur extends BaseModel {
   @column()
   declare villeId: string | null
 
+  // --- NOUVELLES COLONNES AJOUTÉES POUR LES FORMULAIRES ---
+  @column()
+  declare typeCompte: 'personnel' | 'entreprise_agence' | 'administration_publique'
+
+  @column()
+  declare pays: string | null
+
+  @column()
+  declare ville: string | null
+
+  @column()
+  declare typeStructure: string | null
+
+  @column()
+  declare nomEntreprise: string | null
+
+  @column()
+  declare domaine: string | null
+
+  @column()
+  declare avenue: string | null
+
+  @column()
+  declare numero: string | null
+
+  @column()
+  declare indicatifPays: string | null
+
+  @column()
+  declare typeInstitution: string | null
+
+  @column()
+  declare nomInstitution: string | null
+
+  @column()
+  declare tutelle: string | null
+  // -------------------------------------------------------
+
   @column()
   declare nom: string
 
   @column()
-  declare prenom: string
+  declare prenom: string | null
 
   @column()
   declare pseudo: string | null
@@ -148,7 +186,7 @@ export default class Utilisateur extends BaseModel {
   @belongsTo(() => Ville, {
     foreignKey: 'villeId',
   })
-  declare ville: BelongsTo<typeof Ville>
+  declare villeRelation: BelongsTo<typeof Ville> // Renommé pour éviter le conflit avec la colonne textuelle `ville` si nécessaire
 
   @manyToMany(() => Role, {
     pivotTable: 'utilisateur_roles',

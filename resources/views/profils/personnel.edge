@@ -1,20 +1,18 @@
-@component('layouts/main', { title: 'Profil Personnel - MAVILLE' })
+@component('layouts/main', { title: 'Mon Profil Personnel - MAVILLE' })
 
   @slot('main')
   <div class="app-layout">
     
-    <!-- Sidebar fixe à gauche -->
+    <!-- Sidebar Gauche -->
     <aside class="sidebar">
       <div>
         <div class="sidebar-brand">MAVILLE</div>
         <nav class="sidebar-nav">
           <a href="/accueil" class="nav-link">Accueil</a>
-          <a href="/profil/personnel" class="nav-link active">Profil</a>
+          <a href="/profil" class="nav-link active">Profil Personnel</a>
           <a href="/actualite" class="nav-link">Actualité</a>
-          <a href="/recherche" class="nav-link">Recherche</a>
-          <a href="/abonnements" class="nav-link">Abonnements</a>
-          <a href="/historique" class="nav-link">Historique</a>
-          <a href="/notifications" class="nav-link">Notifications</a>
+          <a href="/services-publics" class="nav-link">Services Publics</a>
+          <a href="/signalements" class="nav-link">Mes Signalements</a>
           <a href="/parametres" class="nav-link">Paramètres</a>
         </nav>
       </div>
@@ -28,102 +26,89 @@
       
       <!-- En-tête de Profil -->
       <div class="profile-header-card">
-        <!-- Bannière -->
-        <div class="profile-banner">
-          <div style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 500;">
-            Lubumbashi, RDC
-          </div>
-        </div>
-
-        <!-- Infos Utilisateur -->
+        <div class="profile-banner"></div>
         <div class="profile-details-container">
           <div class="profile-actions-row">
             <div class="profile-avatar-wrapper">
-              <img src="{{ user?.avatar || '/images/default-avatar.png' }}" alt="Avatar">
+              <img src="/images/avatar.jpg" alt="Avatar">
             </div>
-            <button class="btn-outline">
-              Modifier le profil
-            </button>
+            <div class="flex gap-2">
+              <button class="btn-outline">Modifier</button>
+              <button class="btn-primary">Proposer mes services</button>
+            </div>
           </div>
-
+          
           <div class="profile-name-row">
-            <h1 class="profile-name">{{ user?.prenom || '' }} {{ user?.nom || 'Utilisateur' }}</h1>
-            <span class="verified-badge">✔</span>
-          </div>
-
-          <p class="profile-username">@{{ user ? user.username : 'username' }}</p>
-          <p class="profile-bio">{{ user?.bio || 'Aucune biographie pour le moment.' }}</p>
-
-          <!-- Statistiques -->
-          <div class="profile-stats">
-            <div class="stat-item">
-              <div class="stat-value">125</div>
-              <div class="stat-label">Publications</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">340</div>
-              <div class="stat-label">Abonnés</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">210</div>
-              <div class="stat-label">Abonnements</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">42</div>
-              <div class="stat-label">Favoris</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Onglets -->
-        <div class="profile-tabs">
-          <a href="#" class="tab-item active">Publications</a>
-          <a href="#" class="tab-item">À propos</a>
-          <a href="#" class="tab-item">Photos</a>
-          <a href="#" class="tab-item">Vidéos</a>
+  <h1 class="profile-name">{{ user ? (user.fullName || user.nom) : 'Utilisateur non connecté' }}</h1>
+  <span class="verified-badge">✓</span>
+</div>
+<p class="profile-username">@<span>{{ user ? user.username : 'inconnu' }}</span></p>
         </div>
       </div>
 
-      <!-- Grille centrale (Flux + Sidebar Droite) -->
+      <!-- Grille Principale (2 colonnes) -->
       <div class="content-grid">
         
-        <!-- Flux de publications (2 colonnes) -->
+        <!-- Colonne Gauche : Flux d'activité -->
         <div class="feed-column">
           <div class="card">
-            <div class="post-header">
-             <img src="{{ user?.avatar || '/images/default-avatar.png' }}" class="post-avatar" alt="Avatar">
-             <div>
-               <h3 class="post-author-name">{{ user?.prenom || '' }} {{ user?.nom || 'Utilisateur' }}</h3>
-               <span class="post-time">2 h · Lubumbashi</span>
-             </div>
-            </div>
-            <p class="post-text">Magnifique coucher de soleil sur Lubumbashi 🌅<br>Ma ville, ma vie 💚</p>
-            <div class="post-media">
-              <img src="/images/coucher-soleil.jpg" alt="Publication">
+            <h3 class="card-title">Fil d'activité</h3>
+            <div style="color: var(--text-muted); font-size: 0.9rem; font-style: italic;">
+              Vos dernières interactions et publications apparaîtront ici.
             </div>
           </div>
         </div>
 
-        <!-- Widgets de droite (1 colonne) -->
+        <!-- Colonne Droite : Finances & Outils -->
         <div class="sidebar-column">
-          <div class="card">
-            <h3 class="card-title">À propos</h3>
-            <ul class="about-list">
-              <li>💻 Développeur Web</li>
-              <li>📍 Lubumbashi, RDC</li>
-              <li>🗣️ Français, Swahili, Anglais</li>
-              <li>📅 Membre depuis mai 2023</li>
-            </ul>
+          
+          <!-- Portefeuille MAVILLE Money -->
+          <div class="money-card">
+            <h3 class="card-title" style="margin-bottom: 4px;">Portefeuille MAVILLE Money</h3>
+            <div class="money-amount">{{ user?.balance || '0.00' }} $</div>
+            <button class="btn-primary" style="width: 100%; text-align: center; margin-top: 8px;">Recharger mon compte</button>
           </div>
+
+          <!-- Historique Money (Entrées / Sorties) -->
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 class="card-title" style="margin-bottom: 0;">Historique Money</h3>
+              <span style="font-size: 0.8rem; color: var(--primary-color); font-weight: 600; cursor: pointer;">Relevé</span>
+            </div>
+            
+            <div class="transaction-list">
+              <div class="transaction-item">
+                <div class="transaction-info">
+                  <div class="motif">Taxe voirie</div>
+                  <div class="date">18/08/2026 - 10:30</div>
+                </div>
+                <span class="amount-negative">- 2.00 $</span>
+              </div>
+
+              <div class="transaction-item" style="border-bottom: none; padding-bottom: 0;">
+                <div class="transaction-info">
+                  <div class="motif">Recharge compte</div>
+                  <div class="date">15/08/2026 - 09:00</div>
+                </div>
+                <span class="amount-positive">+ 20.00 $</span>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
 
-    </main>
+      <!-- Bouton flottant d'action rapide (FAB) -->
+      <button class="fab-button">
+        <span>+</span> Signaler un problème
+      </button>
 
+    </main>
   </div>
   @end
 
+  <!-- Intégration des fichiers CSS et JS via Vite -->
   @slot('page_css')
     @vite(['resources/css/profil-personnel.css'])
   @end

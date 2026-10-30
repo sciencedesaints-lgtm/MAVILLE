@@ -72,6 +72,9 @@
     color: var(--primary-color);
     margin-bottom: 32px;
     letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   
   .sidebar-nav {
@@ -118,7 +121,7 @@
   }
   
   /* ==========================================
-     3. EN-TÊTE DE PROFIL (MAIRIE)
+     3. EN-TÊTE DE PROFIL (MAIRIE / MAVILLE)
      ========================================== */
   .profile-header-card {
     background-color: var(--card-bg);
@@ -133,6 +136,12 @@
     height: 192px;
     background-color: #111827;
     position: relative;
+  }
+  
+  .profile-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   
   .absolute-badge {
@@ -160,13 +169,26 @@
     margin-bottom: 16px;
   }
   
-  .profile-avatar {
+  .profile-avatar-wrapper {
     width: 128px;
     height: 128px;
     border-radius: 50%;
     border: 4px solid #ffffff;
     background-color: #ffffff;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .profile-avatar-wrapper img,
+  .profile-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
     object-fit: cover;
+  }
+  
+  .profile-avatar {
+    border: 4px solid #ffffff;
     box-shadow: var(--shadow-md);
   }
   
@@ -415,4 +437,82 @@
     color: #c2410c; /* orange-700 */
     padding: 2px 8px;
     border-radius: 50px;
+  }
+  
+  /* ==========================================
+     5. COMPOSANTS FINANCIERS & TRANSACTIONS
+     ========================================== */
+  .money-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .money-amount {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin: 10px 0;
+  }
+  
+  .transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f9fafb;
+  }
+  
+  .transaction-info .motif { 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+  }
+  
+  .transaction-info .date { 
+    font-size: 0.75rem; 
+    color: var(--text-muted); 
+  }
+  
+  .amount-positive { 
+    color: #16a34a; 
+    font-weight: 700; 
+  }
+  
+  .amount-negative { 
+    color: #dc2626; 
+    font-weight: 700; 
+  }
+  
+  /* ==========================================
+     6. ACTIONS RAPIDES (FAB)
+     ========================================== */
+  .fab-button {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding: 16px 24px;
+    border-radius: 50px;
+    box-shadow: 0 10px 25px rgba(21, 128, 61, 0.3);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, background-color 0.2s;
+    z-index: 1000;
+  }
+  
+  .fab-button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-4px);
   }

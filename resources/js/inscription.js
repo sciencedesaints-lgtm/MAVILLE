@@ -58,21 +58,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   
     // 3. Simulation de soumission des formulaires pour déclencher l'Onboarding
-    function handleFormSubmit(e, currentFormSection) {
-        e.preventDefault(); 
-        switchSection(currentFormSection, onboarding1);
+    async function handleFormSubmit(e, currentFormSection) {
+        e.preventDefault();
+    
+        const form = e.target;
+        const formData = new FormData(form);
+    
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: new URLSearchParams(formData),
+            });
+    
+            if (response.ok) {
+                switchSection(currentFormSection, onboarding1);
+            } else {
+                const errorData = await response.json();
+                console.error('Erreur de validation :', errorData);
+                alert('Erreur : ' + errorData.map(e => e.message).join('\n'));
+            }
+        } catch (error) {
+            console.error('Erreur réseau :', error);
+            alert('Une erreur est survenue, veuillez réessayer.');
+        }
     }
-  
-    if (reelFormPersonnel) {
-        reelFormPersonnel.addEventListener('submit', (e) => handleFormSubmit(e, formPersonnel));
-    }
-    if (reelFormEntreprise) {
-        reelFormEntreprise.addEventListener('submit', (e) => handleFormSubmit(e, formEntreprise));
-    }
-    if (reelFormAdministration) {
-        reelFormAdministration.addEventListener('submit', (e) => handleFormSubmit(e, formAdministration));
-    }
-  
     // 4. Gestion de la progression de l'Onboarding
     if (btnOnboarding1) {
         btnOnboarding1.addEventListener('click', () => {

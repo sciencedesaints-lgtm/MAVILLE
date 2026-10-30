@@ -47,16 +47,23 @@
         </div>
       </div>
 
-      <form id="form-inscription-personnel" action="{{ route('web.session.store') }}" method="POST">
+      <form id="form-inscription-personnel" action="{{ route('web.new_account.store') }}" method="POST">     
         {{ csrfField() }}
         <input type="hidden" name="type_compte" value="personnel">
         
         <div class="form-group">
-          <label for="p-nom" class="form-label">Nom et Prénom</label>
-          <div class="input-wrapper">
-            <input type="text" name="nom" id="p-nom" class="form-input" placeholder="Votre nom complet" required />
-          </div>
-        </div>
+  <label for="p-nom" class="form-label">Nom</label>
+  <div class="input-wrapper">
+    <input type="text" name="nom" id="p-nom" class="form-input" placeholder="Votre nom" required />
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="p-prenom" class="form-label">Prénom</label>
+  <div class="input-wrapper">
+    <input type="text" name="prenom" id="p-prenom" class="form-input" placeholder="Votre prénom" required />
+  </div>
+</div>
 
         <div class="form-group">
           <label for="p-contact" class="form-label">Adresse Email ou Téléphone</label>
@@ -103,7 +110,7 @@
         <p class="inscription-subtitle">Enregistrez votre structure professionnelle.</p>
       </header>
 
-      <form id="form-inscription-entreprise">
+      <form id="form-inscription-entreprise" action="{{ route('web.new_account.store') }}" method="POST">
         {{ csrfField() }}
         <input type="hidden" name="type_compte" value="entreprise_agence">
         
@@ -209,7 +216,7 @@
         <p class="inscription-subtitle">Enregistrez un service ou une institution officielle.</p>
       </header>
 
-      <form id="form-inscription-administration">
+      <form id="form-inscription-administration" action="{{ route('web.new_account.store') }}" method="POST">
         {{ csrfField() }}
         <input type="hidden" name="type_compte" value="administration_publique">
         

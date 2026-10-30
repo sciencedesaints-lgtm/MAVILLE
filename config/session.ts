@@ -50,7 +50,7 @@ const sessionConfig = defineConfig({
      * When true, the cookie is only sent over HTTPS connections.
      * Enabled in production for security.
      */
-    secure: app.inProduction,
+    secure: false,
 
     /**
      * Controls when cookies are sent with cross-site requests.
@@ -65,7 +65,7 @@ const sessionConfig = defineConfig({
    * variable in order to infer the store name without any
    * errors.
    */
-  store: env.get('SESSION_DRIVER'),
+  store: 'cookie',
 
   /**
    * List of configured stores. Refer documentation to see

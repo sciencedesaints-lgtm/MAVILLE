@@ -1,24 +1,18 @@
-@component('layouts/main', { title: 'Profil Entreprise - MAVILLE' })
+@component('layouts/main', { title: 'Mon Profil Entreprise - MAVILLE' })
 
   @slot('main')
   <div class="app-layout">
     
-    <!-- Sidebar Gauche (Entreprise) -->
+    <!-- Sidebar Gauche -->
     <aside class="sidebar">
       <div>
-        <div class="sidebar-brand">MAVILLE</div>
-        <nav class="sidebar-nav text-sm">
+        <div class="sidebar-brand">MAVILLE <span style="font-size: 0.8rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 12px; font-weight: 600;">Pro</span></div>
+        <nav class="sidebar-nav">
           <a href="/accueil" class="nav-link">Accueil</a>
-          <a href="/profil/entreprise" class="nav-link active">Profil</a>
-          <a href="/actualite" class="nav-link">Actualité</a>
-          <a href="/catalogue" class="nav-link">Catalogue / Produits</a>
-          <a href="/commandes" class="nav-link flex justify-between items-center">
-            <span>Commandes</span>
-            <span class="badge-count">5</span>
-          </a>
-          <a href="/offres" class="nav-link">Offres d'emploi</a>
-          <a href="/messages" class="nav-link">Messages</a>
-          <a href="/statistiques" class="nav-link">Statistiques</a>
+          <a href="/profil-entreprise" class="nav-link active">Profil Entreprise</a>
+          <a href="/actualite" class="nav-link">Actualité & Annonces</a>
+          <a href="/catalogue" class="nav-link">Mes Services & Produits</a>
+          <a href="/clients" class="nav-link">Visibilité Clients</a>
           <a href="/parametres" class="nav-link">Paramètres</a>
         </nav>
       </div>
@@ -32,160 +26,155 @@
       
       <!-- En-tête de Profil Entreprise -->
       <div class="profile-header-card">
-        <!-- Bannière Commerciale -->
-        <div class="profile-banner">
-          <img src="/images/entreprise-banner.jpg" alt="Bannière Entreprise" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
-          <div class="absolute-badge">
-            Lubumbashi, RDC
-          </div>
-        </div>
-
-        <!-- Infos Entreprise -->
+        <div class="profile-banner" style="background: linear-gradient(135deg, #0369a1, #1e40af);"></div>
         <div class="profile-details-container">
           <div class="profile-actions-row">
-            <img src="{{ user?.avatar || '/images/entreprise-logo.png' }}" alt="Logo Entreprise" class="entreprise-logo profile-avatar-wrapper">
-            <div class="flex gap-3">
-              <button class="btn-outline">Modifier</button>
-              <button class="btn-primary" onclick="document.querySelector('#logo-input').click()">Changer le logo</button>
-              <input type="file" id="logo-input" class="hidden" accept="image/*">
+            <div class="profile-avatar-wrapper">
+              <img src="/images/entreprise-logo.jpg" alt="Logo Entreprise">
+            </div>
+            <div class="flex gap-2">
+              <button class="btn-outline">Modifier l'entreprise</button>
+              <button class="btn-primary" style="background-color: #0369a1;">📢 Booster sur le fil</button>
             </div>
           </div>
-
+          
           <div class="profile-name-row">
-            <h1 class="profile-name">{{ user?.nom || 'Katanga Tech & Services' }}</h1>
-            <span class="verified-badge">✔</span>
+            <h1 class="profile-name">{{ user?.businessName || 'Nom de l’Entreprise' }}</h1>
+            <span class="verified-badge" style="color: #0369a1;">✓ Vérifié Pro</span>
           </div>
-          <p class="profile-username">@{{ user?.username || 'katanga.tech' }}</p>
-          <p class="profile-username">Entreprise de services numériques & logistiques</p>
-          <p class="profile-bio">{{ user?.bio || 'Solutions logicielles et transformation digitale pour les entreprises du Haut-Katanga.' }}</p>
-
-          <!-- Statistiques Commerciales -->
-          <div class="profile-stats">
+          <p class="profile-username">@{{ user?.username || 'entreprise_tag' }} • Secteur : Prestation & Commerce</p>
+          <p class="profile-bio">Solutions et services professionnels adaptés pour les citoyens et partenaires de MAVILLE.</p>
+          
+          <!-- Infos clés & Disponibilité -->
+          <div class="profile-stats" style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap;">
             <div class="stat-item">
-              <div class="stat-value">1,820</div>
-              <div class="stat-label">clients</div>
+              <span class="stat-label">Statut :</span>
+              <span class="stat-value" style="color: #16a34a;">🟢 Ouvert / Disponible</span>
             </div>
             <div class="stat-item">
-              <div class="stat-value">45</div>
-              <div class="stat-label">produits</div>
+              <span class="stat-label">Adresse :</span>
+              <span class="stat-value">Av. de la Kamia, Lubumbashi</span>
             </div>
             <div class="stat-item">
-              <div class="stat-value">4.8 ⭐</div>
-              <div class="stat-label">évaluation</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">12</div>
-              <div class="stat-label">offres actives</div>
+              <span class="stat-label">Paiement in-app :</span>
+              <span class="stat-value" style="color: #0369a1;">Activé 💳</span>
             </div>
           </div>
-        </div>
-
-        <!-- Onglets -->
-        <div class="profile-tabs">
-          <a href="#" class="profile-tab tab-item active">Publications</a>
-          <a href="#" class="profile-tab tab-item">Produits & Services</a>
-          <a href="#" class="profile-tab tab-item">Offres d'emploi</a>
-          <a href="#" class="profile-tab tab-item">À propos</a>
-          <a href="#" class="profile-tab tab-item">Avis clients</a>
         </div>
       </div>
 
-      <!-- Grille centrale (Flux de l'entreprise + Widgets latéraux) -->
+      <!-- Grille Principale (2 colonnes) -->
       <div class="content-grid">
         
-        <!-- Flux de publications de l'entreprise (2 colonnes) -->
+        <!-- Colonne Gauche : Catalogue des services & Gestion de la visibilité -->
         <div class="feed-column">
-          <!-- Publication 1 -->
+          
+          <!-- Catalogue / Tarifs -->
           <div class="card">
-            <div class="post-header">
-              <img src="{{ user?.avatar || '/images/entreprise-logo.png' }}" class="entreprise-logo post-avatar" alt="Avatar">
-              <div>
-                <h3 class="post-author-name">Katanga Tech & Services</h3>
-                <span class="post-time">Lancement de notre nouvelle application mobile MAVILLE Pro</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 class="card-title" style="margin-bottom: 0;">Catalogue & Tarifs des Services</h3>
+              <button class="btn-outline" style="font-size: 0.8rem; padding: 4px 12px;">+ Ajouter un service</button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-color); border-radius: var(--radius-sm);">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.95rem;">Prestation Standard & Maintenance</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Intervention rapide à domicile ou bureau</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-weight: 700; color: var(--primary-color);">25.00 $</div>
+                  <span style="font-size: 0.75rem; background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 4px;">Actif</span>
+                </div>
               </div>
-            </div>
-            <p class="post-text">Nous sommes fiers d'annoncer la sortie de notre nouvelle solution de gestion dédiée aux commerçants de Lubumbashi. Simplifiez vos ventes dès aujourd'hui ! 🚀</p>
-            <div class="post-media">
-              <img src="/images/app-launch.jpg" alt="Lancement Application">
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); padding-top: 12px; border-top: 1px solid var(--border-color);">
-              <span>👍 142 j'aime</span>
-              <span>24 commentaires • 18 partages</span>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-color); border-radius: var(--radius-sm);">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.95rem;">Pack Visibilité Premium Mensuel</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Mise en avant sur la marketplace MAVILLE</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-weight: 700; color: var(--primary-color);">50.00 $</div>
+                  <span style="font-size: 0.75rem; background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 4px;">Actif</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Publication 2 (Produit phare) -->
+          <!-- Fil d'actualité & Publicités de l'entreprise -->
           <div class="card">
-            <div class="post-header">
-              <img src="{{ user?.avatar || '/images/entreprise-logo.png' }}" class="entreprise-logo post-avatar" alt="Avatar">
-              <div>
-                <h3 class="post-author-name">Katanga Tech & Services</h3>
-                <span class="post-time">Pack Matériel Bureautique & Connexion</span>
-              </div>
-            </div>
-            <p class="post-text">Profitez de notre offre spéciale ce mois-ci : routeur 4G + onduleur haute performance à prix réduit pour toutes les PME partenaires.</p>
-            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <h4 style="font-weight: 700; color: #166534; font-size: 0.95rem;">Pack PME Connect</h4>
-                <p style="font-size: 0.85rem; color: #15803d;">Stock limité - Disponible en agence</p>
-              </div>
-              <button class="add-to-cart-btn" data-product="Pack PME Connect" style="background-color: var(--primary-color); color: white; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Commander</button>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); padding-top: 12px; border-top: 1px solid var(--border-color);">
-              <span>👍 89 j'aime</span>
-              <span>7 commentaires • 5 partages</span>
+            <h3 class="card-title">Dernières Publications & Publicités</h3>
+            <div style="color: var(--text-muted); font-size: 0.9rem; font-style: italic;">
+              Vos annonces diffusées sur le fil général de MAVILLE s'afficheront ici avec leurs statistiques d'impact.
             </div>
           </div>
+
         </div>
 
-        <!-- Widgets de droite (1 colonne) -->
+        <!-- Colonne Droite : Finances & Historique Entreprise -->
         <div class="sidebar-column">
-          <!-- Infos de contact -->
-          <div class="card">
-            <h3 class="card-title">Informations professionnelles</h3>
-            <ul class="about-list">
-              <li>📍 Avenue de la పాఠ L, Lubumbashi</li>
-              <li>📞 +243 970 000 000</li>
-              <li>🌐 www.katangatech.cd</li>
-              <li>⏰ Lun - Ven : 08h00 - 17h00</li>
-            </ul>
+          
+          <!-- Portefeuille Entreprise -->
+          <div class="money-card">
+            <h3 class="card-title" style="margin-bottom: 4px;">Compte Entreprise Money</h3>
+            <div class="money-amount" style="color: #0369a1;">{{ user?.businessBalance || '142.50' }} $</div>
+            <button class="btn-primary" style="width: 100%; text-align: center; margin-top: 8px; background-color: #0369a1;">Retirer / Gérer les fonds</button>
           </div>
 
-          <!-- Produits Phares / Vitrine -->
+          <!-- Historique Financier Détaillé (Entrées / Sorties) -->
           <div class="card">
-            <h3 class="card-title">Vitrine de services</h3>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-              <div style="display: flex; gap: 10px; align-items: center; font-size: 0.9rem;">
-                <span style="font-size: 1.2rem;">💻</span>
-                <div>
-                  <div style="font-weight: 600;">Développement Web & Mobile</div>
-                  <div style="font-size: 0.8rem; color: var(--text-muted);">Sur mesure pour entreprises</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 class="card-title" style="margin-bottom: 0;">Historique des Flux</h3>
+              <span style="font-size: 0.8rem; color: #0369a1; font-weight: 600; cursor: pointer;">Relevé complet</span>
+            </div>
+            
+            <div class="transaction-list">
+              <div class="transaction-item">
+                <div class="transaction-info">
+                  <div class="motif">Vente - Prestation Standard</div>
+                  <div class="date">18/08/2026 - 11:45</div>
                 </div>
+                <span class="amount-positive">+ 25.00 $</span>
               </div>
-              <div style="display: flex; gap: 10px; align-items: center; font-size: 0.9rem;">
-                <span style="font-size: 1.2rem;">☁️</span>
-                <div>
-                  <div style="font-weight: 600;">Hébergement Cloud Local</div>
-                  <div style="font-size: 0.8rem; color: var(--text-muted);">Sécurisé et ultra rapide</div>
+
+              <div class="transaction-item">
+                <div class="transaction-info">
+                  <div class="motif">Boost Publicitaire (Fil)</div>
+                  <div class="date">16/08/2026 - 14:20</div>
                 </div>
+                <span class="amount-negative">- 5.00 $</span>
+              </div>
+
+              <div class="transaction-item" style="border-bottom: none; padding-bottom: 0;">
+                <div class="transaction-info">
+                  <div class="motif">Taxe d'exploitation communale</div>
+                  <div class="date">01/08/2026 - 08:00</div>
+                </div>
+                <span class="amount-negative">- 15.00 $</span>
               </div>
             </div>
           </div>
+
         </div>
 
       </div>
 
-    </main>
+      <!-- Bouton flottant d'action rapide (FAB) -->
+      <button class="fab-button" style="background-color: #0369a1;">
+        <span>+</span> Nouvelle Offre / Service
+      </button>
 
+    </main>
   </div>
   @end
 
+  <!-- Intégration des fichiers CSS et JS via Vite -->
   @slot('page_css')
-    @vite(['resources/css/profil-entreprise.css'])
+    @vite(['resources/css/profil-personnel.css'])
   @end
 
   @slot('page_js')
-    @vite(['resources/js/profil-entreprise.js'])
+    @vite(['resources/js/profil-personnel.js'])
   @end
 
 @end

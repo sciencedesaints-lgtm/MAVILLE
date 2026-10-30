@@ -4,6 +4,7 @@ import { middleware } from '#start/kernel'
 // Lazy loading des contrôleurs
 const SessionController = () => import('#controllers/session_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
+const ConditionsController = () => import('#controllers/conditions_controller')
 const EtablissementsController = () => import('#controllers/etablissements_controller')
 const ProduitsController = () => import('#controllers/produits_controller')
 const CommandesController = () => import('#controllers/commandes_controller')
@@ -21,9 +22,12 @@ const ProfilsController = () => import('#controllers/profils_controller')
 
 router.on('/').render('pages/bienvenue').as('web.bienvenue')
 router.on('/authentification').render('pages/authentification').as('web.authentification')
-router.on('/connexion').render('pages/connexion').as('web.connexion')
+router.get('/connexion', async ({ view }) => {
+  return view.render('pages/connexion')
+}).as('web.connexion')
 router.on('/inscription').render('pages/inscription').as('web.inscription')
 router.on('/accueil').render('pages/accueil').as('web.accueil')
+router.on('/login').render('pages/connexion').as('web.login.form')
 
 // Gestion des actualités
 router.get('/actualite', [MediasController, 'index']).as('web.actualite')
@@ -44,8 +48,13 @@ router.group(() => {
   router.get('/profil/personnel', [ProfilsController, 'personnel']).as('profil.personnel')
   router.get('/profil/entreprise', [ProfilsController, 'entreprise']).as('profil.entreprise')
   router.get('/profil/administration', [ProfilsController, 'administration']).as('profil.administration')
-})
+}).use(middleware.auth())
 
+// Conditions d'utilisation (après l'inscription, utilisateur connecté)
+router.group(() => {
+  router.get('/conditions', [ConditionsController, 'show']).as('web.conditions')
+  router.post('/conditions', [ConditionsController, 'accept']).as('web.conditions.accept')
+}).use(middleware.auth())
 
 /* 
 ========================================================================== 
@@ -54,27 +63,12 @@ router.group(() => {
 */
 
 router.group(() => {
-  router.post('/login', async ({ response }) => {
-    return response.ok({ message: 'Connexion réussie !' })
-  }).as('web.session.store')
+  router.post('/login', [SessionController, 'store']).as('web.session.store')
 
-  router.post('/register', async ({ request, response }) => {
-    const typeCompte = request.input('type_compte')
+  // Inscription Web déléguée à NewAccountController (nettoyée et centralisée)
+  router.post('/register', [NewAccountController, 'store']).as('web.new_account.store')
 
-    if (typeCompte === 'personnel') {
-      return response.redirect().toRoute('profil.personnel')
-    } else if (typeCompte === 'entreprise_agence') {
-      return response.redirect().toRoute('profil.entreprise')
-    } else if (typeCompte === 'administration_publique') {
-      return response.redirect().toRoute('profil.administration')
-    }
-
-    return response.redirect().toRoute('web.accueil')
-  }).as('web.new_account.store')
-
-  router.post('/logout', async ({ response }) => {
-    return response.redirect().toRoute('web.connexion')
-  }).as('auth.logout')
+  router.post('/logout', [SessionController, 'destroy']).as('auth.logout')
 })
 
 /* ========================================== */
@@ -99,8 +93,6 @@ router.get('/auth/google/callback', async ({ ally, response }) => {
   return response.redirect().toRoute('web.accueil')
 }).as('auth.google.callback')
 
-
-
 /* 
 ========================================================================== 
 3. API BACKEND MAVILLE (/api/v1)
@@ -121,7 +113,6 @@ router.group(() => {
 
   // Recherche IA Publique (Nom explicite unique)
   router.post('/ai/search', [AiController, 'search']).as('api.ai.search')
-
 
   /* --- API PROTÉGÉE (JWT / Auth requise) --- */
   router.group(() => {

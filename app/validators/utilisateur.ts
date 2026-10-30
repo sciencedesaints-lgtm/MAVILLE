@@ -1,88 +1,94 @@
 import vine from '@vinejs/vine'
-import { DateTime } from 'luxon'
 
 /**
- * Validator pour l'inscription d'un utilisateur
+ * 1. Validator pour le formulaire "Personnel"
  */
-export const signupValidator = vine.compile(
+export const personnelSignupValidator = vine.compile(
   vine.object({
+    type_compte: vine.string().in(['personnel']),
     nom: vine.string().trim().minLength(2).maxLength(100),
-
     prenom: vine.string().trim().minLength(2).maxLength(100),
-
-    pseudo: vine
+    contact: vine
       .string()
       .trim()
       .minLength(3)
-      .maxLength(80)
-      .optional(),
+      .maxLength(255)
+      .unique(async (db, value) => {
+        // Email ou téléphone : on vérifie la bonne colonne
+        const colonne = value.includes('@') ? 'email' : 'telephone'
+        const row = await db.from('utilisateurs').where(colonne, value).first()
+        return !row
+      }),
+    pays: vine.string().trim().minLength(2),
+    ville: vine.string().trim().minLength(2),
+    password: vine.string().minLength(8).maxLength(100),
+  })
+)
 
-    // Rend l'email obligatoire + vérification d'unicité en BDD
+/**
+ * 2. Validator pour le formulaire "Entreprise / Agence"
+ */
+export const entrepriseSignupValidator = vine.compile(
+  vine.object({
+    type_compte: vine.string().in(['entreprise_agence']),
+    type_structure: vine.string().trim(),
+    nom_entreprise: vine.string().trim().minLength(2).maxLength(150),
+    domaine: vine.string().trim().minLength(2).maxLength(100),
+    pays: vine.string().trim().minLength(2),
+    ville: vine.string().trim().minLength(2),
+    commune: vine.string().trim().minLength(2),
+    avenue: vine.string().trim().minLength(2),
+    numero: vine.string().trim().optional(),
+    indicatif_pays: vine.string().trim(),
+    telephone: vine.string().trim().minLength(5).maxLength(30),
     email: vine
       .string()
       .trim()
       .email()
       .maxLength(255)
       .unique(async (db, value) => {
-        const user = await db.from('utilisateurs').where('email', value).first()
-        return !user
+        const row = await db.from('utilisateurs').where('email', value).first()
+        return !row
       }),
-
-    telephone: vine
-      .string()
-      .trim()
-      .maxLength(30)
-      .optional(),
-
-    password: vine
-      .string()
-      .minLength(8)
-      .maxLength(100)
-      .confirmed(),
-
-    sexe: vine
-      .enum(['homme', 'femme', 'autre'])
-      .optional(),
-
-    // Transforme la chaîne de date reçue (ex: "1998-05-14") directement en objet Luxon DateTime
-    dateNaissance: vine
-      .string()
-      .transform((val) => DateTime.fromISO(val))
-      .optional(),
-
-    languePreferee: vine
-      .string()
-      .maxLength(20)
-      .optional(),
-
-    adresse: vine
-      .string()
-      .maxLength(500)
-      .optional(),
-
-    quartier: vine
-      .string()
-      .maxLength(120)
-      .optional(),
-
-    commune: vine
-      .string()
-      .maxLength(120)
-      .optional(),
-
-    villeId: vine
-      .string()
-      .uuid()
-      .optional(),
+    password: vine.string().minLength(8).maxLength(100),
   })
 )
 
 /**
- * Validator pour la connexion (session)
+ * 3. Validator pour le formulaire "Administration publique"
+ */
+export const administrationSignupValidator = vine.compile(
+  vine.object({
+    type_compte: vine.string().in(['administration_publique']),
+    type_institution: vine.string().trim(),
+    nom_institution: vine.string().trim().minLength(2).maxLength(150),
+    tutelle: vine.string().trim().optional(),
+    pays: vine.string().trim().minLength(2),
+    ville: vine.string().trim().minLength(2),
+    commune: vine.string().trim().minLength(2),
+    avenue: vine.string().trim().minLength(2),
+    numero: vine.string().trim().optional(),
+    indicatif_pays: vine.string().trim(),
+    telephone: vine.string().trim().minLength(5).maxLength(30),
+    email: vine
+      .string()
+      .trim()
+      .email()
+      .maxLength(255)
+      .unique(async (db, value) => {
+        const row = await db.from('utilisateurs').where('email', value).first()
+        return !row
+      }),
+    password: vine.string().minLength(8).maxLength(100),
+  })
+)
+
+/**
+ * Validator pour la connexion (inchangé)
  */
 export const loginValidator = vine.compile(
   vine.object({
-    email: vine.string().trim().email(),
-    password: vine.string().minLength(6),
+    login: vine.string().trim().minLength(3).maxLength(255),
+    password: vine.string().minLength(6).maxLength(100),
   })
 )

@@ -1238,12 +1238,14 @@ export class UtilisateurRoleSchema extends BaseModel {
 }
 
 export class UtilisateurSchema extends BaseModel {
-  static $columns = ['actif', 'adresse', 'commune', 'compteGoogle', 'compteTelephone', 'createdAt', 'dateNaissance', 'deletedAt', 'derniereConnexion', 'email', 'emailVerifie', 'emailVerifiedAt', 'id', 'languePreferee', 'latitude', 'longitude', 'nom', 'password', 'photoProfil', 'position', 'prenom', 'pseudo', 'quartier', 'rememberMeToken', 'sexe', 'statutCompte', 'telephone', 'telephoneVerifie', 'updatedAt', 'villeId'] as const
+  static $columns = ['actif', 'adresse', 'avenue', 'commune', 'compteGoogle', 'compteTelephone', 'createdAt', 'dateNaissance', 'deletedAt', 'derniereConnexion', 'domaine', 'email', 'emailVerifie', 'emailVerifiedAt', 'id', 'indicatifPays', 'languePreferee', 'latitude', 'longitude', 'nom', 'nomEntreprise', 'nomInstitution', 'numero', 'password', 'pays', 'photoProfil', 'position', 'prenom', 'pseudo', 'quartier', 'rememberMeToken', 'sexe', 'statutCompte', 'telephone', 'telephoneVerifie', 'tutelle', 'typeCompte', 'typeInstitution', 'typeStructure', 'updatedAt', 'ville', 'villeId'] as const
   $columns = UtilisateurSchema.$columns
   @column()
   declare actif: boolean | null
   @column()
   declare adresse: string | null
+  @column()
+  declare avenue: string | null
   @column()
   declare commune: string | null
   @column()
@@ -1259,6 +1261,8 @@ export class UtilisateurSchema extends BaseModel {
   @column.dateTime()
   declare derniereConnexion: DateTime | null
   @column()
+  declare domaine: string | null
+  @column()
   declare email: string | null
   @column()
   declare emailVerifie: boolean | null
@@ -1267,6 +1271,8 @@ export class UtilisateurSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
   @column()
+  declare indicatifPays: string | null
+  @column()
   declare languePreferee: string | null
   @column()
   declare latitude: string | null
@@ -1274,14 +1280,22 @@ export class UtilisateurSchema extends BaseModel {
   declare longitude: string | null
   @column()
   declare nom: string
+  @column()
+  declare nomEntreprise: string | null
+  @column()
+  declare nomInstitution: string | null
+  @column()
+  declare numero: string | null
   @column({ serializeAs: null })
   declare password: string
+  @column()
+  declare pays: string | null
   @column()
   declare photoProfil: string | null
   @column()
   declare position: any | null
   @column()
-  declare prenom: string
+  declare prenom: string | null
   @column()
   declare pseudo: string | null
   @column()
@@ -1296,8 +1310,18 @@ export class UtilisateurSchema extends BaseModel {
   declare telephone: string | null
   @column()
   declare telephoneVerifie: boolean | null
+  @column()
+  declare tutelle: string | null
+  @column()
+  declare typeCompte: string
+  @column()
+  declare typeInstitution: string | null
+  @column()
+  declare typeStructure: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+  @column()
+  declare ville: string | null
   @column()
   declare villeId: string | null
 }

@@ -9,6 +9,7 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'web.login.form': { paramsTuple?: []; params?: {} }
     'web.actualite': { paramsTuple?: []; params?: {} }
     'web.actualite.create': { paramsTuple?: []; params?: {} }
     'web.actualite.store': { paramsTuple?: []; params?: {} }
@@ -18,6 +19,8 @@ export type ScannedRoutes = {
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
+    'web.conditions': { paramsTuple?: []; params?: {} }
+    'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }
     'auth.logout': { paramsTuple?: []; params?: {} }
@@ -53,6 +56,7 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'web.login.form': { paramsTuple?: []; params?: {} }
     'web.actualite': { paramsTuple?: []; params?: {} }
     'web.actualite.create': { paramsTuple?: []; params?: {} }
     'web.recherche': { paramsTuple?: []; params?: {} }
@@ -61,6 +65,7 @@ export type ScannedRoutes = {
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
+    'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
     'etablissements.index': { paramsTuple?: []; params?: {} }
@@ -76,6 +81,7 @@ export type ScannedRoutes = {
     'web.connexion': { paramsTuple?: []; params?: {} }
     'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
+    'web.login.form': { paramsTuple?: []; params?: {} }
     'web.actualite': { paramsTuple?: []; params?: {} }
     'web.actualite.create': { paramsTuple?: []; params?: {} }
     'web.recherche': { paramsTuple?: []; params?: {} }
@@ -84,6 +90,7 @@ export type ScannedRoutes = {
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
+    'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
     'etablissements.index': { paramsTuple?: []; params?: {} }
@@ -95,6 +102,7 @@ export type ScannedRoutes = {
   }
   POST: {
     'web.actualite.store': { paramsTuple?: []; params?: {} }
+    'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }
     'auth.logout': { paramsTuple?: []; params?: {} }

@@ -1,0 +1,230 @@
+@component('layouts/main', { title: 'Conditions d\'utilisation - MAVILLE' })
+
+  <style>
+    .cgu-page {
+      min-height: 100vh;
+      background: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    .cgu-card {
+      width: 100%;
+      max-width: 720px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      box-sizing: border-box;
+    }
+    .cgu-logo {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+    .cgu-logo b { color: #38bdf8; }
+    .cgu-title {
+      text-align: center;
+      color: #f8fafc;
+      font-size: 1.5rem;
+      margin: 12px 0 4px;
+    }
+    .cgu-subtitle {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin: 0 0 24px;
+    }
+    .cgu-scroll {
+      max-height: 380px;
+      overflow-y: auto;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px 24px;
+      color: #cbd5e1;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+    .cgu-scroll h3 {
+      color: #f1f5f9;
+      font-size: 1rem;
+      margin: 20px 0 6px;
+    }
+    .cgu-scroll h3:first-child { margin-top: 0; }
+    .cgu-scroll p { margin: 0 0 10px; }
+    .cgu-scroll ul { margin: 0 0 10px; padding-left: 20px; }
+    .cgu-scroll li { margin-bottom: 4px; }
+    .cgu-scroll::-webkit-scrollbar { width: 8px; }
+    .cgu-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 8px; }
+    .cgu-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin: 24px 0 20px;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .cgu-check input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: #10b981;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .cgu-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .cgu-btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .cgu-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .cgu-footer {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.8rem;
+      margin-top: 16px;
+    }
+  </style>
+
+  <div class="cgu-page">
+    <div class="cgu-card">
+
+      <div class="cgu-logo">MA<b>VILLE</b></div>
+      <h1 class="cgu-title">Conditions d'utilisation</h1>
+      <p class="cgu-subtitle">Merci de les lire avant d'accéder à votre espace.</p>
+
+      <div class="cgu-scroll">
+
+        <h3>1. Objet du service</h3>
+        <p>
+          MAVILLE est une plateforme urbaine qui met en relation les habitants d'une ville :
+          chacun peut rechercher un produit, un service, un lieu ou une information, et
+          proposer ses propres offres. MAVILLE est un intermédiaire technique : nous
+          facilitons la rencontre entre l'offre et la demande, nous ne sommes pas partie
+          aux transactions conclues entre utilisateurs.
+        </p>
+
+        <h3>2. Création et sécurité du compte</h3>
+        <ul>
+          <li>Vous devez fournir des informations exactes et à jour.</li>
+          <li>Un compte peut être personnel, entreprise ou agence, ou administration publique.</li>
+          <li>Vous êtes responsable de la confidentialité de votre mot de passe et de toute activité réalisée depuis votre compte.</li>
+          <li>Signalez-nous immédiatement tout accès non autorisé.</li>
+        </ul>
+
+        <h3>3. Recherches, offres et notifications</h3>
+        <p>
+          Lorsque vous publiez une recherche, les utilisateurs de votre ville ayant déclaré
+          proposer ce type de produit ou de service peuvent recevoir une notification les
+          informant de votre demande. En vous abonnant à une catégorie d'offres, vous
+          acceptez de recevoir ces notifications. Vous pouvez gérer vos abonnements et vos
+          préférences à tout moment dans vos paramètres.
+        </p>
+
+        <h3>4. Contenus et comportements interdits</h3>
+        <p>Il est interdit de publier ou de proposer :</p>
+        <ul>
+          <li>des produits ou services illégaux, dangereux ou contrefaits ;</li>
+          <li>des contenus violents, haineux, discriminatoires ou à caractère sexuel ;</li>
+          <li>de fausses annonces, des arnaques ou toute tentative de tromper un autre utilisateur ;</li>
+          <li>des messages répétitifs non sollicités (spam) ;</li>
+          <li>des informations personnelles d'autrui sans son accord.</li>
+        </ul>
+
+        <h3>5. Transactions entre utilisateurs</h3>
+        <p>
+          Les accords (prix, livraison, paiement, garantie) sont conclus directement entre
+          utilisateurs, sous leur seule responsabilité. Nous vous recommandons de vérifier
+          l'article ou le service avant tout paiement et de privilégier des lieux de
+          rencontre publics. MAVILLE ne garantit ni la qualité, ni la légalité, ni la
+          disponibilité des offres publiées par les utilisateurs.
+        </p>
+
+        <h3>6. Données personnelles et localisation</h3>
+        <p>
+          Nous collectons les données nécessaires au fonctionnement du service : identité,
+          coordonnées, ville et pays, historique de recherches et, avec votre accord, votre
+          position géographique pour vous proposer des résultats proches de vous. Vos
+          données ne sont pas vendues à des tiers. Votre nom et votre photo de profil
+          peuvent être visibles des autres utilisateurs. Vous pouvez demander l'accès, la
+          correction ou la suppression de vos données en nous contactant.
+        </p>
+
+        <h3>7. Comptes entreprises et administrations</h3>
+        <p>
+          Les entreprises, agences et administrations s'engagent à fournir des informations
+          officielles exactes sur leur structure. MAVILLE peut demander des justificatifs
+          et suspendre un compte dont l'identité ne peut pas être vérifiée.
+        </p>
+
+        <h3>8. Suspension et suppression</h3>
+        <p>
+          En cas de non-respect de ces conditions, MAVILLE peut avertir, suspendre ou
+          supprimer un compte, ainsi que retirer tout contenu concerné. Vous pouvez
+          supprimer votre compte à tout moment.
+        </p>
+
+        <h3>9. Responsabilité</h3>
+        <p>
+          Nous mettons tout en œuvre pour assurer un service continu, sans pouvoir garantir
+          l'absence d'interruptions ou d'erreurs. MAVILLE ne peut être tenue responsable des
+          dommages résultant d'une transaction entre utilisateurs ou d'un contenu publié par
+          un utilisateur.
+        </p>
+
+        <h3>10. Modification des conditions</h3>
+        <p>
+          Ces conditions peuvent évoluer. En cas de changement important, vous en serez
+          informé et, si nécessaire, invité à les accepter de nouveau.
+        </p>
+
+        <h3>11. Contact</h3>
+        <p>Pour toute question : <strong>contact@maville.example</strong> (à remplacer par votre adresse officielle).</p>
+
+      </div>
+
+      <form action="/conditions" method="POST" id="cgu-form">
+        {{ csrfField() }}
+
+        <label class="cgu-check">
+          <input type="checkbox" name="accepte" value="1" id="cgu-checkbox">
+          <span>J'ai lu et j'accepte les conditions d'utilisation de MAVILLE.</span>
+        </label>
+
+        <button type="submit" class="cgu-btn" id="cgu-btn" disabled>Accepter et continuer</button>
+      </form>
+
+      <p class="cgu-footer">Dernière mise à jour : octobre 2026</p>
+
+    </div>
+  </div>
+
+  <script>
+    // Le bouton reste désactivé tant que la case n'est pas cochée
+    const checkbox = document.getElementById('cgu-checkbox')
+    const bouton = document.getElementById('cgu-btn')
+    checkbox.addEventListener('change', () => {
+      bouton.disabled = !checkbox.checked
+    })
+  </script>
+
+@end

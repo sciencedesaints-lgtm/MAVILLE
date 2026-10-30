@@ -1,37 +1,44 @@
+import type { HttpContext } from '@adonisjs/core/http'
 import Utilisateur from '#models/utilisateur'
 import { loginValidator } from '#validators/utilisateur' 
 import { OtpService } from '#services/otp_service'
-import type { HttpContext } from '@adonisjs/core/http'
+import hash from '@adonisjs/core/services/hash' // <- Correction 1 : Import de hash ajouté
 
 export default class SessionController {
-  public async store({ request, response }: HttpContext) {
-    const { email, password } = await request.validateUsing(loginValidator)
+  public async store({ request, response, auth }: HttpContext) {
+    try {
+      const payload = await request.validateUsing(loginValidator)
+      console.log('>>> PAYLOAD VALIDÉ :', payload)
 
-    const user = await Utilisateur.verifyCredentials(email, password)
+      const user = await Utilisateur.query()
+        .where('email', payload.login)
+        .orWhere('telephone', payload.login)
+        .preload('roles')
+        .first()
 
-    if (!user) {
-      return response.badRequest({ message: 'Identifiants invalides' })
+      console.log('>>> UTILISATEUR TROUVÉ EN DB :', user ? user.email : 'AUCUN UTILISATEUR')
+
+      if (!user || !(await hash.verify(user.password, payload.password))) {
+        console.log('>>> ÉCHEC : Mot de passe incorrect ou utilisateur introuvable')
+        if (request.header('accept')?.includes('text/html')) {
+          return response.redirect().back()
+        }
+        return response.badRequest({ message: 'Identifiants invalides' })
+      }
+
+      console.log('>>> SUCCÈS : Connexion de l utilisateur')
+      if (request.header('accept')?.includes('text/html')) {
+        await auth.use('web').login(user)
+        return response.redirect().toRoute('web.accueil')
+      }
+
+      // ... le reste
+    } catch (error) {
+      console.log('>>> ERREUR CRITIQUE DANS LOGIN :', error)
+      throw error
     }
-
-    await user.load('roles')
-
-    const token = await Utilisateur.accessTokens.create(user, ['*'], {
-      expiresIn: '30 days',
-    })
-
-    return response.ok({
-      type: 'bearer',
-      token: token.value!.release(),
-      user: {
-        id: user.id,
-        nom: user.nom,
-        prenom: user.prenom,
-        email: user.email,
-        roles: user.roles.map((r: any) => r.nom),
-      },
-    })
   }
-
+  
   public async requestOtp({ request, response }: HttpContext) {
     const { telephone } = request.only(['telephone'])
 
@@ -44,7 +51,7 @@ export default class SessionController {
     return response.ok({ message: 'Code OTP envoyé avec succès' })
   }
 
-  public async verifyOtp({ request, response }: HttpContext) {
+  public async verifyOtp({ request, response, auth }: HttpContext) {
     const { telephone, code } = request.only(['telephone', 'code'])
 
     const isValid = await OtpService.verifyOtp(telephone, code)
@@ -64,6 +71,10 @@ export default class SessionController {
 
     await user.load('roles')
 
+    if (request.header('accept')?.includes('text/html')) {
+      await auth.use('web').login(user)
+    }
+
     const token = await Utilisateur.accessTokens.create(user, ['*'], {
       expiresIn: '30 days',
     })
@@ -75,11 +86,18 @@ export default class SessionController {
     })
   }
 
-  public async destroy({ auth, response }: HttpContext) {
+  public async destroy({ auth, response, request }: HttpContext) { // <- Correction 3 : Ajout de request dans le contexte
+    if (await auth.use('web').check()) { // <- Correction 4 : Utilisation plus robuste de check()
+      await auth.use('web').logout()
+    }
+
     const user = auth.user as (Utilisateur & { currentAccessToken?: any }) | undefined
-    
     if (user && user.currentAccessToken) {
       await Utilisateur.accessTokens.delete(user, user.currentAccessToken.identifier)
+    }
+
+    if (request.header('accept')?.includes('text/html')) {
+      return response.redirect().toRoute('web.connexion')
     }
 
     return response.ok({ message: 'Déconnexion réussie' })
