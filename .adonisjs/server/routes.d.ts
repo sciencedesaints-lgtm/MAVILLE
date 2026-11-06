@@ -19,6 +19,8 @@ export type ScannedRoutes = {
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
+    'offres.create': { paramsTuple?: []; params?: {} }
+    'offres.store': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
@@ -65,6 +67,7 @@ export type ScannedRoutes = {
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
+    'offres.create': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -90,6 +93,7 @@ export type ScannedRoutes = {
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
+    'offres.create': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -102,6 +106,7 @@ export type ScannedRoutes = {
   }
   POST: {
     'web.actualite.store': { paramsTuple?: []; params?: {} }
+    'offres.store': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }
