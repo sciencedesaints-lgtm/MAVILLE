@@ -1,0 +1,87 @@
+@component('layouts/main', { title: 'Résultats - MAVILLE' })
+
+  <style>
+    .res-page { min-height: 100vh; background: #0f172a; display: flex; justify-content: center; padding: 32px 16px; box-sizing: border-box; font-family: system-ui, sans-serif; }
+    .res-wrap { width: 100%; max-width: 760px; }
+    .res-form { display: flex; gap: 10px; margin-bottom: 16px; }
+    .res-form input { flex: 1; padding: 14px 18px; border-radius: 30px; border: 2px solid #10b981; background: #1e293b; color: #f8fafc; font-size: 1rem; outline: none; }
+    .res-form button { padding: 0 24px; border: none; border-radius: 30px; background: #059669; color: #fff; font-weight: 700; cursor: pointer; }
+    .filtres { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .filtres a { padding: 8px 14px; border-radius: 20px; background: #1e293b; border: 1px solid #334155; color: #cbd5e1; text-decoration: none; font-size: 0.85rem; }
+    .filtres a.actif { background: #064e3b; border-color: #10b981; color: #fff; font-weight: 700; }
+    .res-info { color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px; }
+    .carte { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 18px 20px; margin-bottom: 12px; }
+    .carte-haut { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .carte h3 { color: #f8fafc; margin: 0 0 4px; font-size: 1.05rem; }
+    .badge { font-size: 0.7rem; padding: 3px 10px; border-radius: 12px; font-weight: 700; white-space: nowrap; background: #334155; color: #e2e8f0; }
+    .badge.service { background: #1d4ed8; }
+    .badge.commerce { background: #b45309; }
+    .badge.annonce { background: #7c3aed; }
+    .badge.entreprise { background: #0f766e; }
+    .badge.administration { background: #be123c; }
+    .meta { color: #94a3b8; font-size: 0.88rem; margin: 3px 0; }
+    .prix { color: #34d399; font-weight: 700; margin-top: 6px; }
+    .tel { display: inline-block; margin-top: 10px; padding: 8px 16px; border-radius: 20px; background: #059669; color: #fff; text-decoration: none; font-size: 0.88rem; font-weight: 600; }
+    .vide { text-align: center; color: #94a3b8; padding: 40px 0; }
+    .retour { display: block; text-align: center; color: #94a3b8; margin-top: 20px; text-decoration: none; font-size: 0.9rem; }
+  </style>
+
+  <div class="res-page">
+    <div class="res-wrap">
+
+      <form class="res-form" action="{{ route('resultats.index') }}" method="GET">
+        <input type="text" name="q" value="{{ q }}" placeholder="Que cherchez-vous ?">
+        <input type="hidden" name="type" value="{{ type }}">
+        <button type="submit">Rechercher</button>
+      </form>
+
+      <div class="filtres">
+        <a href="?q={{ q }}&type=tous" class="{{ type === 'tous' ? 'actif' : '' }}">Tout</a>
+        <a href="?q={{ q }}&type=service" class="{{ type === 'service' ? 'actif' : '' }}">🔧 Services</a>
+        <a href="?q={{ q }}&type=commerce" class="{{ type === 'commerce' ? 'actif' : '' }}">🏪 Commerces</a>
+        <a href="?q={{ q }}&type=annonce" class="{{ type === 'annonce' ? 'actif' : '' }}">🛍️ Annonces</a>
+        <a href="?q={{ q }}&type=entreprise" class="{{ type === 'entreprise' ? 'actif' : '' }}">🏢 Entreprises</a>
+        <a href="?q={{ q }}&type=administration" class="{{ type === 'administration' ? 'actif' : '' }}">🏛️ Administrations</a>
+      </div>
+
+      @if(!villeConnue)
+        <p class="res-info">Votre ville n'est pas reconnue : impossible de chercher.</p>
+      @else
+        <p class="res-info">{{ resultats.length }} résultat(s) à {{ villeNom }}</p>
+      @end
+
+      @each(r in resultats)
+        <div class="carte">
+          <div class="carte-haut">
+            <div>
+              <h3>{{ r.titre }}</h3>
+              @if(r.proprietaire)
+                <p class="meta">👤 {{ r.proprietaire }}</p>
+              @end
+              @if(r.categorie)
+                <p class="meta">{{ r.categorie }}</p>
+              @end
+              @if(r.lieu)
+                <p class="meta">📍 {{ r.lieu }}</p>
+              @end
+              @if(r.prix)
+                <p class="prix">{{ r.prix }}</p>
+              @end
+            </div>
+            <span class="badge {{ r.genre }}">{{ r.genre }}</span>
+          </div>
+          @if(r.telephone)
+            <a class="tel" href="tel:{{ r.telephone }}">📞 {{ r.telephone }}</a>
+          @end
+        </div>
+      @else
+        @if(villeConnue)
+          <p class="vide">Aucun résultat pour l'instant.</p>
+        @end
+      @end
+
+      <a class="retour" href="{{ route('web.accueil') }}">← Retour à l'accueil</a>
+    </div>
+  </div>
+
+@end

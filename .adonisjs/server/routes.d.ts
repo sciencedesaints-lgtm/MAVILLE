@@ -26,6 +26,7 @@ export type ScannedRoutes = {
     'commerces.store': { paramsTuple?: []; params?: {} }
     'annonces.create': { paramsTuple?: []; params?: {} }
     'annonces.store': { paramsTuple?: []; params?: {} }
+    'resultats.index': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
@@ -76,6 +77,7 @@ export type ScannedRoutes = {
     'offres.create': { paramsTuple?: []; params?: {} }
     'commerces.create': { paramsTuple?: []; params?: {} }
     'annonces.create': { paramsTuple?: []; params?: {} }
+    'resultats.index': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -105,6 +107,7 @@ export type ScannedRoutes = {
     'offres.create': { paramsTuple?: []; params?: {} }
     'commerces.create': { paramsTuple?: []; params?: {} }
     'annonces.create': { paramsTuple?: []; params?: {} }
+    'resultats.index': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }

@@ -5,6 +5,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==========================================
+  // OUTIL : ouvrir la page de résultats
+  // ==========================================
+  function ouvrirResultats(texte) {
+    const q = (texte || '').trim()
+    if (!q) {
+      if (window.showToast) window.showToast('Veuillez saisir un texte de recherche.', 'warning')
+      return
+    }
+    window.location.href = '/resultats?q=' + encodeURIComponent(q)
+  }
+
+  // ==========================================
   // 1. GESTION DE LA SIDEBAR ET DU TOGGLE MOBILE
   // ==========================================
   const menuToggle = document.getElementById('menu-toggle')
@@ -18,41 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 2. HERO BANNER : ONGLETS DE RECHERCHE (TEXTE, VOCAL, IMAGE)
+  // 2. RECHERCHE VOCALE (bouton de la fenêtre de recherche)
   // ==========================================
-  const searchTabs = document.querySelectorAll('.hero-search-tabs .tab-btn')
-  let typeRecherche = 'TEXTE' // 'TEXTE' | 'AUDIO' | 'IMAGE'
-  let dernierAudioUrl = null
-  let derniereImageUrl = null
-
-  searchTabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      searchTabs.forEach((btn) => btn.classList.remove('active'))
-      tab.classList.add('active')
-
-      const tabText = tab.textContent.trim()
-      
-      if (tabText.includes('Vocal') || tabText.includes('vocale')) {
-        typeRecherche = 'AUDIO'
-        lancerRechercheVocale()
-      } else if (tabText.includes('Image') || tabText.includes('image')) {
-        typeRecherche = 'IMAGE'
-        lancerRechercheImage()
-      } else {
-        typeRecherche = 'TEXTE'
-        const globalSearchInput = document.querySelector('.global-search-bar input')
-        if (globalSearchInput) globalSearchInput.focus()
-        if (window.showToast) window.showToast('Mode recherche textuelle activé', 'info')
-      }
-    })
-  })
-
-  // --- Logique Recherche Vocale (Micro) ---
   function lancerRechercheVocale() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    
+
     if (!SpeechRecognition) {
-      if (window.showToast) window.showToast('La recherche vocale n\'est pas supportée par votre navigateur.', 'error')
+      if (window.showToast) window.showToast("La recherche vocale n'est pas supportée par ce navigateur.", 'error')
+      else alert("La recherche vocale n'est pas supportée par ce navigateur.")
       return
     }
 
@@ -63,86 +48,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (window.showToast) window.showToast('🎤 Écoute en cours... Parlez maintenant.', 'info')
 
-    recognition.start()
-
     recognition.onresult = (event) => {
-      const speechResult = event.results[0][0].transcript
-      if (window.showToast) window.showToast(`Texte capté : "${speechResult}"`, 'success')
-      
-      const globalSearchInput = document.querySelector('.global-search-bar input')
-      if (globalSearchInput) {
-        globalSearchInput.value = speechResult
-      }
-      
-      executerRechercheApi(speechResult, gpsLatitude, gpsLongitude)
+      const texteCapte = event.results[0][0].transcript
+      if (window.showToast) window.showToast(`Texte capté : "${texteCapte}"`, 'success')
+      ouvrirResultats(texteCapte)
     }
 
     recognition.onerror = (event) => {
       if (window.showToast) window.showToast(`Erreur micro : ${event.error}`, 'error')
     }
+
+    recognition.start()
   }
 
-  // --- Logique Recherche Image (Fichiers) ---
-  function lancerRechercheImage() {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = 'image/*'
-    input.onchange = (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        if (window.showToast) window.showToast(`📸 Image sélectionnée : ${file.name}`, 'success')
-        derniereImageUrl = URL.createObjectURL(file)
-        
-        executerRechercheApi('Recherche par image', gpsLatitude, gpsLongitude)
-      }
-    }
-    input.click()
+  const btnVoice = document.getElementById('btn-choice-voice')
+  if (btnVoice) {
+    btnVoice.addEventListener('click', lancerRechercheVocale)
   }
 
   // ==========================================
-  // 3. HERO BANNER : FILTRES DE LOCALISATION (LIEUX)
+  // 3. RECHERCHE PAR IMAGE (pas encore disponible côté serveur)
   // ==========================================
-  const filterBtns = document.querySelectorAll('.hero-filters .filter-btn')
-  let scopeRecherche = 'AUTOUR_DE_MOI' // 'AUTOUR_DE_MOI' | 'VILLE' | 'AUTRE_VILLE' | 'MONDE'
-  let gpsLatitude = null
-  let gpsLongitude = null
-
-  filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach((f) => f.classList.remove('active'))
-      btn.classList.add('active')
-
-      const btnText = btn.textContent.trim()
-
-      if (btnText.includes('Autour de moi')) {
-        scopeRecherche = 'AUTOUR_DE_MOI'
-        recupererGeolocalisation()
-      } else if (btnText.includes('Toute la ville')) {
-        scopeRecherche = 'VILLE'
-        if (window.showToast) window.showToast('Portée : Toute la ville', 'info')
-      } else if (btnText.includes('Autre ville')) {
-        scopeRecherche = 'AUTRE_VILLE'
-        if (window.showToast) window.showToast('Portée : Autre ville / pays', 'info')
-      } else if (btnText.includes('Monde entier')) {
-        scopeRecherche = 'MONDE'
-        if (window.showToast) window.showToast('Portée : Monde entier', 'info')
+  const imageInput = document.querySelector('#image-search-exclusive-view input[type="file"]')
+  if (imageInput) {
+    imageInput.addEventListener('change', () => {
+      if (imageInput.files && imageInput.files[0]) {
+        if (window.showToast) window.showToast("La recherche par image arrive bientôt.", 'info')
+        else alert('La recherche par image arrive bientôt.')
       }
     })
-  })
-
-  function recupererGeolocalisation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          gpsLatitude = position.coords.latitude
-          gpsLongitude = position.coords.longitude
-          if (window.showToast) window.showToast('📍 Position GPS actualisée', 'success')
-        },
-        () => {
-          if (window.showToast) window.showToast('Impossible de récupérer votre position GPS.', 'warning')
-        }
-      )
-    }
   }
 
   // ==========================================
@@ -168,133 +102,66 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 5. BARRE DE RECHERCHE GLOBALE & ENVOI API
+  // 5. MENU DÉROULANT DU PROFIL
   // ==========================================
-  const globalSearchInput = document.querySelector('.global-search-bar input')
-  const globalSearchBtn = document.querySelector('.global-search-bar .btn-search')
+  const userMenuToggle = document.getElementById('user-menu-toggle')
+  const userDropdown = document.getElementById('user-dropdown')
 
-  function declencherRechercheTexte() {
-    const query = globalSearchInput?.value.trim()
-    if (!query) {
-      if (window.showToast) window.showToast('Veuillez saisir un texte de recherche.', 'warning')
-      return
-    }
-    executerRechercheApi(query, gpsLatitude, gpsLongitude)
-  }
+  if (userMenuToggle && userDropdown) {
+    userMenuToggle.addEventListener('click', (event) => {
+      event.stopPropagation()
+      userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block'
+    })
 
-  async function executerRechercheApi(queryText, lat, lng) {
-    if (window.showToast) window.showToast(`Recherche en cours...`, 'info')
-
-    try {
-      const response = await fetch('/api/v1/ai/search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          query: queryText,
-          type_recherche: typeRecherche,
-          audio_url: dernierAudioUrl,
-          image_url: derniereImageUrl,
-          scope_recherche: scopeRecherche,
-          latitude: lat,
-          longitude: lng,
-          rayonKm: 1
-        })
-      })
-
-      const result = await response.json()
-
-      if (response.ok) {
-        if (result.redirectUrl) {
-          window.location.href = result.redirectUrl
-        } else if (window.showToast) {
-          window.showToast(result.reponseIa || 'Recherche effectuée avec succès !', 'success')
-        }
-      } else {
-        if (window.showToast) window.showToast(result.message || 'Une erreur est survenue.', 'error')
+    document.addEventListener('click', () => {
+      if (userDropdown.style.display === 'block') {
+        userDropdown.style.display = 'none'
       }
-    } catch (err) {
-      console.error('Erreur réseau :', err)
-      if (window.showToast) window.showToast('Impossible de contacter le serveur.', 'error')
-    }
-  }
+    })
 
-  if (globalSearchBtn) {
-    globalSearchBtn.addEventListener('click', declencherRechercheTexte)
-  }
-
-  if (globalSearchInput) {
-    globalSearchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        declencherRechercheTexte()
-      }
+    userDropdown.addEventListener('click', (event) => {
+      event.stopPropagation()
     })
   }
 
   // ==========================================
-  // 6. GESTION DU MENU DÉROULANT DU PROFIL
+  // 6. MENU DÉROULANT DE LOCALISATION (VILLE / PAYS)
   // ==========================================
-  const userMenuToggle = document.getElementById('user-menu-toggle');
-  const userDropdown = document.getElementById('user-dropdown');
-
-  if (userMenuToggle && userDropdown) {
-      userMenuToggle.addEventListener('click', (event) => {
-          event.stopPropagation();
-          userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
-      });
-
-      document.addEventListener('click', () => {
-          if (userDropdown.style.display === 'block') {
-              userDropdown.style.display = 'none';
-          }
-      });
-
-      userDropdown.addEventListener('click', (event) => {
-          event.stopPropagation();
-      });
-  }
-
-  // ==========================================
-  // 7. GESTION DU MENU DÉROULANT DE LOCALISATION (VILLE / PAYS)
-  // ==========================================
-  const locToggle = document.getElementById('location-menu-toggle');
-  const locMenu = document.getElementById('location-dropdown-menu');
-  const locText = document.getElementById('current-location-text');
+  const locToggle = document.getElementById('location-menu-toggle')
+  const locMenu = document.getElementById('location-dropdown-menu')
+  const locText = document.getElementById('current-location-text')
 
   if (locToggle && locMenu) {
     locToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      locMenu.style.display = locMenu.style.display === 'block' ? 'none' : 'block';
-    });
+      e.stopPropagation()
+      locMenu.style.display = locMenu.style.display === 'block' ? 'none' : 'block'
+    })
 
-    document.querySelectorAll('.location-option').forEach(option => {
-      option.addEventListener('click', function() {
-        const selectedValue = this.getAttribute('data-value');
-        if (locText) locText.textContent = selectedValue;
-        locMenu.style.display = 'none';
-        if (window.showToast) window.showToast(`Localisation modifiée : ${selectedValue}`, 'success');
-      });
-    });
+    document.querySelectorAll('.location-option').forEach((option) => {
+      option.addEventListener('click', function () {
+        const selectedValue = this.getAttribute('data-value')
+        if (locText) locText.textContent = selectedValue
+        locMenu.style.display = 'none'
+        if (window.showToast) window.showToast(`Localisation modifiée : ${selectedValue}`, 'success')
+      })
+    })
 
-    // Fermeture globale du menu de localisation au clic extérieur
     document.addEventListener('click', () => {
-      if (locMenu) locMenu.style.display = 'none';
-    });
+      locMenu.style.display = 'none'
+    })
 
     locMenu.addEventListener('click', (event) => {
-      event.stopPropagation();
-    });
+      event.stopPropagation()
+    })
   }
 
   // ==========================================
-  // 8. CHARGEMENT DYNAMIQUE DES DONNÉES DU DASHBOARD
+  // 7. DONNÉES DYNAMIQUES DU DASHBOARD (si un token API existe)
   // ==========================================
   async function loadDashboardData() {
     try {
       const token = localStorage.getItem('maville_token')
-      if (!token) return
+      if (!token || !window.apiFetch) return
 
       const data = await window.apiFetch('/dashboard/summary', 'GET')
 

@@ -446,11 +446,6 @@
         imageView.style.display = 'block';
       });
 
-      // Cliquer sur "Recherche vocale"
-      btnChoiceVoice.addEventListener('click', () => {
-        alert('Écoute vocale activée... Parlez maintenant.');
-      });
-
       // Retour aux options depuis le texte
       backToChoices.addEventListener('click', () => {
         textView.style.display = 'none';
@@ -481,13 +476,23 @@
         });
       });
 
-      // Lancer la recherche finale
-      submitSearch.addEventListener('click', () => {
-        if(searchInput.value.trim() !== '') {
-          alert('Recherche lancée pour : ' + searchInput.value);
-          overlay.style.display = 'none';
+            // Lancer la recherche finale : ouvre la page de résultats
+      function lancerRecherche() {
+        const texte = searchInput.value.trim();
+        if (texte !== '') {
+          window.location.href = '/resultats?q=' + encodeURIComponent(texte);
         } else {
           alert('Veuillez saisir ou sélectionner une recherche.');
+        }
+      }
+
+      submitSearch.addEventListener('click', lancerRecherche);
+
+      // Touche Entrée dans le champ de saisie
+            searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          lancerRecherche();
         }
       });
     });

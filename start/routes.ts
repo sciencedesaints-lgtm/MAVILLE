@@ -12,6 +12,7 @@ const CommercesController = () => import('#controllers/commerces_controller')
 const ProduitsController = () => import('#controllers/produits_controller')
 const CommandesController = () => import('#controllers/commandes_controller')
 const DemandesServicesController = () => import('#controllers/demandes_services_controller')
+const ResultatsController = () => import('#controllers/resultats_controller')
 const UploadsController = () => import('#controllers/uploads_controller')
 const AiController = () => import('#controllers/ai_controller')
 const MediasController = () => import('#controllers/medias_controller')
@@ -29,7 +30,7 @@ router.get('/connexion', async ({ view }) => {
   return view.render('pages/connexion')
 }).as('web.connexion')
 router.on('/inscription').render('pages/inscription').as('web.inscription')
-router.on('/accueil').render('pages/accueil').as('web.accueil')
+router.on('/accueil').render('pages/accueil').as('web.accueil').use(middleware.auth())
 router.on('/login').render('pages/connexion').as('web.login.form')
 
 // Gestion des actualités
@@ -61,6 +62,7 @@ router.group(() => {
   router.post('/commerces', [CommercesController, 'store']).as('commerces.store')
   router.get('/annonces/creer', [AnnoncesController, 'create']).as('annonces.create')
   router.post('/annonces', [AnnoncesController, 'store']).as('annonces.store')
+  router.get('/resultats', [ResultatsController, 'index']).as('resultats.index')
 }).use(middleware.auth())
 
 // Conditions d'utilisation (après l'inscription, utilisateur connecté)

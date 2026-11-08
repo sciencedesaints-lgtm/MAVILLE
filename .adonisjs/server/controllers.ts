@@ -5,6 +5,7 @@
 
 export const controllers = {
   Ai: () => import('#controllers/ai_controller'),
+  Annonces: () => import('#controllers/annonces_controller'),
   Commandes: () => import('#controllers/commandes_controller'),
   Commerces: () => import('#controllers/commerces_controller'),
   Conditions: () => import('#controllers/conditions_controller'),
@@ -15,7 +16,7 @@ export const controllers = {
   Offres: () => import('#controllers/offres_controller'),
   Produits: () => import('#controllers/produits_controller'),
   Profils: () => import('#controllers/profils_controller'),
+  Resultats: () => import('#controllers/resultats_controller'),
   Session: () => import('#controllers/session_controller'),
   Uploads: () => import('#controllers/uploads_controller'),
-  Annonces: () => import('#controllers/annonces_controller'),
 }
