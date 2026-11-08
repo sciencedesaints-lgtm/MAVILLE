@@ -6,6 +6,7 @@
 export const controllers = {
   Ai: () => import('#controllers/ai_controller'),
   Commandes: () => import('#controllers/commandes_controller'),
+  Commerces: () => import('#controllers/commerces_controller'),
   Conditions: () => import('#controllers/conditions_controller'),
   DemandesServices: () => import('#controllers/demandes_services_controller'),
   Etablissements: () => import('#controllers/etablissements_controller'),
@@ -16,4 +17,5 @@ export const controllers = {
   Profils: () => import('#controllers/profils_controller'),
   Session: () => import('#controllers/session_controller'),
   Uploads: () => import('#controllers/uploads_controller'),
+  Annonces: () => import('#controllers/annonces_controller'),
 }

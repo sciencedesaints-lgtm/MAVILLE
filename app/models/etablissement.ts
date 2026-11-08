@@ -67,6 +67,35 @@ export default class Etablissement extends BaseModel {
   declare commune: string | null
 
   @column()
+  declare avenue: string | null
+
+  @column()
+  declare numero: string | null
+
+  @column()
+  declare repere: string | null
+
+  @column()
+  declare marche: string | null
+
+  @column()
+  declare emplacement: string | null
+
+  @column()
+  declare typeCommerce: string | null
+
+  @column()
+  declare horaires: string | null
+
+  @column()
+  declare whatsapp: string | null
+
+  @column({
+    prepare: (value: string[] | null) => (value ? `{${value.join(',')}}` : null),
+  })
+  declare mobileMoney: string[] | null
+
+  @column()
   declare latitude: number | null
 
   @column()

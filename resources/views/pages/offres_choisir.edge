@@ -1,0 +1,52 @@
+@component('layouts/main', { title: 'Que voulez-vous publier ? - MAVILLE' })
+
+  <style>
+    .choix-page { min-height: 100vh; background: #0f172a; display: flex; justify-content: center; padding: 40px 16px; box-sizing: border-box; font-family: system-ui, sans-serif; }
+    .choix-card { width: 100%; max-width: 560px; height: fit-content; }
+    .choix-card h1 { color: #f8fafc; font-size: 1.6rem; text-align: center; margin: 0 0 6px; }
+    .choix-card p.sub { color: #94a3b8; text-align: center; margin: 0 0 28px; font-size: 0.95rem; }
+    .choix-item { display: flex; align-items: center; gap: 18px; background: #1e293b; border: 2px solid #334155; border-radius: 16px; padding: 20px 22px; margin-bottom: 14px; text-decoration: none; transition: border-color 0.2s, transform 0.1s; }
+    .choix-item:hover { border-color: #10b981; transform: translateY(-2px); }
+    .choix-icone { font-size: 2.2rem; flex-shrink: 0; }
+    .choix-titre { color: #f8fafc; font-weight: 700; font-size: 1.05rem; margin: 0 0 4px; }
+    .choix-desc { color: #94a3b8; font-size: 0.88rem; margin: 0; }
+    .choix-item.bientot { opacity: 0.5; cursor: not-allowed; }
+    .choix-item.bientot:hover { border-color: #334155; transform: none; }
+    .badge { background: #475569; color: #e2e8f0; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+    .retour { display: block; text-align: center; color: #94a3b8; margin-top: 18px; font-size: 0.9rem; text-decoration: none; }
+  </style>
+
+  <div class="choix-page">
+    <div class="choix-card">
+      <h1>Que voulez-vous publier ?</h1>
+      <p class="sub">Choisissez ce qui correspond le mieux à votre activité.</p>
+
+      <a class="choix-item" href="{{ route('offres.create') }}">
+        <span class="choix-icone">🔧</span>
+        <div>
+          <p class="choix-titre">Un service</p>
+          <p class="choix-desc">Plombier, coiffeur, développeur, cours, transport...</p>
+        </div>
+      </a>
+
+            <a class="choix-item" href="{{ route('annonces.create') }}">
+        <span class="choix-icone">🛍️</span>
+        <div>
+          <p class="choix-titre">Un produit à vendre ou à louer</p>
+          <p class="choix-desc">Voiture, parcelle, maison, meubles, téléphone, chiots...</p>
+        </div>
+      </a>
+
+      <a class="choix-item" href="{{ route('commerces.create') }}"
+        <span class="choix-icone">🏪</span>
+        <div>
+          <p class="choix-titre">Mon commerce ou mon étal</p>
+          <p class="choix-desc">Marché, kiosque, boutique de quartier, cabine, Mobile Money...</p>
+        </div>
+      </a>
+
+      <a class="retour" href="{{ route('profil.personnel') }}">← Retour au profil</a>
+    </div>
+  </div>
+
+@end

@@ -7,6 +7,8 @@ const NewAccountController = () => import('#controllers/new_account_controller')
 const ConditionsController = () => import('#controllers/conditions_controller')
 const OffresController = () => import('#controllers/offres_controller')
 const EtablissementsController = () => import('#controllers/etablissements_controller')
+const AnnoncesController = () => import('#controllers/annonces_controller')
+const CommercesController = () => import('#controllers/commerces_controller')
 const ProduitsController = () => import('#controllers/produits_controller')
 const CommandesController = () => import('#controllers/commandes_controller')
 const DemandesServicesController = () => import('#controllers/demandes_services_controller')
@@ -52,8 +54,13 @@ router.group(() => {
 }).use(middleware.auth())
 
 router.group(() => {
+  router.get('/offres', [OffresController, 'choisir']).as('offres.choisir')
   router.get('/offres/creer', [OffresController, 'create']).as('offres.create')
   router.post('/offres', [OffresController, 'store']).as('offres.store')
+  router.get('/commerces/creer', [CommercesController, 'create']).as('commerces.create')
+  router.post('/commerces', [CommercesController, 'store']).as('commerces.store')
+  router.get('/annonces/creer', [AnnoncesController, 'create']).as('annonces.create')
+  router.post('/annonces', [AnnoncesController, 'store']).as('annonces.store')
 }).use(middleware.auth())
 
 // Conditions d'utilisation (après l'inscription, utilisateur connecté)

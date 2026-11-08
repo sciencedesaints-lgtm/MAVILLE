@@ -51,21 +51,82 @@ export default class extends BaseSeeder {
         }
       }
     }
+    
+    // 4. Catégories de services : [nom, slug, icône, populaire]
+    const categories: [string, string, string, boolean][] = [
+      // Déjà existantes (on garde l'ordre)
+      ['Animaux et chiens', 'animaux-chiens', '🐕', true],
+      ['Immobilier', 'immobilier', '🏠', true],
+      ['Plomberie', 'plomberie', '🔧', true],
+      ['Électricité', 'electricite', '💡', true],
+      ['Transport et livraison', 'transport-livraison', '🚚', true],
+      ['Beauté et coiffure', 'beaute-coiffure', '💇', true],
+      ['Éducation et cours', 'education-cours', '🎓', false],
+      ['Informatique', 'informatique', '💻', false],
 
-    // 4. Catégories de services
-    const categories = [
-      ['Animaux et chiens', 'animaux-chiens', '🐕'],
-      ['Immobilier', 'immobilier', '🏠'],
-      ['Plomberie', 'plomberie', '🔧'],
-      ['Électricité', 'electricite', '💡'],
-      ['Transport et livraison', 'transport-livraison', '🚚'],
-      ['Beauté et coiffure', 'beaute-coiffure', '💇'],
-      ['Éducation et cours', 'education-cours', '🎓'],
-      ['Informatique', 'informatique', '💻'],
+      // Maison et construction
+      ['Maçonnerie et construction', 'maconnerie-construction', '🧱', false],
+      ['Menuiserie et ébénisterie', 'menuiserie', '🪚', false],
+      ['Peinture et décoration', 'peinture-decoration', '🎨', false],
+      ['Soudure et métallerie', 'soudure-metallerie', '🔩', false],
+      ['Carrelage et revêtements', 'carrelage', '🏗️', false],
+      ['Nettoyage et ménage', 'nettoyage-menage', '🧹', true],
+      ['Jardinage et espaces verts', 'jardinage', '🌳', false],
+      ['Sécurité et gardiennage', 'securite-gardiennage', '🛡️', false],
+
+      // Réparation et technique
+      ['Mécanique automobile', 'mecanique-auto', '🚗', true],
+      ['Réparation de motos', 'reparation-motos', '🏍️', false],
+      ['Réparation de téléphones', 'reparation-telephones', '📱', true],
+      ['Réparation électroménager', 'reparation-electromenager', '🔌', false],
+      ['Climatisation et froid', 'climatisation', '❄️', false],
+      ['Panneaux solaires et énergie', 'solaire-energie', '☀️', false],
+
+      // Commerce et alimentation
+      ['Restauration et traiteur', 'restauration-traiteur', '🍴', true],
+      ['Pâtisserie et boulangerie', 'patisserie-boulangerie', '🥖', false],
+      ['Produits agricoles', 'produits-agricoles', '🌾', false],
+      ['Élevage et bétail', 'elevage-betail', '🐄', false],
+      ['Boucherie et poissonnerie', 'boucherie-poissonnerie', '🥩', false],
+
+      // Mode et beauté
+      ['Couture et tailleur', 'couture-tailleur', '🧵', true],
+      ['Mode et vêtements', 'mode-vetements', '👗', false],
+      ['Maquillage et esthétique', 'maquillage-esthetique', '💄', false],
+      ['Massage et bien-être', 'massage-bien-etre', '💆', false],
+
+      // Santé
+      ['Santé et soins à domicile', 'sante-soins', '🩺', false],
+      ['Pharmacie et médicaments', 'pharmacie', '💊', false],
+      ['Sport et coaching', 'sport-coaching', '🏋️', false],
+
+      // Événements et médias
+      ['Événementiel et décoration', 'evenementiel', '🎉', false],
+      ['Photographie et vidéo', 'photo-video', '📸', true],
+      ['Musique et DJ', 'musique-dj', '🎧', false],
+      ['Location de salles et matériel', 'location-salles-materiel', '🪑', false],
+
+      // Professionnel
+      ['Juridique et administratif', 'juridique-administratif', '⚖️', false],
+      ['Comptabilité et finance', 'comptabilite-finance', '📊', false],
+      ['Traduction et rédaction', 'traduction-redaction', '✍️', false],
+      ['Marketing et communication', 'marketing-communication', '📣', false],
+      ['Imprimerie et publicité', 'imprimerie-publicite', '🖨️', false],
+
+      // Transport et voyage
+      ['Taxi et chauffeur privé', 'taxi-chauffeur', '🚕', true],
+      ['Déménagement', 'demenagement', '📦', false],
+      ['Voyage et tourisme', 'voyage-tourisme', '✈️', false],
+      ['Location de véhicules', 'location-vehicules', '🚙', false],
+
+      // Divers
+      ['Garde d\'enfants et nounou', 'garde-enfants', '👶', false],
+      ['Emploi et recrutement', 'emploi-recrutement', '💼', false],
+      ['Autres services', 'autres-services', '➕', false],
     ]
 
     let ordre = 1
-    for (const [nom, slug, icone] of categories) {
+    for (const [nom, slug, icone, populaire] of categories) {
       const existe = await db.from('categories_services').where('slug', slug).first()
       if (!existe) {
         await db.table('categories_services').insert({
@@ -74,7 +135,7 @@ export default class extends BaseSeeder {
           icone,
           active: true,
           ordre_affichage: ordre,
-          est_populaire: false,
+          est_populaire: populaire,
         })
       }
       ordre++

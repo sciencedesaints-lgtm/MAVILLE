@@ -1,0 +1,138 @@
+@component('layouts/main', { title: 'Mon commerce - MAVILLE' })
+
+  <style>
+    .com-page { min-height: 100vh; background: #0f172a; display: flex; justify-content: center; padding: 40px 16px; box-sizing: border-box; font-family: system-ui, sans-serif; }
+    .com-card { width: 100%; max-width: 600px; background: #1e293b; border: 1px solid #334155; border-radius: 20px; padding: 32px; box-sizing: border-box; height: fit-content; }
+    .com-card h1 { color: #f8fafc; font-size: 1.5rem; margin: 0 0 6px; text-align: center; }
+    .com-card p.sub { color: #94a3b8; font-size: 0.9rem; text-align: center; margin: 0 0 24px; }
+    .com-card h2 { color: #38bdf8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; margin: 26px 0 14px; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+    .com-card label.champ { display: block; color: #e2e8f0; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+    .com-card input[type=text], .com-card input[type=tel], .com-card select, .com-card textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #475569; background: #0f172a; color: #f8fafc; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 16px; font-family: inherit; }
+    .ligne { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .option { display: inline-flex; align-items: center; gap: 8px; color: #e2e8f0; font-size: 0.92rem; margin: 0 16px 12px 0; cursor: pointer; }
+    .option input { width: 18px; height: 18px; accent-color: #10b981; }
+    .com-card button { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 12px; }
+    .com-card a.retour { display: block; text-align: center; color: #94a3b8; margin-top: 14px; font-size: 0.9rem; text-decoration: none; }
+    .com-erreur { background: #7f1d1d; color: #fecaca; padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.9rem; }
+    .aide { color: #64748b; font-size: 0.8rem; margin: -10px 0 16px; }
+    @media (max-width: 520px) { .ligne { grid-template-columns: 1fr; } }
+  </style>
+
+  <div class="com-page">
+    <div class="com-card">
+      <h1>Mon commerce ou mon étal</h1>
+      <p class="sub">Les habitants de votre ville pourront vous trouver sans se déplacer.</p>
+
+      @if(flashMessages.has('erreur'))
+        <div class="com-erreur">{{ flashMessages.get('erreur') }}</div>
+      @end
+
+      <form action="{{ route('commerces.store') }}" method="POST">
+        {{ csrfField() }}
+
+        <h2>Votre commerce</h2>
+
+        <label class="champ" for="nom">Nom du commerce</label>
+        <input type="text" id="nom" name="nom" placeholder="Ex : Poissons frais Mama Ngoy" required minlength="3" maxlength="200">
+
+        <div class="ligne">
+          <div>
+            <label class="champ" for="type_commerce">Type</label>
+            <select id="type_commerce" name="type_commerce" required>
+              <option value="" disabled selected>Choisissez</option>
+              <option value="etal_marche">Étal de marché</option>
+              <option value="kiosque">Kiosque</option>
+              <option value="boutique">Boutique</option>
+              <option value="cabine">Cabine publique</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+          <div>
+            <label class="champ" for="categorie_id">Ce que vous vendez</label>
+            <select id="categorie_id" name="categorie_id" required>
+              <option value="" disabled selected>Choisissez</option>
+              @each(categorie in categories)
+                <option value="{{ categorie.id }}">{{ categorie.icone }} {{ categorie.nom }}</option>
+              @end
+            </select>
+          </div>
+        </div>
+
+        <label class="champ" for="description">Ce que vous avez aujourd'hui (facultatif)</label>
+        <textarea id="description" name="description" rows="3" placeholder="Ex : poisson frais arrivé ce matin, tilapia et capitaine..."></textarea>
+
+        <h2>Où vous trouver</h2>
+        <p class="aide">Remplissez ce que vous connaissez : au moins un des champs marché, quartier, avenue ou repère.</p>
+
+        <div class="ligne">
+          <div>
+            <label class="champ" for="marche">Marché (si vous y êtes)</label>
+            <input type="text" id="marche" name="marche" placeholder="Ex : Marché Kenya">
+          </div>
+          <div>
+            <label class="champ" for="emplacement">Allée ou étal</label>
+            <input type="text" id="emplacement" name="emplacement" placeholder="Ex : allée des légumes, étal 14">
+          </div>
+        </div>
+
+        <div class="ligne">
+          <div>
+            <label class="champ" for="commune">Commune</label>
+            <input type="text" id="commune" name="commune" placeholder="Ex : Kampemba">
+          </div>
+          <div>
+            <label class="champ" for="quartier">Quartier</label>
+            <input type="text" id="quartier" name="quartier" placeholder="Ex : Bel-Air">
+          </div>
+        </div>
+
+        <div class="ligne">
+          <div>
+            <label class="champ" for="avenue">Avenue ou rue</label>
+            <input type="text" id="avenue" name="avenue" placeholder="Ex : Kasai">
+          </div>
+          <div>
+            <label class="champ" for="numero">Numéro</label>
+            <input type="text" id="numero" name="numero" placeholder="Ex : 12">
+          </div>
+        </div>
+
+        <label class="champ" for="repere">Repère</label>
+        <input type="text" id="repere" name="repere" placeholder="Ex : en face de l'école, à côté de la station">
+
+        <h2>Horaires et contact</h2>
+
+        <label class="champ" for="horaires">Horaires</label>
+        <input type="text" id="horaires" name="horaires" placeholder="Ex : 6h-18h, fermé le dimanche">
+
+        <div class="ligne">
+          <div>
+            <label class="champ" for="telephone">Téléphone</label>
+            <input type="tel" id="telephone" name="telephone" value="{{ auth.user.telephone || '' }}" placeholder="+243...">
+          </div>
+          <div>
+            <label class="champ" for="whatsapp">WhatsApp</label>
+            <input type="tel" id="whatsapp" name="whatsapp" placeholder="+243...">
+          </div>
+        </div>
+
+        <h2>Services proposés</h2>
+
+        <label class="champ">Mobile Money</label>
+        <div>
+          <label class="option"><input type="checkbox" name="mobile_money" value="airtel"> Airtel Money</label>
+          <label class="option"><input type="checkbox" name="mobile_money" value="mpesa"> M-Pesa</label>
+          <label class="option"><input type="checkbox" name="mobile_money" value="orange"> Orange Money</label>
+          <label class="option"><input type="checkbox" name="mobile_money" value="africell"> Africell Money</label>
+        </div>
+
+        <label class="option"><input type="checkbox" name="livraison" value="1"> Je livre à domicile</label>
+
+        <button type="submit">Publier mon commerce</button>
+      </form>
+
+      <a class="retour" href="{{ route('offres.choisir') }}">← Retour</a>
+    </div>
+  </div>
+
+@end

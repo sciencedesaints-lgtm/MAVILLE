@@ -109,6 +109,59 @@ export class AlertesVilleSchema extends BaseModel {
   declare villeId: string
 }
 
+export class AnnonceSchema extends BaseModel {
+  static $columns = ['avenue', 'categorieId', 'commune', 'createdAt', 'description', 'devise', 'disponible', 'etat', 'id', 'nombreVues', 'periodicite', 'prix', 'prixNegociable', 'quartier', 'repere', 'slug', 'telephone', 'titre', 'typeOffre', 'updatedAt', 'vendeurId', 'villeId', 'visible', 'whatsapp'] as const
+  $columns = AnnonceSchema.$columns
+  @column()
+  declare avenue: string | null
+  @column()
+  declare categorieId: number
+  @column()
+  declare commune: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column()
+  declare devise: string | null
+  @column()
+  declare disponible: boolean | null
+  @column()
+  declare etat: string | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare nombreVues: number | null
+  @column()
+  declare periodicite: string | null
+  @column()
+  declare prix: string | null
+  @column()
+  declare prixNegociable: boolean | null
+  @column()
+  declare quartier: string | null
+  @column()
+  declare repere: string | null
+  @column()
+  declare slug: string
+  @column()
+  declare telephone: string | null
+  @column()
+  declare titre: string
+  @column()
+  declare typeOffre: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare vendeurId: string
+  @column()
+  declare villeId: string
+  @column()
+  declare visible: boolean | null
+  @column()
+  declare whatsapp: string | null
+}
+
 export class AviSchema extends BaseModel {
   static $columns = ['commentaire', 'createdAt', 'elementId', 'id', 'note', 'typeElement', 'updatedAt', 'utilisateurId', 'visible'] as const
   $columns = AviSchema.$columns
@@ -429,10 +482,12 @@ export class EscrowTransactionSchema extends BaseModel {
 }
 
 export class EtablissementSchema extends BaseModel {
-  static $columns = ['adresse', 'categorieId', 'commune', 'createdAt', 'description', 'email', 'id', 'latitude', 'livraison', 'longitude', 'nom', 'nombreAvis', 'noteMoyenne', 'ouvert', 'position', 'proprietaireId', 'quartier', 'retraitSurPlace', 'siteWeb', 'slug', 'telephone', 'updatedAt', 'verifie', 'villeId', 'visible'] as const
+  static $columns = ['adresse', 'avenue', 'categorieId', 'commune', 'createdAt', 'description', 'email', 'emplacement', 'horaires', 'id', 'latitude', 'livraison', 'longitude', 'marche', 'mobileMoney', 'nom', 'nombreAvis', 'noteMoyenne', 'numero', 'ouvert', 'position', 'proprietaireId', 'quartier', 'repere', 'retraitSurPlace', 'siteWeb', 'slug', 'telephone', 'typeCommerce', 'updatedAt', 'verifie', 'villeId', 'visible', 'whatsapp'] as const
   $columns = EtablissementSchema.$columns
   @column()
   declare adresse: string
+  @column()
+  declare avenue: string | null
   @column()
   declare categorieId: number
   @column()
@@ -443,6 +498,10 @@ export class EtablissementSchema extends BaseModel {
   declare description: string | null
   @column()
   declare email: string | null
+  @column()
+  declare emplacement: string | null
+  @column()
+  declare horaires: string | null
   @column({ isPrimary: true })
   declare id: string
   @column()
@@ -452,11 +511,17 @@ export class EtablissementSchema extends BaseModel {
   @column()
   declare longitude: string | null
   @column()
+  declare marche: string | null
+  @column()
+  declare mobileMoney: any | null
+  @column()
   declare nom: string
   @column()
   declare nombreAvis: number | null
   @column()
   declare noteMoyenne: string | null
+  @column()
+  declare numero: string | null
   @column()
   declare ouvert: boolean | null
   @column()
@@ -466,6 +531,8 @@ export class EtablissementSchema extends BaseModel {
   @column()
   declare quartier: string | null
   @column()
+  declare repere: string | null
+  @column()
   declare retraitSurPlace: boolean | null
   @column()
   declare siteWeb: string | null
@@ -473,6 +540,8 @@ export class EtablissementSchema extends BaseModel {
   declare slug: string
   @column()
   declare telephone: string | null
+  @column()
+  declare typeCommerce: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
   @column()
@@ -481,6 +550,8 @@ export class EtablissementSchema extends BaseModel {
   declare villeId: string
   @column()
   declare visible: boolean | null
+  @column()
+  declare whatsapp: string | null
 }
 
 export class EvenementSchema extends BaseModel {
