@@ -2,14 +2,15 @@ import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 
 type Resultat = {
-  genre: 'service' | 'commerce' | 'annonce' | 'entreprise' | 'administration'
-  titre: string
-  proprietaire: string | null
-  categorie: string | null
-  lieu: string
-  telephone: string | null
-  prix: string | null
-}
+    genre: 'service' | 'commerce' | 'annonce' | 'entreprise' | 'administration'
+    titre: string
+    proprietaireId: string
+    proprietaire: string | null
+    categorie: string | null
+    lieu: string
+    telephone: string | null
+    prix: string | null
+  }
 
 export default class ResultatsController {
   async index({ request, view, auth }: HttpContext) {
@@ -53,16 +54,17 @@ export default class ResultatsController {
       filtrer(query, ['s.nom', 's.description', 'c.nom'])
       for (const r of await query) {
         resultats.push({
-          genre: 'service',
-          titre: r.nom,
-          proprietaire: [r.u_prenom, r.u_nom].filter(Boolean).join(' '),
-          categorie: r.categorie_nom,
-          lieu: lieu(r.quartier, r.commune),
-          telephone: r.telephone,
-          prix: r.prix_min ? `dès ${Number(r.prix_min)} ${r.devise}` : null,
-        })
+            genre: 'service',
+            titre: r.nom,
+            proprietaireId: r.prestataire_id,
+            proprietaire: [r.u_prenom, r.u_nom].filter(Boolean).join(' '),
+            categorie: r.categorie_nom,
+            lieu: lieu(r.quartier, r.commune),
+            telephone: r.telephone,
+            prix: r.prix_min ? `dès ${Number(r.prix_min)} ${r.devise}` : null,
+          })
+        }
       }
-    }
 
     if (ville && veut('commerce')) {
       const query = db
@@ -76,16 +78,17 @@ export default class ResultatsController {
       filtrer(query, ['e.nom', 'e.description', 'e.adresse', 'e.marche', 'c.nom'])
       for (const r of await query) {
         resultats.push({
-          genre: 'commerce',
-          titre: r.nom,
-          proprietaire: null,
-          categorie: r.categorie_nom,
-          lieu: r.adresse,
-          telephone: r.telephone || r.whatsapp,
-          prix: null,
-        })
+            genre: 'commerce',
+            titre: r.nom,
+            proprietaireId: r.proprietaire_id,
+            proprietaire: null,
+            categorie: r.categorie_nom,
+            lieu: r.adresse,
+            telephone: r.telephone || r.whatsapp,
+            prix: null,
+          })
+        }
       }
-    }
 
     if (ville && veut('annonce')) {
       const query = db
@@ -101,18 +104,19 @@ export default class ResultatsController {
       filtrer(query, ['a.titre', 'a.description', 'c.nom'])
       for (const r of await query) {
         resultats.push({
-          genre: 'annonce',
-          titre: r.titre,
-          proprietaire: [r.u_prenom, r.u_nom].filter(Boolean).join(' '),
-          categorie: r.categorie_nom,
-          lieu: lieu(r.quartier, r.commune),
-          telephone: r.telephone || r.whatsapp,
-          prix: r.prix
-            ? `${Number(r.prix)} ${r.devise}${r.type_offre === 'location' ? ' / ' + r.periodicite : ''}`
-            : null,
-        })
+            genre: 'annonce',
+            titre: r.titre,
+            proprietaireId: r.vendeur_id,
+            proprietaire: [r.u_prenom, r.u_nom].filter(Boolean).join(' '),
+            categorie: r.categorie_nom,
+            lieu: lieu(r.quartier, r.commune),
+            telephone: r.telephone || r.whatsapp,
+            prix: r.prix
+              ? `${Number(r.prix)} ${r.devise}${r.type_offre === 'location' ? ' / ' + r.periodicite : ''}`
+              : null,
+          })
+        }
       }
-    }
 
     // Comptes entreprise et administration (profils de la même ville)
     for (const [genre, typeCompte] of [
@@ -138,16 +142,17 @@ export default class ResultatsController {
       ])
       for (const r of await query) {
         resultats.push({
-          genre,
-          titre: r.nom,
-          proprietaire: null,
-          categorie: r.domaine || r.type_institution || r.type_structure,
-          lieu: lieu(r.avenue, r.commune, r.ville),
-          telephone: r.telephone ? `${r.indicatif_pays ?? ''} ${r.telephone}`.trim() : null,
-          prix: null,
-        })
+            genre,
+            titre: r.nom,
+            proprietaireId: r.id,
+            proprietaire: null,
+            categorie: r.domaine || r.type_institution || r.type_structure,
+            lieu: lieu(r.avenue, r.commune, r.ville),
+            telephone: r.telephone ? `${r.indicatif_pays ?? ''} ${r.telephone}`.trim() : null,
+            prix: null,
+          })
+        }
       }
-    }
 
     return view.render('pages/resultats', {
       resultats,

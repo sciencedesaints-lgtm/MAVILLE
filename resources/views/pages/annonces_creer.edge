@@ -8,6 +8,7 @@
     .ann-card h2 { color: #38bdf8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; margin: 26px 0 14px; border-bottom: 1px solid #334155; padding-bottom: 8px; }
     .ann-card label.champ { display: block; color: #e2e8f0; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
     .ann-card input[type=text], .ann-card input[type=number], .ann-card input[type=tel], .ann-card select, .ann-card textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #475569; background: #0f172a; color: #f8fafc; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 16px; font-family: inherit; }
+    .ann-card input[type=file] { width: 100%; color: #e2e8f0; margin-bottom: 16px; }
     .ligne { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .ligne3 { display: grid; grid-template-columns: 1fr 110px; gap: 12px; }
     .bascule { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
@@ -32,7 +33,7 @@
         <div class="ann-erreur">{{ flashMessages.get('erreur') }}</div>
       @end
 
-      <form action="{{ route('annonces.store') }}" method="POST">
+     <form action="{{ route('annonces.store') }}" method="POST" enctype="multipart/form-data">
         {{ csrfField() }}
 
         <div class="bascule">
@@ -135,6 +136,11 @@
             <input type="tel" id="whatsapp" name="whatsapp" placeholder="+243...">
           </div>
         </div>
+
+                <h2>Photos et vidéos</h2>
+
+        <label class="champ" for="medias">Jusqu'à 5 fichiers (photos ou vidéos, 30 Mo maximum chacun)</label>
+        <input type="file" id="medias" name="medias" accept="image/*,video/mp4,video/webm,video/quicktime" multiple>
 
         <button type="submit">Publier mon annonce</button>
       </form>

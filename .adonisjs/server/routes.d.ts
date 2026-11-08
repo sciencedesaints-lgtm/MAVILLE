@@ -27,6 +27,7 @@ export type ScannedRoutes = {
     'annonces.create': { paramsTuple?: []; params?: {} }
     'annonces.store': { paramsTuple?: []; params?: {} }
     'resultats.index': { paramsTuple?: []; params?: {} }
+    'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
@@ -78,6 +79,7 @@ export type ScannedRoutes = {
     'commerces.create': { paramsTuple?: []; params?: {} }
     'annonces.create': { paramsTuple?: []; params?: {} }
     'resultats.index': { paramsTuple?: []; params?: {} }
+    'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -108,6 +110,7 @@ export type ScannedRoutes = {
     'commerces.create': { paramsTuple?: []; params?: {} }
     'annonces.create': { paramsTuple?: []; params?: {} }
     'resultats.index': { paramsTuple?: []; params?: {} }
+    'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }

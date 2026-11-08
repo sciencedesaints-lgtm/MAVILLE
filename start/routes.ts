@@ -5,6 +5,7 @@ import { middleware } from '#start/kernel'
 const SessionController = () => import('#controllers/session_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
 const ConditionsController = () => import('#controllers/conditions_controller')
+const MembresController = () => import('#controllers/membres_controller')
 const OffresController = () => import('#controllers/offres_controller')
 const EtablissementsController = () => import('#controllers/etablissements_controller')
 const AnnoncesController = () => import('#controllers/annonces_controller')
@@ -63,6 +64,7 @@ router.group(() => {
   router.get('/annonces/creer', [AnnoncesController, 'create']).as('annonces.create')
   router.post('/annonces', [AnnoncesController, 'store']).as('annonces.store')
   router.get('/resultats', [ResultatsController, 'index']).as('resultats.index')
+  router.get('/membre/:id', [MembresController, 'show']).as('membre.show')
 }).use(middleware.auth())
 
 // Conditions d'utilisation (après l'inscription, utilisateur connecté)

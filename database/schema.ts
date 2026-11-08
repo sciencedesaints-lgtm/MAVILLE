@@ -807,6 +807,27 @@ export class NotificationSchema extends BaseModel {
   declare utilisateurId: string
 }
 
+export class OffresMediaSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'offreId', 'ordre', 'type', 'typeOffre', 'updatedAt', 'url'] as const
+  $columns = OffresMediaSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare offreId: string
+  @column()
+  declare ordre: number | null
+  @column()
+  declare type: string
+  @column()
+  declare typeOffre: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare url: string
+}
+
 export class PaiementSchema extends BaseModel {
   static $columns = ['commandeId', 'createdAt', 'devise', 'id', 'mode', 'montant', 'referenceTransaction', 'statut', 'updatedAt'] as const
   $columns = PaiementSchema.$columns

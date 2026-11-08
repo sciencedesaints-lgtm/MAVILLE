@@ -12,6 +12,7 @@ export const controllers = {
   DemandesServices: () => import('#controllers/demandes_services_controller'),
   Etablissements: () => import('#controllers/etablissements_controller'),
   Medias: () => import('#controllers/medias_controller'),
+  Membres: () => import('#controllers/membres_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Offres: () => import('#controllers/offres_controller'),
   Produits: () => import('#controllers/produits_controller'),

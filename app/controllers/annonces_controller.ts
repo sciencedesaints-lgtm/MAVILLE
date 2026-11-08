@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import Annonce from '#models/annonce'
+import { MediaService } from '#services/media_service'
 
 export default class AnnoncesController {
   async create({ view }: HttpContext) {
@@ -49,7 +50,7 @@ export default class AnnoncesController {
       '-' +
       Date.now()
 
-    await Annonce.create({
+      const annonce = await Annonce.create({
       vendeurId: user.id,
       categorieId,
       villeId: ville.id,
@@ -69,6 +70,13 @@ export default class AnnoncesController {
       avenue: texte('avenue'),
       repere: texte('repere'),
     })
+
+        // Photos et vidéos (facultatif)
+        const fichiers = request.files('medias', {
+          size: '30mb',
+          extnames: ['jpg', 'jpeg', 'png', 'webp', 'mp4', 'webm', 'mov'],
+        })
+        await MediaService.enregistrerPourOffre('annonce', annonce.id, fichiers)
 
     return response.redirect().toRoute('profil.personnel')
   }
