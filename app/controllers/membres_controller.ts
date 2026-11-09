@@ -35,6 +35,17 @@ export default class MembresController {
       .where('a.visible', true)
       .select('a.*', 'c.nom as categorie_nom')
 
+          // Photos et vidéos de toutes les offres de ce membre
+    const toutes = [...services, ...commerces, ...annonces]
+    const ids = toutes.map((o: any) => o.id)
+    const medias = ids.length
+      ? await db.from('offres_medias').whereIn('offre_id', ids).orderBy('ordre')
+      : []
+
+    for (const offre of toutes as any[]) {
+      offre.medias = medias.filter((m: any) => m.offre_id === offre.id)
+    }
+
     const nomComplet = [membre.prenom, membre.nom].filter(Boolean).join(' ')
     const initiales = nomComplet
       .split(' ')
