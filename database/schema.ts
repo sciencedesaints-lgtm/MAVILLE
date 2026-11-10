@@ -1123,6 +1123,27 @@ export class ReponsesDemandesServiceSchema extends BaseModel {
   declare updatedAt: DateTime
 }
 
+export class ResultatsMasqueSchema extends BaseModel {
+  static $columns = ['categorie', 'createdAt', 'genre', 'id', 'offreId', 'titre', 'updatedAt', 'utilisateurId'] as const
+  $columns = ResultatsMasqueSchema.$columns
+  @column()
+  declare categorie: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare genre: string
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare offreId: string
+  @column()
+  declare titre: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare utilisateurId: string
+}
+
 export class RoleSchema extends BaseModel {
   static $columns = ['createdAt', 'description', 'id', 'nom', 'updatedAt'] as const
   $columns = RoleSchema.$columns

@@ -17,6 +17,8 @@
     .mb-retour { display: block; text-align: center; color: #94a3b8; margin-top: 24px; text-decoration: none; font-size: 0.9rem; }
     .mb-medias { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .mb-media { width: 150px; height: 110px; object-fit: cover; border-radius: 10px; background: #0f172a; }
+.mb-carte.off { opacity: 0.5; filter: grayscale(1); }
+.mb-off { display: inline-block; margin-left: 8px; padding: 2px 10px; border-radius: 12px; background: #92400e; color: #fff; font-size: 0.7rem; font-weight: 700; vertical-align: middle; }
   </style>
 
   <div class="mb-page">
@@ -47,8 +49,12 @@
           @if(services.length)
         <h2 class="mb-titre">🔧 Services proposés</h2>
         @each(s in services)
-          <div class="mb-carte">
-            <h3>{{ s.nom }}</h3>
+          <h3>
+  {{ s.nom }}
+  @if(!s.disponible)
+    <span class="mb-off">⛔ Indisponible</span>
+  @end
+</h3>
             @if(s.categorie_nom)
               <p class="mb-meta">{{ s.categorie_nom }}</p>
             @end

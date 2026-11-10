@@ -27,7 +27,13 @@ export type ScannedRoutes = {
     'annonces.create': { paramsTuple?: []; params?: {} }
     'annonces.store': { paramsTuple?: []; params?: {} }
     'resultats.index': { paramsTuple?: []; params?: {} }
+    'publications.index': { paramsTuple?: []; params?: {} }
+    'publications.basculer': { paramsTuple: [ParamValue,ParamValue]; params: {'type': ParamValue,'id': ParamValue} }
+    'publications.supprimer': { paramsTuple: [ParamValue,ParamValue]; params: {'type': ParamValue,'id': ParamValue} }
     'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'corbeille.index': { paramsTuple?: []; params?: {} }
+    'resultats.masquer': { paramsTuple?: []; params?: {} }
+    'corbeille.restaurer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
@@ -79,7 +85,9 @@ export type ScannedRoutes = {
     'commerces.create': { paramsTuple?: []; params?: {} }
     'annonces.create': { paramsTuple?: []; params?: {} }
     'resultats.index': { paramsTuple?: []; params?: {} }
+    'publications.index': { paramsTuple?: []; params?: {} }
     'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'corbeille.index': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -110,7 +118,9 @@ export type ScannedRoutes = {
     'commerces.create': { paramsTuple?: []; params?: {} }
     'annonces.create': { paramsTuple?: []; params?: {} }
     'resultats.index': { paramsTuple?: []; params?: {} }
+    'publications.index': { paramsTuple?: []; params?: {} }
     'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'corbeille.index': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -126,6 +136,10 @@ export type ScannedRoutes = {
     'offres.store': { paramsTuple?: []; params?: {} }
     'commerces.store': { paramsTuple?: []; params?: {} }
     'annonces.store': { paramsTuple?: []; params?: {} }
+    'publications.basculer': { paramsTuple: [ParamValue,ParamValue]; params: {'type': ParamValue,'id': ParamValue} }
+    'publications.supprimer': { paramsTuple: [ParamValue,ParamValue]; params: {'type': ParamValue,'id': ParamValue} }
+    'resultats.masquer': { paramsTuple?: []; params?: {} }
+    'corbeille.restaurer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }
