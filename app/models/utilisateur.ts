@@ -180,6 +180,12 @@ export default class Utilisateur extends BaseModel {
   @column()
   declare reponseAuto: boolean
 
+  @column()
+  declare profession: string | null
+
+  @column()
+  declare qualification: string | null
+
   /*
   |--------------------------------------------------------------------------
   | Relations

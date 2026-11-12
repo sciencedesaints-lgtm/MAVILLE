@@ -11,6 +11,7 @@
           <a href="/accueil" class="nav-link">Accueil</a>
           <a href="/profil" class="nav-link active">Profil Personnel</a>
           <a href="/actualite" class="nav-link">Actualité</a>
+                    <a href="/profil/demandes" class="nav-link">Notifications <span data-notif-badge style="display:none; background:#ef4444; color:#fff; border-radius:10px; padding:1px 7px; font-size:0.7rem; font-weight:700; margin-left:6px;">0</span></a>
           <a href="/services-publics" class="nav-link">Services Publics</a>
           <a href="/signalements" class="nav-link">Mes Signalements</a>
           <a href="/parametres" class="nav-link">Paramètres</a>
@@ -30,10 +31,12 @@
         <div class="profile-details-container">
           <div class="profile-actions-row">
             <div class="profile-avatar-wrapper">
-              <img src="/images/avatar.jpg" alt="Avatar">
+               @if(auth.user.photoProfil)
+  <img src="{{ auth.user.photoProfil }}" alt="Avatar">
+@end
             </div>
             <div class="flex gap-2">
-              <button class="btn-outline">Modifier</button>
+              <a href="{{ route('profil.modifier') }}" class="btn-outline" style="text-decoration: none;">Modifier</a>
               <a href="{{ route('offres.choisir') }}" class="btn-primary" style="text-decoration: none;">Proposer mes services</a>
               <a href="{{ route('publications.index') }}" class="btn-outline" style="text-decoration: none;">Mes publications</a>
             </div>
@@ -110,6 +113,7 @@
   @end
 
   <!-- Intégration des fichiers CSS et JS via Vite -->
+    <script src="/notifications.js" defer></script>
   @slot('page_css')
     @vite(['resources/css/profil-personnel.css'])
   @end

@@ -34,6 +34,12 @@
         </div>
         <div>
           <h1 class="mb-nom">{{ nomComplet }}</h1>
+                    @if(membre.profession)
+            <p class="mb-meta">🎓 {{ membre.profession }}</p>
+          @end
+          @if(membre.qualification)
+            <p class="mb-meta">{{ membre.qualification }}</p>
+          @end
           <p class="mb-meta">📍 {{ membre.ville }}{{ membre.pays ? ', ' + membre.pays : '' }}</p>
           @if(membre.type_compte === 'entreprise_agence')
             <p class="mb-meta">🏢 Entreprise ou agence</p>

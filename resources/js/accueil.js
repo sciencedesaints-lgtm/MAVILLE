@@ -13,8 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.showToast) window.showToast('Veuillez saisir un texte de recherche.', 'warning')
       return
     }
-    document.getElementById('form-lancer-q').value = q
-    document.getElementById('form-lancer').submit()
+    // Formulaire créé à la volée, avec le jeton CSRF de la page
+    const csrf = document.querySelector('input[name="_csrf"]')
+    const form = document.createElement('form')
+    form.method = 'POST'
+    form.action = '/recherche/lancer'
+    const champs = { q }
+    if (csrf) champs._csrf = csrf.value
+    for (const [nom, valeur] of Object.entries(champs)) {
+      const input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = nom
+      input.value = valeur
+      form.appendChild(input)
+    }
+    document.body.appendChild(form)
+    form.submit()
   }
 
   // ==========================================

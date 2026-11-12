@@ -1,7 +1,12 @@
 import db from '@adonisjs/lucid/services/db'
-import { analyser, motsDe, norm, normaliser } from '#services/analyse_recherche'
+import { analyser, motsDe, normaliser, conditionFloue } from '#services/analyse_recherche'
 
-type Auteur = { id: string | number; ville: string | null }
+type Auteur = {
+  id: string | number
+  ville: string | null
+  prenom?: string | null
+  nom?: string | null
+}
 type Candidat = {
   proprietaire: string
   genre: 'service' | 'commerce' | 'annonce'
@@ -35,9 +40,9 @@ export class NotificationRechercheService {
       const morceaux: string[] = []
       const valeurs: string[] = []
       for (const t of termes) {
-        const cond = colonnes.map((c) => `${norm(c)} LIKE ?`).join(' OR ')
-        morceaux.push(`(CASE WHEN ${cond} THEN 1 ELSE 0 END)`)
-        for (let i = 0; i < colonnes.length; i++) valeurs.push(`%${normaliser(t)}%`)
+        const c = conditionFloue(colonnes, t)
+        morceaux.push(`(CASE WHEN ${c.sql} THEN 1 ELSE 0 END)`)
+        valeurs.push(...c.params)
       }
       const score = morceaux.join(' + ')
       query.whereRaw(`(${score}) >= ${seuil}`, valeurs)
@@ -98,6 +103,8 @@ export class NotificationRechercheService {
     const reglages = await db.from('utilisateurs').whereIn('id', ids).select('id', 'reponse_auto')
     const auto = new Set(reglages.filter((u: any) => u.reponse_auto).map((u: any) => u.id))
 
+    const nomChercheur = [auteur.prenom, auteur.nom].filter(Boolean).join(' ') || 'Un habitant'
+
     const reponses: any[] = []
     const notifications: any[] = []
 
@@ -118,18 +125,28 @@ export class NotificationRechercheService {
       notifications.push({
         utilisateur_id: vendeurId,
         type: 'DEMANDE_RECHERCHE',
-        titre: estAuto
-          ? '✅ Réponse automatique envoyée'
-          : "🔔 Quelqu'un cherche ce que vous proposez",
+        titre: estAuto ? '✅ Réponse automatique envoyée' : '🔔 Une personne sollicite vos services',
         message: estAuto
-          ? `Recherche : « ${q} ». Votre offre « ${c.offre} » a été confirmée disponible automatiquement.`
-          : `Recherche : « ${q} ». Cela correspond à votre offre « ${c.offre} ». Confirmez votre disponibilité.`,
+          ? `${nomChercheur} recherche : « ${q} ». Votre offre « ${c.offre} » a été confirmée disponible automatiquement.`
+          : `${nomChercheur} souhaite savoir si vous pouvez répondre à sa recherche : « ${q} ». Cela correspond à votre offre « ${c.offre} ».`,
         lien: '/profil/demandes',
       })
     }
 
     await db.table('reponses_recherche').insert(reponses).onConflict(['recherche_id', 'vendeur_id']).ignore()
     await db.table('notifications').insert(notifications)
+
+    // Le chercheur est prévenu une seule fois des confirmations automatiques
+    const nbAuto = reponses.filter((r) => r.statut === 'disponible').length
+    if (nbAuto > 0) {
+      await db.table('notifications').insert({
+        utilisateur_id: auteurId,
+        type: 'REPONSE_VENDEUR',
+        titre: '✅ Des vendeurs ont confirmé leur disponibilité',
+        message: `${nbAuto} vendeur(s) ont confirmé qu'ils peuvent répondre à votre recherche : « ${q} ».`,
+        lien: `/resultats?q=${encodeURIComponent(q)}&r=${rechercheId}`,
+      })
+    }
 
     return notifications.length
   }

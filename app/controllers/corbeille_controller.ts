@@ -1,7 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 
-const GENRES = ['service', 'commerce', 'annonce', 'entreprise', 'administration']
+const GENRES = ['service', 'commerce', 'annonce', 'entreprise', 'administration', 'professionnel']
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 export default class CorbeilleController {

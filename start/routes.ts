@@ -22,7 +22,7 @@ const UploadsController = () => import('#controllers/uploads_controller')
 const AiController = () => import('#controllers/ai_controller')
 const MediasController = () => import('#controllers/medias_controller')
 const ProfilsController = () => import('#controllers/profils_controller')
-
+const ProfilEditionController = () => import('#controllers/profil_edition_controller')
 /* 
 ========================================================================== 
 1. VUES ET AFFICHAGE WEB (PAGE PAR PAGE)
@@ -57,6 +57,8 @@ router.group(() => {
   router.get('/profil/personnel', [ProfilsController, 'personnel']).as('profil.personnel')
   router.get('/profil/entreprise', [ProfilsController, 'entreprise']).as('profil.entreprise')
   router.get('/profil/administration', [ProfilsController, 'administration']).as('profil.administration')
+  router.get('/profil/modifier', [ProfilEditionController, 'edit']).as('profil.modifier')
+  router.post('/profil/modifier', [ProfilEditionController, 'update']).as('profil.modifier.enregistrer')
 }).use(middleware.auth())
 
 router.group(() => {
@@ -77,6 +79,7 @@ router.group(() => {
   router.post('/corbeille/:id/restaurer', [CorbeilleController, 'restaurer']).as('corbeille.restaurer')
   router.post('/recherche/lancer', [RecherchesController, 'lancer']).as('recherches.lancer')
   router.post('/demandes/auto', [DemandesController, 'basculerAuto']).as('demandes.auto')
+  router.get('/notifications/compte', [DemandesController, 'compte']).as('notifications.compte')
   router.post('/demandes/:id/repondre', [DemandesController, 'repondre']).as('demandes.repondre')
 }).use(middleware.auth())
 

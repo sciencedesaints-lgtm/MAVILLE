@@ -1,10 +1,10 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
-import { MOTS_VIDES, normaliser, norm } from '#services/analyse_recherche'
+import { MOTS_VIDES, normaliser, conditionFloue } from '#services/analyse_recherche'
 
 type Resultat = {
   id: string
-  genre: 'service' | 'commerce' | 'annonce' | 'entreprise' | 'administration'
+  genre: 'service' | 'commerce' | 'annonce' | 'entreprise' | 'administration' | 'professionnel'
   titre: string
   proprietaireId: string
   proprietaire: string | null
@@ -12,6 +12,8 @@ type Resultat = {
   lieu: string
   telephone: string | null
   prix: string | null
+  description: string | null
+  details: string[]
   statut: string | null
 }
 
@@ -19,6 +21,8 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const MOTS_VENTE = new Set(['vendre', 'vente', 'vend', 'vends', 'acheter', 'achat', 'achete', 'acquerir'])
 const MOTS_LOCATION = new Set(['louer', 'location', 'loue', 'loyer', 'locat', 'louez'])
 const MARQUEURS_LIEU = new Set(['quartier', 'commune', 'avenue', 'av', 'rue', 'marche'])
+
+const coupe = (t: string | null) => (t && t.length > 180 ? t.slice(0, 177) + '…' : t || null)
 
 export default class ResultatsController {
   async index({ request, view, auth }: HttpContext) {
@@ -69,36 +73,50 @@ export default class ResultatsController {
     const motsUniques = [...new Set(mots)]
     const lieuxUniques = [...new Set(lieux)]
 
-    const appliquer = (query: any, colonnesTexte: string[], colonnesLieu: string[]) => {
-      const termes: { valeur: string; poids: number; colonnes: string[] }[] = []
+    // Nom/titre/catégorie = 2 points, description = 1 point, lieu cité = 3 points. Minimum : 2 points.
+    const appliquer = (
+      query: any,
+      principales: string[],
+      secondaires: string[],
+      colonnesLieu: string[]
+    ) => {
+      type Terme = { valeur: string; p: string[]; s: string[]; poidsP: number; poidsS: number }
+      const termes: Terme[] = []
       for (const m of motsUniques) {
-        termes.push({ valeur: m, poids: 1, colonnes: [...colonnesTexte, ...colonnesLieu] })
+        termes.push({ valeur: m, p: principales, s: [...secondaires, ...colonnesLieu], poidsP: 2, poidsS: 1 })
       }
       for (const l of lieuxUniques) {
-        termes.push({ valeur: l, poids: 3, colonnes: [...colonnesLieu, ...colonnesTexte] })
+        termes.push({ valeur: l, p: colonnesLieu, s: [...principales, ...secondaires], poidsP: 3, poidsS: 1 })
       }
       for (const e of expressions) {
-        termes.push({ valeur: e, poids: 2, colonnes: colonnesTexte })
+        termes.push({ valeur: e, p: [...principales, ...secondaires], s: [], poidsP: 2, poidsS: 0 })
       }
       if (!termes.length) return
 
       const morceaux: string[] = []
       const valeurs: string[] = []
       for (const t of termes) {
-        const conditions = t.colonnes.map((c) => `${norm(c)} LIKE ?`).join(' OR ')
-        morceaux.push(`(CASE WHEN ${conditions} THEN ${t.poids} ELSE 0 END)`)
-        for (let i = 0; i < t.colonnes.length; i++) valeurs.push(`%${normaliser(t.valeur)}%`)
+        const pp = conditionFloue(t.p, t.valeur)
+        let sql = `CASE WHEN ${pp.sql} THEN ${t.poidsP}`
+        valeurs.push(...pp.params)
+        if (t.s.length) {
+          const ss = conditionFloue(t.s, t.valeur)
+          sql += ` WHEN ${ss.sql} THEN ${t.poidsS}`
+          valeurs.push(...ss.params)
+        }
+        sql += ' ELSE 0 END'
+        morceaux.push(`(${sql})`)
       }
       const score = morceaux.join(' + ')
-      query.whereRaw(`(${score}) > 0`, valeurs)
+      query.whereRaw(`(${score}) >= 2`, valeurs)
       query.orderByRaw(`(${score}) DESC`, valeurs)
     }
-
     // ---------- Requêtes ----------
     const ville = await db.from('villes').where('nom', user.ville ?? '').first()
     const resultats: Resultat[] = []
     const veut = (genre: string) => type === 'tous' || type === genre
     const lieu = (...parties: (string | null)[]) => parties.filter(Boolean).join(', ')
+    const nomComplet = (p: string | null, n: string | null) => [p, n].filter(Boolean).join(' ')
 
     if (ville && veut('service')) {
       const query = db
@@ -111,18 +129,25 @@ export default class ResultatsController {
         .whereNot('s.prestataire_id', user.id)
         .select('s.*', 'c.nom as categorie_nom', 'u.nom as u_nom', 'u.prenom as u_prenom')
         .limit(50)
-      appliquer(query, ['s.nom', 's.description', 'c.nom'], ['s.quartier', 's.commune', 's.adresse'])
+      appliquer(query, ['s.nom', 'c.nom'], ['s.description'], ['s.quartier', 's.commune', 's.adresse'])
       for (const r of await query) {
+        const details: string[] = []
+        if (r.intervention_domicile) details.push('🏠 À domicile')
+        if (r.urgence) details.push('⚡ Urgences')
+        if (r.sur_rendez_vous) details.push('📅 Sur rendez-vous')
+        if (r.prix_negociable) details.push('🤝 Prix négociable')
         resultats.push({
           id: r.id,
           genre: 'service',
           titre: r.nom,
           proprietaireId: r.prestataire_id,
-          proprietaire: [r.u_prenom, r.u_nom].filter(Boolean).join(' '),
+          proprietaire: nomComplet(r.u_prenom, r.u_nom),
           categorie: r.categorie_nom,
           lieu: lieu(r.quartier, r.commune),
           telephone: r.telephone,
           prix: r.prix_min ? `dès ${Number(r.prix_min)} ${r.devise}` : null,
+          description: coupe(r.description),
+          details,
           statut: null,
         })
       }
@@ -140,10 +165,17 @@ export default class ResultatsController {
         .limit(50)
       appliquer(
         query,
-        ['e.nom', 'e.description', 'c.nom'],
+        ['e.nom', 'c.nom'],
+        ['e.description'],
         ['e.adresse', 'e.marche', 'e.quartier', 'e.commune', 'e.avenue', 'e.repere', 'e.emplacement']
       )
       for (const r of await query) {
+        const details: string[] = []
+        if (r.horaires) details.push(`🕒 ${r.horaires}`)
+        if (r.livraison) details.push('🚚 Livraison')
+        if (Array.isArray(r.mobile_money) && r.mobile_money.length) {
+          details.push(`💸 ${r.mobile_money.join(', ')}`)
+        }
         resultats.push({
           id: r.id,
           genre: 'commerce',
@@ -154,6 +186,8 @@ export default class ResultatsController {
           lieu: r.adresse,
           telephone: r.telephone || r.whatsapp,
           prix: null,
+          description: coupe(r.description),
+          details,
           statut: null,
         })
       }
@@ -171,20 +205,26 @@ export default class ResultatsController {
         .select('a.*', 'c.nom as categorie_nom', 'u.nom as u_nom', 'u.prenom as u_prenom')
         .limit(50)
       if (intention) query.where('a.type_offre', intention)
-      appliquer(query, ['a.titre', 'a.description', 'c.nom'], ['a.quartier', 'a.commune', 'a.avenue', 'a.repere'])
+      appliquer(query, ['a.titre', 'c.nom'], ['a.description'], ['a.quartier', 'a.commune', 'a.avenue', 'a.repere'])
+      const etats: Record<string, string> = { neuf: 'Neuf', bon_etat: 'Bon état', occasion: 'Occasion' }
       for (const r of await query) {
+        const details: string[] = [r.type_offre === 'location' ? '🔑 À louer' : '💰 À vendre']
+        if (r.etat && etats[r.etat]) details.push(etats[r.etat])
+        if (r.prix_negociable) details.push('🤝 Prix négociable')
         resultats.push({
           id: r.id,
           genre: 'annonce',
           titre: r.titre,
           proprietaireId: r.vendeur_id,
-          proprietaire: [r.u_prenom, r.u_nom].filter(Boolean).join(' '),
+          proprietaire: nomComplet(r.u_prenom, r.u_nom),
           categorie: r.categorie_nom,
           lieu: lieu(r.quartier, r.commune),
           telephone: r.telephone || r.whatsapp,
           prix: r.prix
             ? `${Number(r.prix)} ${r.devise}${r.type_offre === 'location' ? ' / ' + r.periodicite : ''}`
             : null,
+          description: coupe(r.description),
+          details,
           statut: null,
         })
       }
@@ -204,7 +244,8 @@ export default class ResultatsController {
         .limit(50)
       appliquer(
         query,
-        ['u.nom', 'u.domaine', 'u.type_structure', 'u.type_institution', 'u.tutelle'],
+        ['u.nom', 'u.domaine', 'u.type_structure', 'u.type_institution'],
+        ['u.tutelle'],
         ['u.commune', 'u.avenue']
       )
       for (const r of await query) {
@@ -218,10 +259,54 @@ export default class ResultatsController {
           lieu: lieu(r.avenue, r.commune, r.ville),
           telephone: r.telephone ? `${r.indicatif_pays ?? ''} ${r.telephone}`.trim() : null,
           prix: null,
+          description: r.tutelle ? `Tutelle : ${r.tutelle}` : null,
+          details: [],
           statut: null,
         })
       }
     }
+
+        // Particuliers trouvés par leur profession ou leur qualification (fautes tolérées)
+        if (veut('professionnel') && (motsUniques.length || type === 'professionnel')) {
+          const query = db
+            .from('utilisateurs as u')
+            .where('u.type_compte', 'personnel')
+            .where('u.ville', user.ville ?? '')
+            .where('u.actif', true)
+            .whereNotNull('u.profession')
+            .whereNot('u.id', user.id)
+            .limit(50)
+    
+          // "plomberie" et "plombier" partagent le radical "plomb"
+          const radicaux = [...new Set(motsUniques.map((m) => (m.length >= 7 ? m.slice(0, 5) : m)))]
+          if (radicaux.length) {
+            const morceaux: string[] = []
+            const valeurs: string[] = []
+            for (const rad of radicaux) {
+              const c = conditionFloue(['u.profession', 'u.qualification'], rad)
+              morceaux.push(`(${c.sql})`)
+              valeurs.push(...c.params)
+            }
+            query.whereRaw(`(${morceaux.join(' OR ')})`, valeurs)
+          }
+    
+          for (const r of await query) {
+            resultats.push({
+              id: r.id,
+              genre: 'professionnel',
+              titre: nomComplet(r.prenom, r.nom),
+              proprietaireId: r.id,
+              proprietaire: null,
+              categorie: r.profession,
+              lieu: lieu(r.quartier, r.commune, r.ville),
+              telephone: r.telephone,
+              prix: null,
+              description: coupe(r.qualification),
+              details: [],
+              statut: null,
+            })
+          }
+        }
 
     // ---------- Réponses des vendeurs à CETTE recherche ----------
     if (UUID.test(rechercheId)) {
@@ -237,7 +322,6 @@ export default class ResultatsController {
       }
     }
 
-    // Confirmés d'abord, puis en attente, puis sans réponse, puis indisponibles
     const rang = (s: string | null) =>
       s === 'disponible' ? 0 : s === 'en_attente' ? 1 : s === 'indisponible' ? 3 : 2
     resultats.sort((a, b) => rang(a.statut) - rang(b.statut))

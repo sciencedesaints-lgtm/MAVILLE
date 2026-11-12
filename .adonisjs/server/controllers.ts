@@ -18,6 +18,7 @@ export const controllers = {
   NewAccount: () => import('#controllers/new_account_controller'),
   Offres: () => import('#controllers/offres_controller'),
   Produits: () => import('#controllers/produits_controller'),
+  ProfilEdition: () => import('#controllers/profil_edition_controller'),
   Profils: () => import('#controllers/profils_controller'),
   Publications: () => import('#controllers/publications_controller'),
   Recherches: () => import('#controllers/recherches_controller'),

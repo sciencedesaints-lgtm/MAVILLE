@@ -19,6 +19,8 @@ export type ScannedRoutes = {
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
+    'profil.modifier': { paramsTuple?: []; params?: {} }
+    'profil.modifier.enregistrer': { paramsTuple?: []; params?: {} }
     'offres.choisir': { paramsTuple?: []; params?: {} }
     'offres.create': { paramsTuple?: []; params?: {} }
     'offres.store': { paramsTuple?: []; params?: {} }
@@ -36,6 +38,7 @@ export type ScannedRoutes = {
     'corbeille.restaurer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'recherches.lancer': { paramsTuple?: []; params?: {} }
     'demandes.auto': { paramsTuple?: []; params?: {} }
+    'notifications.compte': { paramsTuple?: []; params?: {} }
     'demandes.repondre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
@@ -83,6 +86,7 @@ export type ScannedRoutes = {
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
+    'profil.modifier': { paramsTuple?: []; params?: {} }
     'offres.choisir': { paramsTuple?: []; params?: {} }
     'offres.create': { paramsTuple?: []; params?: {} }
     'commerces.create': { paramsTuple?: []; params?: {} }
@@ -91,6 +95,7 @@ export type ScannedRoutes = {
     'publications.index': { paramsTuple?: []; params?: {} }
     'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'corbeille.index': { paramsTuple?: []; params?: {} }
+    'notifications.compte': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -116,6 +121,7 @@ export type ScannedRoutes = {
     'profil.personnel': { paramsTuple?: []; params?: {} }
     'profil.entreprise': { paramsTuple?: []; params?: {} }
     'profil.administration': { paramsTuple?: []; params?: {} }
+    'profil.modifier': { paramsTuple?: []; params?: {} }
     'offres.choisir': { paramsTuple?: []; params?: {} }
     'offres.create': { paramsTuple?: []; params?: {} }
     'commerces.create': { paramsTuple?: []; params?: {} }
@@ -124,6 +130,7 @@ export type ScannedRoutes = {
     'publications.index': { paramsTuple?: []; params?: {} }
     'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'corbeille.index': { paramsTuple?: []; params?: {} }
+    'notifications.compte': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -136,6 +143,7 @@ export type ScannedRoutes = {
   }
   POST: {
     'web.actualite.store': { paramsTuple?: []; params?: {} }
+    'profil.modifier.enregistrer': { paramsTuple?: []; params?: {} }
     'offres.store': { paramsTuple?: []; params?: {} }
     'commerces.store': { paramsTuple?: []; params?: {} }
     'annonces.store': { paramsTuple?: []; params?: {} }

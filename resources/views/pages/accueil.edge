@@ -14,7 +14,7 @@
     <a href="{{ route('profil.personnel') }}" class="nav-item"><span>👤</span> Profil</a>
     <a href="{{ route('web.actualite') }}" class="nav-item active"><span>📰</span> Actualité</a>
     <a href="{{ route('web.recherche') }}" class="nav-item"><span>🔍</span> Recherche</a>
-    <a href="{{ route('notifications.index') }}" class="nav-item"><span>🔔</span> Notifications</a>
+    <a href="{{ route('notifications.index') }}" class="nav-item"><span>🔔</span> Notifications <span data-notif-badge style="display:none; background:#ef4444; color:#fff; border-radius:10px; padding:1px 7px; font-size:0.7rem; font-weight:700; margin-left:6px;">0</span></a>
     <a href="#" class="nav-item"><span>⚙️</span> Paramètres</a>
     <a href="{{ route('web.actualite.create') }}" class="nav-item"><span>✍️</span> Publier</a>
     <a href="#" class="nav-item"><span>•••</span> Plus</a>
@@ -399,6 +399,8 @@
   </div>
 
   {{-- Gestion interactive de l'ouverture de la recherche et des choix --}}
+
+    <script src="/notifications.js" defer></script>
 
   <form id="form-lancer" action="/recherche/lancer" method="POST" style="display:none">
     {{ csrfField() }}
