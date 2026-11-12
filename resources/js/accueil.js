@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.showToast) window.showToast('Veuillez saisir un texte de recherche.', 'warning')
       return
     }
-    window.location.href = '/resultats?q=' + encodeURIComponent(q)
+    document.getElementById('form-lancer-q').value = q
+    document.getElementById('form-lancer').submit()
   }
 
   // ==========================================

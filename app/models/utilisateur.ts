@@ -177,6 +177,9 @@ export default class Utilisateur extends BaseModel {
   @column.dateTime()
   declare deletedAt: DateTime | null
 
+  @column()
+  declare reponseAuto: boolean
+
   /*
   |--------------------------------------------------------------------------
   | Relations

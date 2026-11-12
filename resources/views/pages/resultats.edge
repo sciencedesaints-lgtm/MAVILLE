@@ -29,6 +29,9 @@
     .supp { position: relative; z-index: 1; display: inline-block; margin: 10px 0 0 8px; }
     .btn-supp { padding: 8px 14px; border-radius: 20px; border: 1px solid #475569; background: #0f172a; color: #cbd5e1; font-size: 0.82rem; cursor: pointer; }
     .lien-corbeille { display: block; text-align: right; color: #94a3b8; font-size: 0.85rem; text-decoration: none; margin-bottom: 12px; }
+    .etat { display: inline-block; margin-top: 8px; padding: 3px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; background: #334155; color: #e2e8f0; }
+.etat.disponible { background: #065f46; }
+.etat.indisponible { background: #92400e; }
   </style>
 
   <div class="res-page">
@@ -38,26 +41,26 @@
         <input type="text" name="q" value="{{ q }}" placeholder="Que cherchez-vous ?">
         <input type="hidden" name="type" value="{{ type }}">
         <input type="hidden" name="portee" value="{{ portee }}">
+        <input type="hidden" name="r" value="{{ rechercheId }}">
         <button type="submit">Rechercher</button>
       </form>
 
       <a class="lien-corbeille" href="{{ route('corbeille.index') }}">🗑 Corbeille ({{ nbCorbeille }})</a>
 
       <div class="filtres">
-        <a href="?q={{ q }}&type={{ type }}&portee=ville" class="{{ portee === 'ville' ? 'actif' : '' }}">📍 Ma ville</a>
-        <a href="?q={{ q }}&type={{ type }}&portee=pays" class="{{ portee === 'pays' ? 'actif' : '' }}">🏳️ Mon pays</a>
-        <a href="?q={{ q }}&type={{ type }}&portee=monde" class="{{ portee === 'monde' ? 'actif' : '' }}">🌍 Monde</a>
-      </div>
+    <a href="?q={{ q }}&type={{ type }}&portee=ville&r={{ rechercheId }}" class="{{ portee === 'ville' ? 'actif' : '' }}">📍 Ma ville</a>
+    <a href="?q={{ q }}&type={{ type }}&portee=pays&r={{ rechercheId }}" class="{{ portee === 'pays' ? 'actif' : '' }}">🏳️ Mon pays</a>
+    <a href="?q={{ q }}&type={{ type }}&portee=monde&r={{ rechercheId }}" class="{{ portee === 'monde' ? 'actif' : '' }}">🌍 Monde</a>
+</div>
 
-      <div class="filtres">
-        <a href="?q={{ q }}&type=tous&portee={{ portee }}" class="{{ type === 'tous' ? 'actif' : '' }}">Tout</a>
-        <a href="?q={{ q }}&type=service&portee={{ portee }}" class="{{ type === 'service' ? 'actif' : '' }}">🔧 Services</a>
-        <a href="?q={{ q }}&type=commerce&portee={{ portee }}" class="{{ type === 'commerce' ? 'actif' : '' }}">🏪 Commerces</a>
-        <a href="?q={{ q }}&type=annonce&portee={{ portee }}" class="{{ type === 'annonce' ? 'actif' : '' }}">🛍️ Annonces</a>
-        <a href="?q={{ q }}&type=entreprise&portee={{ portee }}" class="{{ type === 'entreprise' ? 'actif' : '' }}">🏢 Entreprises</a>
-        <a href="?q={{ q }}&type=administration&portee={{ portee }}" class="{{ type === 'administration' ? 'actif' : '' }}">🏛️ Administrations</a>
-      </div>
-
+<div class="filtres">
+    <a href="?q={{ q }}&type=tous&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'tous' ? 'actif' : '' }}">Tout</a>
+    <a href="?q={{ q }}&type=service&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'service' ? 'actif' : '' }}">🔧 Services</a>
+    <a href="?q={{ q }}&type=commerce&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'commerce' ? 'actif' : '' }}">🏪 Commerces</a>
+    <a href="?q={{ q }}&type=annonce&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'annonce' ? 'actif' : '' }}">🛍️ Annonces</a>
+    <a href="?q={{ q }}&type=entreprise&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'entreprise' ? 'actif' : '' }}">🏢 Entreprises</a>
+    <a href="?q={{ q }}&type=administration&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'administration' ? 'actif' : '' }}">🏛️ Administrations</a>
+</div>
       @if(!villeConnue)
         <p class="res-info">Votre ville n'est pas reconnue : impossible de chercher.</p>
       @else
@@ -80,6 +83,13 @@
               @end
               @if(r.prix)
                 <p class="prix">{{ r.prix }}</p>
+              @end
+                            @if(r.statut === 'disponible')
+                <span class="etat disponible">✅ Disponible, confirmé par le vendeur</span>
+              @elseif(r.statut === 'en_attente')
+                <span class="etat">⏳ En attente de réponse du vendeur</span>
+              @elseif(r.statut === 'indisponible')
+                <span class="etat indisponible">❌ Indisponible</span>
               @end
             </div>
             <span class="badge {{ r.genre }}">{{ r.genre }}</span>

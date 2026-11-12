@@ -34,6 +34,9 @@ export type ScannedRoutes = {
     'corbeille.index': { paramsTuple?: []; params?: {} }
     'resultats.masquer': { paramsTuple?: []; params?: {} }
     'corbeille.restaurer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'recherches.lancer': { paramsTuple?: []; params?: {} }
+    'demandes.auto': { paramsTuple?: []; params?: {} }
+    'demandes.repondre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
@@ -140,6 +143,9 @@ export type ScannedRoutes = {
     'publications.supprimer': { paramsTuple: [ParamValue,ParamValue]; params: {'type': ParamValue,'id': ParamValue} }
     'resultats.masquer': { paramsTuple?: []; params?: {} }
     'corbeille.restaurer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'recherches.lancer': { paramsTuple?: []; params?: {} }
+    'demandes.auto': { paramsTuple?: []; params?: {} }
+    'demandes.repondre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }

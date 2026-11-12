@@ -1,0 +1,77 @@
+@component('layouts/main', { title: 'Demandes reçues - MAVILLE' })
+
+  <style>
+    .dm-page { min-height: 100vh; background: #0f172a; display: flex; justify-content: center; padding: 32px 16px; box-sizing: border-box; font-family: system-ui, sans-serif; }
+    .dm-wrap { width: 100%; max-width: 760px; }
+    .dm-wrap h1 { color: #f8fafc; font-size: 1.5rem; margin: 0 0 6px; }
+    .dm-sub { color: #94a3b8; font-size: 0.9rem; margin: 0 0 20px; }
+    .dm-auto { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 16px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .dm-auto p { margin: 0; color: #cbd5e1; font-size: 0.9rem; }
+    .dm-auto strong { color: #f8fafc; }
+    .dm-carte { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; }
+    .dm-titre { color: #f8fafc; margin: 0 0 4px; font-size: 1rem; }
+    .dm-meta { color: #94a3b8; font-size: 0.85rem; margin: 3px 0; }
+    .dm-badge { display: inline-block; margin-top: 8px; padding: 3px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; background: #334155; color: #e2e8f0; }
+    .dm-badge.disponible { background: #065f46; }
+    .dm-badge.indisponible { background: #92400e; }
+    .dm-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .dm-actions form { margin: 0; }
+    .dm-btn { padding: 8px 16px; border-radius: 20px; border: none; font-weight: 600; font-size: 0.85rem; cursor: pointer; color: #fff; background: #059669; }
+    .dm-btn.non { background: #b45309; }
+    .dm-btn.neutre { background: #334155; }
+    .dm-vide { color: #64748b; font-style: italic; text-align: center; padding: 40px 0; }
+    .dm-retour { display: block; text-align: center; color: #94a3b8; margin-top: 22px; text-decoration: none; font-size: 0.9rem; }
+  </style>
+
+  <div class="dm-page">
+    <div class="dm-wrap">
+      <h1>🔔 Demandes reçues</h1>
+      <p class="dm-sub">Des habitants cherchent ce que vous proposez. Confirmez votre disponibilité.</p>
+
+      <div class="dm-auto">
+        <p>
+          <strong>Réponse automatique : {{ reponseAuto ? 'activée' : 'désactivée' }}</strong><br>
+          Activée, vos offres disponibles sont confirmées toutes seules à chaque recherche correspondante.
+        </p>
+        <form action="/demandes/auto" method="POST">
+          {{ csrfField() }}
+          <button type="submit" class="dm-btn {{ reponseAuto ? 'neutre' : '' }}">{{ reponseAuto ? 'Désactiver' : 'Activer' }}</button>
+        </form>
+      </div>
+
+      @each(d in demandes)
+        <div class="dm-carte">
+          <h3 class="dm-titre">« {{ d.texte }} »</h3>
+          <p class="dm-meta">Votre offre concernée : {{ d.offre_titre }}</p>
+          <p class="dm-meta">🕒 {{ d.quand }}</p>
+
+          @if(d.statut === 'disponible')
+            <span class="dm-badge disponible">✅ Disponible{{ d.mode === 'auto' ? ' (automatique)' : '' }}</span>
+          @elseif(d.statut === 'indisponible')
+            <span class="dm-badge indisponible">❌ Indisponible</span>
+          @else
+            <span class="dm-badge">⏳ En attente de votre réponse</span>
+          @end
+
+          <div class="dm-actions">
+            <form action="/demandes/{{ d.id }}/repondre" method="POST">
+              {{ csrfField() }}
+              <input type="hidden" name="statut" value="disponible">
+              <button type="submit" class="dm-btn">✅ Oui, disponible</button>
+            </form>
+            <form action="/demandes/{{ d.id }}/repondre" method="POST">
+              {{ csrfField() }}
+              <input type="hidden" name="statut" value="indisponible">
+              <button type="submit" class="dm-btn non">❌ Non, plus disponible</button>
+            </form>
+          </div>
+        </div>
+      @else
+        <p class="dm-vide">Aucune demande pour l'instant.</p>
+      @end
+
+      <a class="dm-retour" href="{{ route('profil.personnel') }}">← Retour au profil</a>
+    </div>
+  </div>
+
+@end

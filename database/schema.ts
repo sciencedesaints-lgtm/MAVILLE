@@ -1123,6 +1123,33 @@ export class ReponsesDemandesServiceSchema extends BaseModel {
   declare updatedAt: DateTime
 }
 
+export class ReponsesRechercheSchema extends BaseModel {
+  static $columns = ['createdAt', 'genre', 'id', 'mode', 'offreId', 'offreTitre', 'rechercheId', 'reponduAt', 'statut', 'updatedAt', 'vendeurId'] as const
+  $columns = ReponsesRechercheSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare genre: string
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare mode: string | null
+  @column()
+  declare offreId: string
+  @column()
+  declare offreTitre: string
+  @column()
+  declare rechercheId: string
+  @column.dateTime()
+  declare reponduAt: DateTime | null
+  @column()
+  declare statut: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare vendeurId: string
+}
+
 export class ResultatsMasqueSchema extends BaseModel {
   static $columns = ['categorie', 'createdAt', 'genre', 'id', 'offreId', 'titre', 'updatedAt', 'utilisateurId'] as const
   $columns = ResultatsMasqueSchema.$columns
@@ -1351,7 +1378,7 @@ export class UtilisateurRoleSchema extends BaseModel {
 }
 
 export class UtilisateurSchema extends BaseModel {
-  static $columns = ['actif', 'adresse', 'avenue', 'commune', 'compteGoogle', 'compteTelephone', 'createdAt', 'dateNaissance', 'deletedAt', 'derniereConnexion', 'domaine', 'email', 'emailVerifie', 'emailVerifiedAt', 'id', 'indicatifPays', 'languePreferee', 'latitude', 'longitude', 'nom', 'nomEntreprise', 'nomInstitution', 'numero', 'password', 'pays', 'photoProfil', 'position', 'prenom', 'pseudo', 'quartier', 'rememberMeToken', 'sexe', 'statutCompte', 'telephone', 'telephoneVerifie', 'tutelle', 'typeCompte', 'typeInstitution', 'typeStructure', 'updatedAt', 'ville', 'villeId'] as const
+  static $columns = ['actif', 'adresse', 'avenue', 'commune', 'compteGoogle', 'compteTelephone', 'createdAt', 'dateNaissance', 'deletedAt', 'derniereConnexion', 'domaine', 'email', 'emailVerifie', 'emailVerifiedAt', 'id', 'indicatifPays', 'languePreferee', 'latitude', 'longitude', 'nom', 'nomEntreprise', 'nomInstitution', 'numero', 'password', 'pays', 'photoProfil', 'position', 'prenom', 'pseudo', 'quartier', 'rememberMeToken', 'reponseAuto', 'sexe', 'statutCompte', 'telephone', 'telephoneVerifie', 'tutelle', 'typeCompte', 'typeInstitution', 'typeStructure', 'updatedAt', 'ville', 'villeId'] as const
   $columns = UtilisateurSchema.$columns
   @column()
   declare actif: boolean | null
@@ -1415,6 +1442,8 @@ export class UtilisateurSchema extends BaseModel {
   declare quartier: string | null
   @column()
   declare rememberMeToken: string | null
+  @column()
+  declare reponseAuto: boolean
   @column()
   declare sexe: string | null
   @column()

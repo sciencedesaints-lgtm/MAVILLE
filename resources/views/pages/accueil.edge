@@ -14,7 +14,7 @@
     <a href="{{ route('profil.personnel') }}" class="nav-item"><span>👤</span> Profil</a>
     <a href="{{ route('web.actualite') }}" class="nav-item active"><span>📰</span> Actualité</a>
     <a href="{{ route('web.recherche') }}" class="nav-item"><span>🔍</span> Recherche</a>
-    <a href="#" class="nav-item"><span>🔔</span> Notifications</a>
+    <a href="{{ route('notifications.index') }}" class="nav-item"><span>🔔</span> Notifications</a>
     <a href="#" class="nav-item"><span>⚙️</span> Paramètres</a>
     <a href="{{ route('web.actualite.create') }}" class="nav-item"><span>✍️</span> Publier</a>
     <a href="#" class="nav-item"><span>•••</span> Plus</a>
@@ -363,26 +363,26 @@
       <div id="text-search-exclusive-view" style="display: none; margin-top: 20px;">
         <button id="back-to-choices" style="background: none; border: none; color: #2563eb; font-weight: 600; cursor: pointer; margin-bottom: 15px; font-size: 0.95rem;">← Retour aux options</button>
         
-        <div style="background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;">
-          <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 10px;">Entrez votre recherche textuelle :</label>
-          
-          <div style="position: relative;">
-            <input type="text" id="live-search-input" placeholder="ex: Ma..." style="width: 100%; padding: 15px 20px; font-size: 1.1rem; border: 2px solid #cbd5e1; border-radius: 10px; outline: none; box-sizing: border-box;">
-            
-            <!-- Liste de propositions dynamique -->
-            <div id="suggestions-box" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-top: none; border-radius: 0 0 10px 10px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); z-index: 50;">
-              <div class="suggestion-item" style="padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #1e293b;" data-value="Maison à louer, à vendre ou à acheter">🏠 <strong>Ma</strong>ison à louer, à vendre ou à acheter</div>
-              <div class="suggestion-item" style="padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #1e293b;" data-value="Marché central de Lubumbashi">🛒 <strong>Ma</strong>rché central de Lubumbashi</div>
-              <div class="suggestion-item" style="padding: 12px 20px; cursor: pointer; color: #1e293b;" data-value="Matériel informatique et bureautique">💻 <strong>Ma</strong>tériel informatique et bureautique</div>
-            </div>
-          </div>
+                <div style="background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;">
+          <form action="/recherche/lancer" method="POST">
+            {{ csrfField() }}
+            <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 10px;">Entrez votre recherche textuelle :</label>
 
-          <!-- Bouton de validation final -->
-          <button id="btn-submit-search" style="width: 100%; margin-top: 25px; padding: 16px; background: #0f172a; color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background 0.2s;">
-            Lancer votre recherche
-          </button>
+            <div style="position: relative;">
+              <input type="text" name="q" id="live-search-input" required autocomplete="off" placeholder="ex: Ma..." style="width: 100%; padding: 15px 20px; font-size: 1.1rem; border: 2px solid #cbd5e1; border-radius: 10px; outline: none; box-sizing: border-box;">
+
+              <div id="suggestions-box" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-top: none; border-radius: 0 0 10px 10px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); z-index: 50;">
+                <div class="suggestion-item" style="padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #1e293b;" data-value="Maison à louer, à vendre ou à acheter">🏠 <strong>Ma</strong>ison à louer, à vendre ou à acheter</div>
+                <div class="suggestion-item" style="padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #1e293b;" data-value="Marché central de Lubumbashi">🛒 <strong>Ma</strong>rché central de Lubumbashi</div>
+                <div class="suggestion-item" style="padding: 12px 20px; cursor: pointer; color: #1e293b;" data-value="Matériel informatique et bureautique">💻 <strong>Ma</strong>tériel informatique et bureautique</div>
+              </div>
+            </div>
+
+            <button type="submit" id="btn-submit-search" style="width: 100%; margin-top: 25px; padding: 16px; background: #0f172a; color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer;">
+              Lancer votre recherche
+            </button>
+          </form>
         </div>
-      </div>
 
       <!-- ÉTAPE 3 : Vue exclusive Image -->
       <div id="image-search-exclusive-view" style="display: none; margin-top: 20px;">
@@ -399,103 +399,75 @@
   </div>
 
   {{-- Gestion interactive de l'ouverture de la recherche et des choix --}}
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const openBtn = document.getElementById('open-search-overlay');
-      const overlay = document.getElementById('search-overlay-page');
-      const closeBtn = document.getElementById('close-search-overlay');
-      
-      const choicesContainer = document.getElementById('search-choices-container');
-      const textView = document.getElementById('text-search-exclusive-view');
-      const imageView = document.getElementById('image-search-exclusive-view');
-      
-      const btnChoiceText = document.getElementById('btn-choice-text');
-      const btnChoiceImage = document.getElementById('btn-choice-image');
-      const btnChoiceVoice = document.getElementById('btn-choice-voice');
-      
-      const backToChoices = document.getElementById('back-to-choices');
-      const backToChoicesImg = document.getElementById('back-to-choices-img');
 
-      const searchInput = document.getElementById('live-search-input');
-      const suggestionsBox = document.getElementById('suggestions-box');
-      const submitSearch = document.getElementById('btn-submit-search');
+  <form id="form-lancer" action="/recherche/lancer" method="POST" style="display:none">
+    {{ csrfField() }}
+    <input type="hidden" name="q" id="form-lancer-q">
+  </form>
 
-      // Ouvrir la page entière de recherche
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const openBtn = document.getElementById('open-search-overlay')
+      const overlay = document.getElementById('search-overlay-page')
+      const closeBtn = document.getElementById('close-search-overlay')
+
+      const choicesContainer = document.getElementById('search-choices-container')
+      const textView = document.getElementById('text-search-exclusive-view')
+      const imageView = document.getElementById('image-search-exclusive-view')
+
+      const btnChoiceText = document.getElementById('btn-choice-text')
+      const btnChoiceImage = document.getElementById('btn-choice-image')
+
+      const backToChoices = document.getElementById('back-to-choices')
+      const backToChoicesImg = document.getElementById('back-to-choices-img')
+
+      const searchInput = document.getElementById('live-search-input')
+      const suggestionsBox = document.getElementById('suggestions-box')
+
       openBtn.addEventListener('click', () => {
-        overlay.style.display = 'block';
-        choicesContainer.style.display = 'flex';
-        textView.style.display = 'none';
-        imageView.style.display = 'none';
-      });
+        overlay.style.display = 'block'
+        choicesContainer.style.display = 'flex'
+        textView.style.display = 'none'
+        imageView.style.display = 'none'
+      })
 
-      // Fermer la page de recherche
       closeBtn.addEventListener('click', () => {
-        overlay.style.display = 'none';
-      });
+        overlay.style.display = 'none'
+      })
 
-      // Cliquer sur "Taper votre demande"
       btnChoiceText.addEventListener('click', () => {
-        choicesContainer.style.display = 'none';
-        textView.style.display = 'block';
-        searchInput.focus();
-      });
+        choicesContainer.style.display = 'none'
+        textView.style.display = 'block'
+        searchInput.focus()
+      })
 
-      // Cliquer sur "Placez votre image"
       btnChoiceImage.addEventListener('click', () => {
-        choicesContainer.style.display = 'none';
-        imageView.style.display = 'block';
-      });
+        choicesContainer.style.display = 'none'
+        imageView.style.display = 'block'
+      })
 
-      // Retour aux options depuis le texte
       backToChoices.addEventListener('click', () => {
-        textView.style.display = 'none';
-        choicesContainer.style.display = 'flex';
-      });
+        textView.style.display = 'none'
+        choicesContainer.style.display = 'flex'
+      })
 
-      // Retour aux options depuis l'image
       backToChoicesImg.addEventListener('click', () => {
-        imageView.style.display = 'none';
-        choicesContainer.style.display = 'flex';
-      });
+        imageView.style.display = 'none'
+        choicesContainer.style.display = 'flex'
+      })
 
-      // Gestion des propositions en direct (ex: Ma...)
       searchInput.addEventListener('input', (e) => {
-        const val = e.target.value.trim();
-        if (val.toLowerCase().startsWith('ma') && val.length > 0) {
-          suggestionsBox.style.display = 'block';
-        } else {
-          suggestionsBox.style.display = 'none';
-        }
-      });
+        const val = e.target.value.trim()
+        suggestionsBox.style.display = val.toLowerCase().startsWith('ma') ? 'block' : 'none'
+      })
 
-      // Cliquer sur une proposition
-      document.querySelectorAll('.suggestion-item').forEach(item => {
-        item.addEventListener('click', function() {
-          searchInput.value = this.getAttribute('data-value');
-          suggestionsBox.style.display = 'none';
-        });
-      });
-
-            // Lancer la recherche finale : ouvre la page de résultats
-      function lancerRecherche() {
-        const texte = searchInput.value.trim();
-        if (texte !== '') {
-          window.location.href = '/resultats?q=' + encodeURIComponent(texte);
-        } else {
-          alert('Veuillez saisir ou sélectionner une recherche.');
-        }
-      }
-
-      submitSearch.addEventListener('click', lancerRecherche);
-
-      // Touche Entrée dans le champ de saisie
-            searchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          lancerRecherche();
-        }
-      });
-    });
+      document.querySelectorAll('.suggestion-item').forEach((item) => {
+        item.addEventListener('click', function () {
+          searchInput.value = this.getAttribute('data-value')
+          suggestionsBox.style.display = 'none'
+        })
+      })
+    })
   </script>
 
   {{-- Chargement correct du script via l'assistant Vite d'AdonisJS v6 --}}
