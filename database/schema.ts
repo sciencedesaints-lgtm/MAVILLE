@@ -1378,7 +1378,7 @@ export class UtilisateurRoleSchema extends BaseModel {
 }
 
 export class UtilisateurSchema extends BaseModel {
-  static $columns = ['actif', 'adresse', 'avenue', 'commune', 'compteGoogle', 'compteTelephone', 'createdAt', 'dateNaissance', 'deletedAt', 'derniereConnexion', 'domaine', 'email', 'emailVerifie', 'emailVerifiedAt', 'id', 'indicatifPays', 'languePreferee', 'latitude', 'longitude', 'nom', 'nomEntreprise', 'nomInstitution', 'numero', 'password', 'pays', 'photoProfil', 'position', 'prenom', 'profession', 'pseudo', 'qualification', 'quartier', 'rememberMeToken', 'reponseAuto', 'sexe', 'statutCompte', 'telephone', 'telephoneVerifie', 'tutelle', 'typeCompte', 'typeInstitution', 'typeStructure', 'updatedAt', 'ville', 'villeId'] as const
+  static $columns = ['actif', 'adresse', 'avenue', 'commune', 'compteGoogle', 'compteTelephone', 'createdAt', 'dateNaissance', 'deletedAt', 'derniereConnexion', 'domaine', 'email', 'emailVerifie', 'emailVerifiedAt', 'id', 'indicatifPays', 'languePreferee', 'latitude', 'longitude', 'nom', 'nomEntreprise', 'nomInstitution', 'numero', 'password', 'pays', 'photoBanniere', 'photoProfil', 'position', 'prenom', 'profession', 'pseudo', 'qualification', 'quartier', 'rememberMeToken', 'reponseAuto', 'sexe', 'statutCompte', 'telephone', 'telephoneVerifie', 'tutelle', 'typeCompte', 'typeInstitution', 'typeStructure', 'updatedAt', 'ville', 'villeId'] as const
   $columns = UtilisateurSchema.$columns
   @column()
   declare actif: boolean | null
@@ -1430,6 +1430,8 @@ export class UtilisateurSchema extends BaseModel {
   declare password: string
   @column()
   declare pays: string | null
+  @column()
+  declare photoBanniere: string | null
   @column()
   declare photoProfil: string | null
   @column()

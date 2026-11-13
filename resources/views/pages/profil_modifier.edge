@@ -14,6 +14,8 @@
     .pm-card a.retour { display: block; text-align: center; color: #94a3b8; margin-top: 14px; font-size: 0.9rem; text-decoration: none; }
     .pm-erreur { background: #7f1d1d; color: #fecaca; padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.9rem; }
     .pm-aide { color: #64748b; font-size: 0.8rem; margin: -10px 0 16px; }
+    .pm-banniere { height: 110px; border-radius: 12px; background: #0f172a center/cover no-repeat; margin-bottom: 10px; border: 1px solid #334155; }
+    .pm-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 1px solid #334155; }
     @media (max-width: 520px) { .pm-card .ligne { grid-template-columns: 1fr; } }
   </style>
 
@@ -29,10 +31,21 @@
       <form action="{{ route('profil.modifier.enregistrer') }}" method="POST" enctype="multipart/form-data">
         {{ csrfField() }}
 
-        <h2>Identité</h2>
+        <h2>Photos</h2>
+
+        <label class="champ" for="banniere">Photo de bannière (jpg, png, webp, 8 Mo maximum)</label>
+        @if(moi.photo_banniere)
+          <div class="pm-banniere" style="background-image: url('{{ moi.photo_banniere }}');"></div>
+        @end
+        <input type="file" id="banniere" name="banniere" accept="image/*">
 
         <label class="champ" for="photo">Photo de profil (jpg, png, webp, 5 Mo maximum)</label>
+        @if(moi.photo_profil)
+          <img class="pm-avatar" src="{{ moi.photo_profil }}" alt="Photo actuelle">
+        @end
         <input type="file" id="photo" name="photo" accept="image/*">
+
+        <h2>Identité</h2>
 
         <div class="ligne">
           <div>

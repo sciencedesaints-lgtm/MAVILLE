@@ -27,7 +27,11 @@
       
       <!-- En-tête de Profil -->
       <div class="profile-header-card">
-        <div class="profile-banner"></div>
+        @if(auth.user.photoBanniere)
+  <div class="profile-banner" style="background: url('{{ auth.user.photoBanniere }}') center/cover no-repeat;"></div>
+@else
+  <div class="profile-banner"></div>
+@end
         <div class="profile-details-container">
           <div class="profile-actions-row">
             <div class="profile-avatar-wrapper">

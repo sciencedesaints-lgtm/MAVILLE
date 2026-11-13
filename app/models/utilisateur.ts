@@ -113,6 +113,9 @@ export default class Utilisateur extends BaseModel {
   declare photoProfil: string | null
 
   @column()
+  declare photoBanniere: string | null
+
+  @column()
   declare sexe: string | null
 
   @column.date()

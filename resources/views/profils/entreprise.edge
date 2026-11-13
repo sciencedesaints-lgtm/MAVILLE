@@ -30,7 +30,11 @@
         <div class="profile-details-container">
           <div class="profile-actions-row">
             <div class="profile-avatar-wrapper">
-              <img src="/images/entreprise-logo.jpg" alt="Logo Entreprise">
+              @if(auth.user.photoProfil)
+  <img src="{{ auth.user.photoProfil }}" alt="Avatar" class="avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+@else
+  <div class="avatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #0369a1); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ (auth.user.prenom || auth.user.nom).charAt(0).toUpperCase() }}</div>
+@end
             </div>
             <div class="flex gap-2">
               <button class="btn-outline">Modifier l'entreprise</button>

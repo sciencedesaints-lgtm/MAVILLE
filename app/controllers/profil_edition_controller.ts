@@ -3,6 +3,7 @@ import db from '@adonisjs/lucid/services/db'
 import { MediaService } from '#services/media_service'
 
 const texte = (v: unknown) => String(v ?? '').trim() || null
+const IMAGES = ['jpg', 'jpeg', 'png', 'webp']
 
 export default class ProfilEditionController {
   async edit({ view, auth }: HttpContext) {
@@ -34,13 +35,22 @@ export default class ProfilEditionController {
       donnees.prenom = texte(request.input('prenom'))?.slice(0, 100) ?? null
     }
 
-    const photo = request.file('photo', { size: '5mb', extnames: ['jpg', 'jpeg', 'png', 'webp'] })
+    const photo = request.file('photo', { size: '5mb', extnames: IMAGES })
     if (photo && photo.clientName) {
       if (!photo.isValid) {
-        session.flash('erreur', 'Photo refusée : jpg, png ou webp, 5 Mo maximum.')
+        session.flash('erreur', 'Photo de profil refusée : jpg, png ou webp, 5 Mo maximum.')
         return response.redirect().back()
       }
       donnees.photo_profil = await MediaService.uploadImage(photo, 'avatars')
+    }
+
+    const banniere = request.file('banniere', { size: '8mb', extnames: IMAGES })
+    if (banniere && banniere.clientName) {
+      if (!banniere.isValid) {
+        session.flash('erreur', 'Bannière refusée : jpg, png ou webp, 8 Mo maximum.')
+        return response.redirect().back()
+      }
+      donnees.photo_banniere = await MediaService.uploadImage(banniere, 'bannieres')
     }
 
     await db.from('utilisateurs').where('id', user.id).update(donnees)
