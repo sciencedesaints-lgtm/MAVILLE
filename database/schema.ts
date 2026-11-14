@@ -731,8 +731,10 @@ export class LivraisonSchema extends BaseModel {
 }
 
 export class MediaSchema extends BaseModel {
-  static $columns = ['createdAt', 'duree', 'id', 'mimeType', 'miniature', 'nomFichier', 'taille', 'typeMedia', 'updatedAt', 'url', 'utilisateurId'] as const
+  static $columns = ['categorie', 'createdAt', 'duree', 'id', 'mimeType', 'miniature', 'nomFichier', 'taille', 'typeMedia', 'updatedAt', 'url', 'utilisateurId'] as const
   $columns = MediaSchema.$columns
+  @column()
+  declare categorie: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()

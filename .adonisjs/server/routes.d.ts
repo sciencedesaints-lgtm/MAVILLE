@@ -13,6 +13,7 @@ export type ScannedRoutes = {
     'web.actualite': { paramsTuple?: []; params?: {} }
     'web.actualite.create': { paramsTuple?: []; params?: {} }
     'web.actualite.store': { paramsTuple?: []; params?: {} }
+    'web.actualite.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.recherche': { paramsTuple?: []; params?: {} }
     'notifications.index': { paramsTuple?: []; params?: {} }
     'web.profil': { paramsTuple?: []; params?: {} }
@@ -143,6 +144,7 @@ export type ScannedRoutes = {
   }
   POST: {
     'web.actualite.store': { paramsTuple?: []; params?: {} }
+    'web.actualite.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'profil.modifier.enregistrer': { paramsTuple?: []; params?: {} }
     'offres.store': { paramsTuple?: []; params?: {} }
     'commerces.store': { paramsTuple?: []; params?: {} }

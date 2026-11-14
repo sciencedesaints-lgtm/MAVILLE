@@ -42,6 +42,7 @@ router.on('/login').render('pages/connexion').as('web.login.form')
 router.get('/actualite', [MediasController, 'index']).as('web.actualite')
 router.get('/actualite/creer', [MediasController, 'create']).as('web.actualite.create')
 router.post('/actualite', [MediasController, 'store']).as('web.actualite.store')
+router.post('/actualite/:id/supprimer', [MediasController, 'supprimer']).as('web.actualite.supprimer')
 
 // Route pour la page de recherche interactive (Sidebar)
 router.get('/recherche', [AiController, 'index']).as('web.recherche')
