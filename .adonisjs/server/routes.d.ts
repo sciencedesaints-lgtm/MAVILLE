@@ -5,9 +5,9 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'web.bienvenue': { paramsTuple?: []; params?: {} }
+    'web.inscription': { paramsTuple?: []; params?: {} }
     'web.authentification': { paramsTuple?: []; params?: {} }
     'web.connexion': { paramsTuple?: []; params?: {} }
-    'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
     'web.login.form': { paramsTuple?: []; params?: {} }
     'web.actualite': { paramsTuple?: []; params?: {} }
@@ -41,6 +41,10 @@ export type ScannedRoutes = {
     'demandes.auto': { paramsTuple?: []; params?: {} }
     'notifications.compte': { paramsTuple?: []; params?: {} }
     'demandes.repondre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'articles.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogue.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'articles.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'articles.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
@@ -74,9 +78,9 @@ export type ScannedRoutes = {
   }
   GET: {
     'web.bienvenue': { paramsTuple?: []; params?: {} }
+    'web.inscription': { paramsTuple?: []; params?: {} }
     'web.authentification': { paramsTuple?: []; params?: {} }
     'web.connexion': { paramsTuple?: []; params?: {} }
-    'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
     'web.login.form': { paramsTuple?: []; params?: {} }
     'web.actualite': { paramsTuple?: []; params?: {} }
@@ -97,6 +101,8 @@ export type ScannedRoutes = {
     'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'corbeille.index': { paramsTuple?: []; params?: {} }
     'notifications.compte': { paramsTuple?: []; params?: {} }
+    'articles.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogue.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -109,9 +115,9 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'web.bienvenue': { paramsTuple?: []; params?: {} }
+    'web.inscription': { paramsTuple?: []; params?: {} }
     'web.authentification': { paramsTuple?: []; params?: {} }
     'web.connexion': { paramsTuple?: []; params?: {} }
-    'web.inscription': { paramsTuple?: []; params?: {} }
     'web.accueil': { paramsTuple?: []; params?: {} }
     'web.login.form': { paramsTuple?: []; params?: {} }
     'web.actualite': { paramsTuple?: []; params?: {} }
@@ -132,6 +138,8 @@ export type ScannedRoutes = {
     'membre.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'corbeille.index': { paramsTuple?: []; params?: {} }
     'notifications.compte': { paramsTuple?: []; params?: {} }
+    'articles.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogue.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -156,6 +164,8 @@ export type ScannedRoutes = {
     'recherches.lancer': { paramsTuple?: []; params?: {} }
     'demandes.auto': { paramsTuple?: []; params?: {} }
     'demandes.repondre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'articles.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'articles.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }

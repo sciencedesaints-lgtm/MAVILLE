@@ -14,6 +14,9 @@ type Resultat = {
   prix: string | null
   description: string | null
   details: string[]
+  articles?: { nom: string; prix: string; description: string | null; photo: string | null }[]
+  nbArticles?: number
+  voirPlus?: string | null
   statut: string | null
 }
 
@@ -307,6 +310,100 @@ export default class ResultatsController {
             })
           }
         }
+
+            // Articles des commerces : le résultat est le commerce, avec les articles trouvés
+    const aTermes = motsUniques.length || lieuxUniques.length || expressions.length
+    if (ville && veut('commerce') && aTermes) {
+      const query = db
+        .from('produits as p')
+        .join('etablissements as e', 'e.id', 'p.etablissement_id')
+        .leftJoin('categories_produits as c', 'c.id', 'p.categorie_id')
+        .where('e.ville_id', ville.id)
+        .where('e.visible', true)
+        .where('e.ouvert', true)
+        .where('p.visible', true)
+        .where('p.disponible', true)
+        .whereNot('e.proprietaire_id', user.id)
+        .select(
+          'p.*',
+          'c.nom as categorie_nom',
+          'e.id as e_id',
+          'e.nom as e_nom',
+          'e.proprietaire_id as e_proprietaire',
+          'e.adresse as e_adresse',
+          'e.telephone as e_tel',
+          'e.whatsapp as e_wa',
+          'e.horaires as e_horaires',
+          'e.livraison as e_livraison'
+        )
+        .limit(100)
+      appliquer(
+        query,
+        ['p.nom', 'c.nom'],
+        ['p.description'],
+        ['e.adresse', 'e.marche', 'e.quartier', 'e.commune', 'e.avenue']
+      )
+      const lignes = await query
+
+      if (lignes.length) {
+        const idsArticles = lignes.map((l: any) => l.id)
+        const idsCommerces = [...new Set(lignes.map((l: any) => l.e_id))] as string[]
+
+        const images = await db.from('images_produits').whereIn('produit_id', idsArticles).orderBy('ordre')
+        const totaux = await db
+          .from('produits')
+          .whereIn('etablissement_id', idsCommerces)
+          .where('visible', true)
+          .where('disponible', true)
+          .groupBy('etablissement_id')
+          .select('etablissement_id')
+          .count('* as n')
+        const nbParCommerce = new Map(totaux.map((t: any) => [t.etablissement_id, Number(t.n)]))
+
+        for (const idCommerce of idsCommerces) {
+          const siens = lignes.filter((l: any) => l.e_id === idCommerce)
+          const premier = siens[0]
+
+          const articles = siens.slice(0, 3).map((l: any) => ({
+            nom: l.nom,
+            prix: Number(l.prix) > 0
+              ? `${Number(l.prix)} ${l.devise}${l.unite ? ' / ' + l.unite : ''}`
+              : 'Prix à discuter',
+            description: coupe(l.description),
+            photo: images.find((i: any) => i.produit_id === l.id)?.url ?? null,
+          }))
+
+          const details: string[] = []
+          if (premier.e_horaires) details.push(`🕒 ${premier.e_horaires}`)
+          if (premier.e_livraison) details.push('🚚 Livraison')
+
+          const existant = resultats.find((r) => r.genre === 'commerce' && r.id === idCommerce)
+          if (existant) {
+            existant.articles = articles
+            existant.nbArticles = nbParCommerce.get(idCommerce) ?? articles.length
+            existant.voirPlus = `/commerce/${idCommerce}/catalogue`
+          } else {
+            resultats.push({
+              id: idCommerce,
+              genre: 'commerce',
+              titre: premier.e_nom,
+              proprietaireId: premier.e_proprietaire,
+              proprietaire: null,
+              categorie: premier.categorie_nom,
+              lieu: premier.e_adresse,
+              telephone: premier.e_tel || premier.e_wa,
+              prix: null,
+              description: null,
+              details,
+              statut: null,
+              articles,
+              nbArticles: nbParCommerce.get(idCommerce) ?? articles.length,
+              voirPlus: `/commerce/${idCommerce}/catalogue`,
+            })
+          }
+        }
+      }
+    }
 
     // ---------- Réponses des vendeurs à CETTE recherche ----------
     if (UUID.test(rechercheId)) {

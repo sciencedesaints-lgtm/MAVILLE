@@ -37,6 +37,9 @@
                     @if(membre.profession)
             <p class="mb-meta">🎓 {{ membre.profession }}</p>
           @end
+                    @if(activites.length)
+            <p class="mb-meta">🏷️ @each(a in activites){{ a.nom }} · @end</p>
+          @end
           @if(membre.qualification)
             <p class="mb-meta">{{ membre.qualification }}</p>
           @end

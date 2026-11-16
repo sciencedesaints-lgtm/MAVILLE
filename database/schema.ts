@@ -80,6 +80,25 @@ export class AbonnementsVisibiliteSchema extends BaseModel {
   declare updatedAt: DateTime
 }
 
+export class ActiviteSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'nom', 'ordre', 'slug', 'typeCompte', 'updatedAt'] as const
+  $columns = ActiviteSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare nom: string
+  @column()
+  declare ordre: number | null
+  @column()
+  declare slug: string
+  @column()
+  declare typeCompte: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
 export class AlertesVilleSchema extends BaseModel {
   static $columns = ['active', 'createdAt', 'createurId', 'dateDebut', 'dateFin', 'description', 'id', 'niveau', 'titre', 'type', 'updatedAt', 'villeId'] as const
   $columns = AlertesVilleSchema.$columns
@@ -1366,6 +1385,15 @@ export class TraductionSchema extends BaseModel {
   declare texteTraduit: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+}
+
+export class UtilisateurActiviteSchema extends BaseModel {
+  static $columns = ['activiteId', 'utilisateurId'] as const
+  $columns = UtilisateurActiviteSchema.$columns
+  @column()
+  declare activiteId: number
+  @column({ isPrimary: true })
+  declare utilisateurId: string
 }
 
 export class UtilisateurRoleSchema extends BaseModel {

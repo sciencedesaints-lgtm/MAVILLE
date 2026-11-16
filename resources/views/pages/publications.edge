@@ -46,6 +46,9 @@
           </div>
 
           <div class="pb-actions">
+                      @if(p.genre === 'commerce')
+              <a class="pb-btn" href="/commerces/{{ p.id }}/articles" style="text-decoration:none;">🛒 Articles</a>
+            @end
             <form action="/publications/{{ p.genre }}/{{ p.id }}/basculer" method="POST">
               {{ csrfField() }}
               <button type="submit" class="pb-btn">{{ p.en_ligne ? 'Marquer indisponible' : 'Remettre en ligne' }}</button>

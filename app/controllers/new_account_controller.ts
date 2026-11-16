@@ -1,4 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import db from '@adonisjs/lucid/services/db'
 import Utilisateur from '#models/utilisateur'
 import {
   personnelSignupValidator,
@@ -27,6 +28,20 @@ export default class NewAccountController {
             type_compte: ['Le type de compte est invalide ou manquant.'],
           })
       }
+
+            // Activités : obligatoires pour entreprise et administration, jamais pour le personnel
+            let activiteIds: number[] = []
+            if (payload.type_compte !== 'personnel') {
+              const brut = ([] as any[]).concat(request.input('activites') ?? [])
+              const demandes = brut.map(Number).filter((n) => Number.isInteger(n))
+              const valides = demandes.length
+                ? await db.from('activites').whereIn('id', demandes).where('type_compte', payload.type_compte)
+                : []
+              activiteIds = valides.map((a: any) => a.id)
+              if (!activiteIds.length) {
+                return response.badRequest([{ message: 'Cochez au moins une activité.', field: 'activites' }])
+              }
+            }
 
       const utilisateur = new Utilisateur()
       utilisateur.typeCompte = payload.type_compte
@@ -69,6 +84,11 @@ export default class NewAccountController {
       }
 
       await utilisateur.save()
+      if (activiteIds.length) {
+        await db.table('utilisateur_activites').insert(
+          activiteIds.map((id) => ({ utilisateur_id: utilisateur.id, activite_id: id }))
+        )
+      }
       await auth.use('web').login(utilisateur)
 
       if (request.accepts(['html', 'json']) === 'json') {

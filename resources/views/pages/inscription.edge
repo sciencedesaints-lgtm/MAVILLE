@@ -138,6 +138,17 @@
           <input type="text" name="domaine" id="ent-domaine" class="form-input" placeholder="Ex: Transport, Immobilier, Commerce..." required />
         </div>
 
+                <div class="form-group">
+          <label class="form-label">Activités spécifiques (cochez au moins une)</label>
+          <div style="max-height: 180px; overflow-y: auto; border: 1px solid #334155; border-radius: 10px; padding: 10px;">
+            @each(a in activitesEntreprise)
+              <label style="display: flex; gap: 8px; align-items: center; padding: 4px 0; color: #e2e8f0; font-size: 0.9rem;">
+                <input type="checkbox" name="activites" value="{{ a.id }}"> {{ a.nom }}
+              </label>
+            @end
+          </div>
+        </div>
+
         <div class="form-group">
           <label class="form-label">Localisation</label>
           
@@ -241,6 +252,17 @@
         <div class="form-group">
           <label for="admin-tutelle" class="form-label">Ministère de tutelle / Hiérarchie (Optionnel)</label>
           <input type="text" name="tutelle" id="admin-tutelle" class="form-input" placeholder="Ex: Ministère de l'Intérieur" />
+        </div>
+
+                <div class="form-group">
+          <label class="form-label">Services rendus (cochez au moins un)</label>
+          <div style="max-height: 180px; overflow-y: auto; border: 1px solid #334155; border-radius: 10px; padding: 10px;">
+            @each(a in activitesAdmin)
+              <label style="display: flex; gap: 8px; align-items: center; padding: 4px 0; color: #e2e8f0; font-size: 0.9rem;">
+                <input type="checkbox" name="activites" value="{{ a.id }}"> {{ a.nom }}
+              </label>
+            @end
+          </div>
         </div>
 
         <div class="form-group">

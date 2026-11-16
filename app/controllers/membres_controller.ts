@@ -46,6 +46,12 @@ export default class MembresController {
       offre.medias = medias.filter((m: any) => m.offre_id === offre.id)
     }
 
+    const activites = await db
+    .from('utilisateur_activites as ua')
+    .join('activites as a', 'a.id', 'ua.activite_id')
+    .where('ua.utilisateur_id', membre.id)
+    .select('a.nom')
+
     const nomComplet = [membre.prenom, membre.nom].filter(Boolean).join(' ')
     const initiales = nomComplet
       .split(' ')

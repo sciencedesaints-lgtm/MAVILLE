@@ -1,0 +1,112 @@
+@component('layouts/main', { title: 'Articles - MAVILLE' })
+
+  <style>
+    .ar-page { min-height: 100vh; background: #0f172a; display: flex; justify-content: center; padding: 32px 16px; box-sizing: border-box; font-family: system-ui, sans-serif; }
+    .ar-wrap { width: 100%; max-width: 760px; }
+    .ar-wrap h1 { color: #f8fafc; font-size: 1.5rem; margin: 0 0 6px; }
+    .ar-sub { color: #94a3b8; font-size: 0.9rem; margin: 0 0 20px; }
+    .ar-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 22px; margin-bottom: 24px; }
+    .ar-card h2 { color: #38bdf8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 14px; }
+    .ar-card label.champ { display: block; color: #e2e8f0; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+    .ar-card input[type=text], .ar-card select, .ar-card textarea { width: 100%; padding: 11px; border-radius: 10px; border: 1px solid #475569; background: #0f172a; color: #f8fafc; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 14px; font-family: inherit; }
+    .ar-card input[type=file] { width: 100%; color: #e2e8f0; margin-bottom: 14px; }
+    .ar-ligne { display: grid; grid-template-columns: 1fr 1fr 100px; gap: 12px; }
+    .ar-btn { width: 100%; padding: 13px; border: none; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; }
+    .ar-erreur { background: #7f1d1d; color: #fecaca; padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.9rem; }
+    .ar-article { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; }
+    .ar-article h3 { color: #f8fafc; margin: 0 0 4px; font-size: 1.05rem; }
+    .ar-meta { color: #94a3b8; font-size: 0.85rem; margin: 3px 0; }
+    .ar-prix { color: #34d399; font-weight: 700; margin-top: 6px; }
+    .ar-photos { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .ar-photos img { width: 110px; height: 85px; object-fit: cover; border-radius: 10px; }
+    .ar-suppr { margin-top: 12px; padding: 7px 14px; border-radius: 20px; border: 1px solid #991b1b; background: #0f172a; color: #fca5a5; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    .ar-vide { color: #64748b; font-style: italic; text-align: center; padding: 30px 0; }
+    .ar-retour { display: block; text-align: center; color: #94a3b8; margin-top: 22px; text-decoration: none; font-size: 0.9rem; }
+    @media (max-width: 560px) { .ar-ligne { grid-template-columns: 1fr; } }
+  </style>
+
+  <div class="ar-page">
+    <div class="ar-wrap">
+      <h1>🛒 Articles de « {{ commerce.nom }} »</h1>
+      <p class="ar-sub">Ajoutez ce que vous vendez. Les clients pourront voir votre catalogue complet.</p>
+
+      @if(flashMessages.has('erreur'))
+        <div class="ar-erreur">{{ flashMessages.get('erreur') }}</div>
+      @end
+
+      <div class="ar-card">
+        <h2>Ajouter un article</h2>
+        <form action="/commerces/{{ commerce.id }}/articles" method="POST" enctype="multipart/form-data">
+          {{ csrfField() }}
+
+          <label class="champ" for="nom">Nom de l'article</label>
+          <input type="text" id="nom" name="nom" required minlength="2" maxlength="255" placeholder="Ex : Sucre 1 kg, Chemise homme, Forfait Airtel 1 Go">
+
+          <label class="champ" for="categorie_id">Catégorie</label>
+          <select id="categorie_id" name="categorie_id" required>
+            <option value="" disabled selected>Choisissez</option>
+            @each(c in categories)
+              <option value="{{ c.id }}">{{ c.icone }} {{ c.nom }}</option>
+            @end
+          </select>
+
+          <div class="ar-ligne">
+            <div>
+              <label class="champ" for="prix">Prix (vide = à discuter)</label>
+              <input type="text" id="prix" name="prix" inputmode="decimal" placeholder="Ex : 2 500">
+            </div>
+            <div>
+              <label class="champ" for="unite">Unité (facultatif)</label>
+              <input type="text" id="unite" name="unite" placeholder="kg, pièce, litre">
+            </div>
+            <div>
+              <label class="champ" for="devise">Devise</label>
+              <select id="devise" name="devise">
+                <option value="USD">USD</option>
+                <option value="CDF">CDF</option>
+                <option value="EUR">EUR</option>
+              </select>
+            </div>
+          </div>
+
+          <label class="champ" for="description">Description (facultatif)</label>
+          <textarea id="description" name="description" rows="3" placeholder="Marque, taille, état, quantité disponible..."></textarea>
+
+          <label class="champ" for="photos">Photos (3 maximum, 5 Mo chacune)</label>
+          <input type="file" id="photos" name="photos" accept="image/*" multiple>
+
+          <button type="submit" class="ar-btn">Ajouter l'article</button>
+        </form>
+      </div>
+
+      @each(a in articles)
+        <div class="ar-article">
+          <h3>{{ a.nom }}</h3>
+          @if(a.categorie)
+            <p class="ar-meta">{{ a.categorie }}</p>
+          @end
+          @if(a.description)
+            <p class="ar-meta">{{ a.description }}</p>
+          @end
+          <p class="ar-prix">{{ a.prix }}</p>
+          @if(a.photos.length)
+            <div class="ar-photos">
+              @each(url in a.photos)
+                <img src="{{ url }}" alt="{{ a.nom }}">
+              @end
+            </div>
+          @end
+          <form action="/articles/{{ a.id }}/supprimer" method="POST" onsubmit="return confirm('Supprimer cet article ?')">
+            {{ csrfField() }}
+            <button type="submit" class="ar-suppr">🗑 Supprimer</button>
+          </form>
+        </div>
+      @else
+        <p class="ar-vide">Aucun article pour l'instant.</p>
+      @end
+
+      <a class="ar-retour" href="{{ route('publications.index') }}">← Retour à mes publications</a>
+    </div>
+  </div>
+
+@end

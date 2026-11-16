@@ -1,5 +1,6 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
+import db from '@adonisjs/lucid/services/db'
 
 // Lazy loading des contrôleurs
 const SessionController = () => import('#controllers/session_controller')
@@ -13,6 +14,7 @@ const PublicationsController = () => import('#controllers/publications_controlle
 const CorbeilleController = () => import('#controllers/corbeille_controller')
 const CommercesController = () => import('#controllers/commerces_controller')
 const ProduitsController = () => import('#controllers/produits_controller')
+const ArticlesController = () => import('#controllers/articles_controller')
 const CommandesController = () => import('#controllers/commandes_controller')
 const RecherchesController = () => import('#controllers/recherches_controller')
 const DemandesController = () => import('#controllers/demandes_controller')
@@ -30,11 +32,17 @@ const ProfilEditionController = () => import('#controllers/profil_edition_contro
 */
 
 router.on('/').render('pages/bienvenue').as('web.bienvenue')
+router.get('/inscription', async ({ view }) => {
+  const activites = await db.from('activites').orderBy('ordre')
+  return view.render('pages/inscription', {
+    activitesEntreprise: activites.filter((a: any) => a.type_compte === 'entreprise_agence'),
+    activitesAdmin: activites.filter((a: any) => a.type_compte === 'administration_publique'),
+  })
+}).as('web.inscription')
 router.on('/authentification').render('pages/authentification').as('web.authentification')
 router.get('/connexion', async ({ view }) => {
   return view.render('pages/connexion')
 }).as('web.connexion')
-router.on('/inscription').render('pages/inscription').as('web.inscription')
 router.on('/accueil').render('pages/accueil').as('web.accueil').use(middleware.auth())
 router.on('/login').render('pages/connexion').as('web.login.form')
 
@@ -82,6 +90,10 @@ router.group(() => {
   router.post('/demandes/auto', [DemandesController, 'basculerAuto']).as('demandes.auto')
   router.get('/notifications/compte', [DemandesController, 'compte']).as('notifications.compte')
   router.post('/demandes/:id/repondre', [DemandesController, 'repondre']).as('demandes.repondre')
+  router.get('/commerces/:id/articles', [ArticlesController, 'index']).as('articles.index')
+  router.get('/commerce/:id/catalogue', [ArticlesController, 'catalogue']).as('catalogue.show')
+  router.post('/commerces/:id/articles', [ArticlesController, 'store']).as('articles.store')
+  router.post('/articles/:id/supprimer', [ArticlesController, 'supprimer']).as('articles.supprimer')
 }).use(middleware.auth())
 
 // Conditions d'utilisation (après l'inscription, utilisateur connecté)

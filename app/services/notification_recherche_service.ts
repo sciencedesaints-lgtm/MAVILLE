@@ -92,6 +92,23 @@ export class NotificationRechercheService {
       candidats.push({ proprietaire: r.proprietaire, genre: 'annonce', offreId: r.offre_id, offre: r.offre })
     }
 
+        // Articles du catalogue des commerces : le commerce est notifié, avec le nom de l'article
+        const articlesCommerces = db
+        .from('produits as p')
+        .join('etablissements as e', 'e.id', 'p.etablissement_id')
+        .leftJoin('categories_produits as c', 'c.id', 'p.categorie_id')
+        .where('e.ville_id', ville.id)
+        .where('e.visible', true)
+        .where('e.ouvert', true)
+        .where('p.visible', true)
+        .where('p.disponible', true)
+        .whereNot('e.proprietaire_id', auteurId)
+        .select('e.proprietaire_id as proprietaire', 'e.id as offre_id', 'p.nom as offre')
+      filtrer(articlesCommerces, ['p.nom', 'p.description', 'c.nom'])
+      for (const r of await articlesCommerces) {
+        candidats.push({ proprietaire: r.proprietaire, genre: 'commerce', offreId: r.offre_id, offre: r.offre })
+      }
+
     // Une seule ligne par vendeur (sa première offre = la mieux classée)
     const parVendeur = new Map<string, Candidat>()
     for (const c of candidats) {

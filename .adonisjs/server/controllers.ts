@@ -6,6 +6,7 @@
 export const controllers = {
   Ai: () => import('#controllers/ai_controller'),
   Annonces: () => import('#controllers/annonces_controller'),
+  Articles: () => import('#controllers/articles_controller'),
   Commandes: () => import('#controllers/commandes_controller'),
   Commerces: () => import('#controllers/commerces_controller'),
   Conditions: () => import('#controllers/conditions_controller'),
