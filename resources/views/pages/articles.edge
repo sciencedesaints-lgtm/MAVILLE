@@ -12,7 +12,11 @@
     .ar-card input[type=file] { width: 100%; color: #e2e8f0; margin-bottom: 14px; }
     .ar-ligne { display: grid; grid-template-columns: 1fr 1fr 100px; gap: 12px; }
     .ar-btn { width: 100%; padding: 13px; border: none; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; }
+    .ar-btn.bleu { background: linear-gradient(135deg, #0ea5e9, #0369a1); }
     .ar-erreur { background: #7f1d1d; color: #fecaca; padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.9rem; }
+    .ar-succes { background: #064e3b; color: #a7f3d0; padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.9rem; }
+    .ar-aide { color: #94a3b8; font-size: 0.85rem; margin: 0 0 12px; line-height: 1.5; }
+    .ar-aide a { color: #38bdf8; font-weight: 600; }
     .ar-article { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; }
     .ar-article h3 { color: #f8fafc; margin: 0 0 4px; font-size: 1.05rem; }
     .ar-meta { color: #94a3b8; font-size: 0.85rem; margin: 3px 0; }
@@ -27,15 +31,32 @@
 
   <div class="ar-page">
     <div class="ar-wrap">
-      <h1>🛒 Articles de « {{ commerce.nom }} »</h1>
-      <p class="ar-sub">Ajoutez ce que vous vendez. Les clients pourront voir votre catalogue complet.</p>
+      <h1>🛒 Catalogue de « {{ commerce.nom }} »</h1>
+      <p class="ar-sub">Ajoutez vos articles un par un, ou importez-les d'un seul coup avec un fichier.</p>
 
       @if(flashMessages.has('erreur'))
         <div class="ar-erreur">{{ flashMessages.get('erreur') }}</div>
       @end
+      @if(flashMessages.has('succes'))
+        <div class="ar-succes">{{ flashMessages.get('succes') }}</div>
+      @end
 
       <div class="ar-card">
-        <h2>Ajouter un article</h2>
+        <h2>Importer un fichier (entreprises informatisées)</h2>
+        <p class="ar-aide">
+          Format CSV, 500 articles maximum, 2 Mo. Colonnes : <strong>nom</strong>, categorie, prix, devise, unite, description.
+          Seule la colonne « nom » est obligatoire. Dans Excel : Fichier → Enregistrer sous → « CSV UTF-8 ».
+          <a href="/modele-catalogue.csv">Télécharger le modèle</a>
+        </p>
+        <form action="/commerces/{{ commerce.id }}/articles/import" method="POST" enctype="multipart/form-data">
+          {{ csrfField() }}
+          <input type="file" name="fichier" accept=".csv,.txt,text/csv" required>
+          <button type="submit" class="ar-btn bleu">Importer le fichier</button>
+        </form>
+      </div>
+
+      <div class="ar-card">
+        <h2>Ajouter un article à la main</h2>
         <form action="/commerces/{{ commerce.id }}/articles" method="POST" enctype="multipart/form-data">
           {{ csrfField() }}
 

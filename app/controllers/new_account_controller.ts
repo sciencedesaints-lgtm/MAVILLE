@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import Utilisateur from '#models/utilisateur'
+import { assurerCommerce } from '#services/commerce_auto'
 import {
   personnelSignupValidator,
   entrepriseSignupValidator,
@@ -89,6 +90,15 @@ export default class NewAccountController {
           activiteIds.map((id) => ({ utilisateur_id: utilisateur.id, activite_id: id }))
         )
       }
+     
+      if (payload.type_compte === 'entreprise_agence') {
+        try {
+          await assurerCommerce(String(utilisateur.id))
+        } catch {
+          // l'inscription ne doit pas échouer à cause du commerce : il sera créé à la première visite du catalogue
+        }
+      }
+
       await auth.use('web').login(utilisateur)
 
       if (request.accepts(['html', 'json']) === 'json') {

@@ -94,6 +94,9 @@ router.group(() => {
   router.get('/commerce/:id/catalogue', [ArticlesController, 'catalogue']).as('catalogue.show')
   router.post('/commerces/:id/articles', [ArticlesController, 'store']).as('articles.store')
   router.post('/articles/:id/supprimer', [ArticlesController, 'supprimer']).as('articles.supprimer')
+  router.get('/mon-catalogue', [ArticlesController, 'monCatalogue']).as('catalogue.mien')
+  router.post('/commerces/:id/articles/import', [ArticlesController, 'importer']).as('articles.import')
+  router.get('/modele-catalogue.csv', [ArticlesController, 'modele']).as('articles.modele')
 }).use(middleware.auth())
 
 // Conditions d'utilisation (après l'inscription, utilisateur connecté)

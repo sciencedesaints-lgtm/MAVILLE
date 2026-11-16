@@ -45,6 +45,9 @@ export type ScannedRoutes = {
     'catalogue.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'articles.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'articles.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogue.mien': { paramsTuple?: []; params?: {} }
+    'articles.import': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'articles.modele': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
@@ -103,6 +106,8 @@ export type ScannedRoutes = {
     'notifications.compte': { paramsTuple?: []; params?: {} }
     'articles.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'catalogue.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogue.mien': { paramsTuple?: []; params?: {} }
+    'articles.modele': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -140,6 +145,8 @@ export type ScannedRoutes = {
     'notifications.compte': { paramsTuple?: []; params?: {} }
     'articles.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'catalogue.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogue.mien': { paramsTuple?: []; params?: {} }
+    'articles.modele': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -166,6 +173,7 @@ export type ScannedRoutes = {
     'demandes.repondre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'articles.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'articles.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'articles.import': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }
