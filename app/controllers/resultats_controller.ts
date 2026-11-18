@@ -139,6 +139,7 @@ export default class ResultatsController {
         if (r.urgence) details.push('⚡ Urgences')
         if (r.sur_rendez_vous) details.push('📅 Sur rendez-vous')
         if (r.prix_negociable) details.push('🤝 Prix négociable')
+        if (r.delai) details.push(`⏱ ${r.delai}`)
         resultats.push({
           id: r.id,
           genre: 'service',

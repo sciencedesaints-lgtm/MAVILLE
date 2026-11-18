@@ -1,0 +1,49 @@
+@component('layouts/main', { title: 'Services publics - MAVILLE' })
+
+  <style>
+    .sp-page { min-height: 100vh; background: #0f172a; display: flex; justify-content: center; padding: 32px 16px; box-sizing: border-box; font-family: system-ui, sans-serif; }
+    .sp-wrap { width: 100%; max-width: 760px; }
+    .sp-wrap h1 { color: #f8fafc; font-size: 1.5rem; margin: 0 0 6px; }
+    .sp-sub { color: #94a3b8; font-size: 0.9rem; margin: 0 0 20px; }
+    .sp-carte { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; }
+    .sp-carte h3 { margin: 0 0 4px; font-size: 1.05rem; }
+    .sp-carte h3 a { color: #f8fafc; text-decoration: none; }
+    .sp-meta { color: #94a3b8; font-size: 0.85rem; margin: 3px 0; }
+    .sp-puces { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .sp-puce { background: #0f172a; border: 1px solid #334155; color: #cbd5e1; font-size: 0.75rem; padding: 2px 10px; border-radius: 12px; }
+    .sp-vide { color: #64748b; font-style: italic; text-align: center; padding: 40px 0; }
+    .sp-retour { display: block; text-align: center; color: #94a3b8; margin-top: 22px; text-decoration: none; font-size: 0.9rem; }
+  </style>
+
+  <div class="sp-page">
+    <div class="sp-wrap">
+      <h1>🏛️ Services publics à {{ ville }}</h1>
+      <p class="sp-sub">Les administrations de votre ville et les prestations qu'elles rendent.</p>
+
+      @each(a in liste)
+        <div class="sp-carte">
+          <h3><a href="/membre/{{ a.id }}">{{ a.nom }}</a></h3>
+          @if(a.type_institution)
+            <p class="sp-meta">{{ a.type_institution }}</p>
+          @end
+          <p class="sp-meta">📍 {{ a.avenue || '' }} {{ a.commune || '' }}</p>
+          @if(a.tel)
+            <p class="sp-meta">📞 {{ a.tel }}</p>
+          @end
+          @if(a.prestations.length)
+            <div class="sp-puces">
+              @each(p in a.prestations)
+                <span class="sp-puce">{{ p }}</span>
+              @end
+            </div>
+          @end
+        </div>
+      @else
+        <p class="sp-vide">Aucune administration enregistrée dans votre ville.</p>
+      @end
+
+      <a class="sp-retour" href="{{ route('web.accueil') }}">← Retour à l'accueil</a>
+    </div>
+  </div>
+
+@end

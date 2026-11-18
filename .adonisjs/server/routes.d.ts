@@ -48,6 +48,12 @@ export type ScannedRoutes = {
     'catalogue.mien': { paramsTuple?: []; params?: {} }
     'articles.import': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'articles.modele': { paramsTuple?: []; params?: {} }
+    'prestations.index': { paramsTuple?: []; params?: {} }
+    'prestations.store': { paramsTuple?: []; params?: {} }
+    'prestations.import': { paramsTuple?: []; params?: {} }
+    'prestations.modele': { paramsTuple?: []; params?: {} }
+    'prestations.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'services.publics': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
@@ -108,6 +114,9 @@ export type ScannedRoutes = {
     'catalogue.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'catalogue.mien': { paramsTuple?: []; params?: {} }
     'articles.modele': { paramsTuple?: []; params?: {} }
+    'prestations.index': { paramsTuple?: []; params?: {} }
+    'prestations.modele': { paramsTuple?: []; params?: {} }
+    'services.publics': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -147,6 +156,9 @@ export type ScannedRoutes = {
     'catalogue.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'catalogue.mien': { paramsTuple?: []; params?: {} }
     'articles.modele': { paramsTuple?: []; params?: {} }
+    'prestations.index': { paramsTuple?: []; params?: {} }
+    'prestations.modele': { paramsTuple?: []; params?: {} }
+    'services.publics': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -174,6 +186,9 @@ export type ScannedRoutes = {
     'articles.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'articles.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'articles.import': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'prestations.store': { paramsTuple?: []; params?: {} }
+    'prestations.import': { paramsTuple?: []; params?: {} }
+    'prestations.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }

@@ -1208,7 +1208,7 @@ export class RoleSchema extends BaseModel {
 }
 
 export class ServiceSchema extends BaseModel {
-  static $columns = ['adresse', 'categorieId', 'commune', 'createdAt', 'description', 'devise', 'disponible', 'email', 'id', 'interventionDomicile', 'latitude', 'longitude', 'nom', 'nombreAvis', 'nombreVues', 'noteMoyenne', 'ordreAffichage', 'position', 'prestataireId', 'prixMax', 'prixMin', 'prixNegociable', 'quartier', 'siteWeb', 'slug', 'surRendezVous', 'telephone', 'updatedAt', 'urgence', 'villeId', 'visible'] as const
+  static $columns = ['adresse', 'categorieId', 'commune', 'createdAt', 'delai', 'description', 'devise', 'disponible', 'email', 'id', 'interventionDomicile', 'latitude', 'longitude', 'nom', 'nombreAvis', 'nombreVues', 'noteMoyenne', 'ordreAffichage', 'piecesRequises', 'position', 'prestataireId', 'prixMax', 'prixMin', 'prixNegociable', 'quartier', 'siteWeb', 'slug', 'surRendezVous', 'telephone', 'updatedAt', 'urgence', 'villeId', 'visible'] as const
   $columns = ServiceSchema.$columns
   @column()
   declare adresse: string | null
@@ -1218,6 +1218,8 @@ export class ServiceSchema extends BaseModel {
   declare commune: string | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+  @column()
+  declare delai: string | null
   @column()
   declare description: string | null
   @column()
@@ -1244,6 +1246,8 @@ export class ServiceSchema extends BaseModel {
   declare noteMoyenne: string | null
   @column()
   declare ordreAffichage: number | null
+  @column()
+  declare piecesRequises: string | null
   @column()
   declare position: any | null
   @column()

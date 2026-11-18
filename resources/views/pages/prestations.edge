@@ -1,0 +1,130 @@
+@component('layouts/main', { title: 'Mes prestations - MAVILLE' })
+
+  <style>
+    .pr-page { min-height: 100vh; background: #0f172a; display: flex; justify-content: center; padding: 32px 16px; box-sizing: border-box; font-family: system-ui, sans-serif; }
+    .pr-wrap { width: 100%; max-width: 760px; }
+    .pr-wrap h1 { color: #f8fafc; font-size: 1.5rem; margin: 0 0 6px; }
+    .pr-sub { color: #94a3b8; font-size: 0.9rem; margin: 0 0 20px; }
+    .pr-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 22px; margin-bottom: 24px; }
+    .pr-card h2 { color: #38bdf8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 14px; }
+    .pr-card label.champ { display: block; color: #e2e8f0; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+    .pr-card input[type=text], .pr-card select, .pr-card textarea { width: 100%; padding: 11px; border-radius: 10px; border: 1px solid #475569; background: #0f172a; color: #f8fafc; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 14px; font-family: inherit; }
+    .pr-card input[type=file] { width: 100%; color: #e2e8f0; margin-bottom: 14px; }
+    .pr-ligne { display: grid; grid-template-columns: 1fr 100px 1fr; gap: 12px; }
+    .pr-btn { width: 100%; padding: 13px; border: none; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; }
+    .pr-btn.bleu { background: linear-gradient(135deg, #0ea5e9, #0369a1); }
+    .pr-erreur { background: #7f1d1d; color: #fecaca; padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.9rem; }
+    .pr-succes { background: #064e3b; color: #a7f3d0; padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 0.9rem; }
+    .pr-aide { color: #94a3b8; font-size: 0.85rem; margin: 0 0 12px; line-height: 1.5; }
+    .pr-aide a { color: #38bdf8; font-weight: 600; }
+    .pr-item { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; }
+    .pr-item h3 { color: #f8fafc; margin: 0 0 4px; font-size: 1.05rem; }
+    .pr-meta { color: #94a3b8; font-size: 0.85rem; margin: 3px 0; }
+    .pr-tarif { color: #34d399; font-weight: 700; margin-top: 6px; }
+    .pr-suppr { margin-top: 12px; padding: 7px 14px; border-radius: 20px; border: 1px solid #991b1b; background: #0f172a; color: #fca5a5; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    .pr-vide { color: #64748b; font-style: italic; text-align: center; padding: 30px 0; }
+    .pr-retour { display: block; text-align: center; color: #94a3b8; margin-top: 22px; text-decoration: none; font-size: 0.9rem; }
+    @media (max-width: 560px) { .pr-ligne { grid-template-columns: 1fr; } }
+  </style>
+
+  <div class="pr-page">
+    <div class="pr-wrap">
+      <h1>🏛️ Mes prestations</h1>
+      <p class="pr-sub">Listez les services rendus par votre institution : tarif, délai et pièces à fournir.</p>
+
+      @if(flashMessages.has('erreur'))
+        <div class="pr-erreur">{{ flashMessages.get('erreur') }}</div>
+      @end
+      @if(flashMessages.has('succes'))
+        <div class="pr-succes">{{ flashMessages.get('succes') }}</div>
+      @end
+
+      <div class="pr-card">
+        <h2>Importer un fichier</h2>
+        <p class="pr-aide">
+          Format CSV, 500 lignes maximum, 2 Mo. Colonnes : <strong>nom</strong>, categorie, tarif, devise, delai, pieces, description.
+          Seule la colonne « nom » est obligatoire. Tarif vide = non précisé, 0 = gratuit.
+          <a href="/modele-prestations.csv">Télécharger le modèle</a>
+        </p>
+        <form action="/prestations/import" method="POST" enctype="multipart/form-data">
+          {{ csrfField() }}
+          <input type="file" name="fichier" accept=".csv,.txt,text/csv" required>
+          <button type="submit" class="pr-btn bleu">Importer le fichier</button>
+        </form>
+      </div>
+
+      <div class="pr-card">
+        <h2>Ajouter une prestation</h2>
+        <form action="/prestations" method="POST">
+          {{ csrfField() }}
+
+          <label class="champ" for="nom">Nom de la prestation</label>
+          <input type="text" id="nom" name="nom" required minlength="3" maxlength="255" placeholder="Ex : Acte de naissance, Permis de bâtir">
+
+          <label class="champ" for="categorie_id">Catégorie</label>
+          <select id="categorie_id" name="categorie_id" required>
+            <option value="" disabled selected>Choisissez</option>
+            @each(c in categories)
+              <option value="{{ c.id }}">{{ c.icone }} {{ c.nom }}</option>
+            @end
+          </select>
+
+          <div class="pr-ligne">
+            <div>
+              <label class="champ" for="tarif">Tarif (vide = non précisé, 0 = gratuit)</label>
+              <input type="text" id="tarif" name="tarif" inputmode="decimal" placeholder="Ex : 5 000">
+            </div>
+            <div>
+              <label class="champ" for="devise">Devise</label>
+              <select id="devise" name="devise">
+                <option value="CDF">CDF</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+              </select>
+            </div>
+            <div>
+              <label class="champ" for="delai">Délai</label>
+              <input type="text" id="delai" name="delai" placeholder="Ex : 48 heures">
+            </div>
+          </div>
+
+          <label class="champ" for="pieces">Pièces à fournir</label>
+          <textarea id="pieces" name="pieces" rows="2" placeholder="Ex : Pièce d'identité, photocopie du titre, 2 photos"></textarea>
+
+          <label class="champ" for="description">Description (facultatif)</label>
+          <textarea id="description" name="description" rows="2" placeholder="Explications pour l'usager"></textarea>
+
+          <button type="submit" class="pr-btn">Ajouter la prestation</button>
+        </form>
+      </div>
+
+      @each(p in prestations)
+        <div class="pr-item">
+          <h3>{{ p.nom }}</h3>
+          @if(p.categorie)
+            <p class="pr-meta">{{ p.categorie }}</p>
+          @end
+          @if(p.delai)
+            <p class="pr-meta">⏱ Délai : {{ p.delai }}</p>
+          @end
+          @if(p.pieces)
+            <p class="pr-meta">📄 Pièces : {{ p.pieces }}</p>
+          @end
+          @if(p.description)
+            <p class="pr-meta">{{ p.description }}</p>
+          @end
+          <p class="pr-tarif">{{ p.tarif }}</p>
+          <form action="/prestations/{{ p.id }}/supprimer" method="POST" onsubmit="return confirm('Supprimer cette prestation ?')">
+            {{ csrfField() }}
+            <button type="submit" class="pr-suppr">🗑 Supprimer</button>
+          </form>
+        </div>
+      @else
+        <p class="pr-vide">Aucune prestation pour l'instant.</p>
+      @end
+
+      <a class="pr-retour" href="{{ route('web.accueil') }}">← Retour à l'accueil</a>
+    </div>
+  </div>
+
+@end

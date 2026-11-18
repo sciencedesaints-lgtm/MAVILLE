@@ -18,6 +18,7 @@ export const controllers = {
   Membres: () => import('#controllers/membres_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Offres: () => import('#controllers/offres_controller'),
+  Prestations: () => import('#controllers/prestations_controller'),
   Produits: () => import('#controllers/produits_controller'),
   ProfilEdition: () => import('#controllers/profil_edition_controller'),
   Profils: () => import('#controllers/profils_controller'),

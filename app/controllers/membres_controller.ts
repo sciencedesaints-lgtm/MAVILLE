@@ -67,6 +67,35 @@ export default class MembresController {
       services,
       commerces,
       annonces,
+      activites,
     })
   }
+
+  // Annuaire des administrations de la ville
+  async servicesPublics({ view, auth }: HttpContext) {
+      const user = auth.getUserOrFail()
+  
+      const admins = await db
+        .from('utilisateurs')
+        .where('type_compte', 'administration_publique')
+        .where('actif', true)
+        .where('ville', user.ville ?? '')
+        .whereNot('id', user.id)
+        .select('id', 'nom', 'type_institution', 'commune', 'avenue', 'telephone', 'indicatif_pays')
+        .orderBy('nom')
+  
+      const ids = admins.map((a: any) => a.id)
+      const prestations = ids.length
+        ? await db.from('services').whereIn('prestataire_id', ids).where('visible', true).where('disponible', true).select('prestataire_id', 'nom')
+        : []
+  
+      const liste = admins.map((a: any) => ({
+        ...a,
+        tel: a.telephone ? `${a.indicatif_pays ?? ''} ${a.telephone}`.trim() : null,
+        prestations: prestations.filter((p: any) => p.prestataire_id === a.id).map((p: any) => p.nom),
+      }))
+  
+      return view.render('pages/services_publics', { liste, ville: user.ville })
+  }
+
 }

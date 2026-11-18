@@ -37,7 +37,7 @@
                     @if(membre.profession)
             <p class="mb-meta">🎓 {{ membre.profession }}</p>
           @end
-                    @if(activites.length)
+                    @if(activites && activites.length)
             <p class="mb-meta">🏷️ @each(a in activites){{ a.nom }} · @end</p>
           @end
           @if(membre.qualification)
@@ -67,12 +67,22 @@
             @if(s.categorie_nom)
               <p class="mb-meta">{{ s.categorie_nom }}</p>
             @end
+
             @if(s.description)
               <p class="mb-meta">{{ s.description }}</p>
             @end
+
+                        @if(s.delai)
+              <p class="mb-meta">⏱ Délai : {{ s.delai }}</p>
+            @end
+            @if(s.pieces_requises)
+              <p class="mb-meta">📄 Pièces à fournir : {{ s.pieces_requises }}</p>
+            @end
+
             @if(s.prix_min)
               <p class="mb-prix">dès {{ Number(s.prix_min) }} {{ s.devise }}</p>
             @end
+
             @if(s.medias.length)
               <div class="mb-medias">
                 @each(m in s.medias)
