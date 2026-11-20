@@ -52,6 +52,9 @@ export default class extends BaseSchema {
   }
 
   async down() {
-    this.schema.dropTable(this.tableName)
+    this.schema.alterTable(this.tableName, (table) => {
+      table.dropColumn('latitude')
+      table.dropColumn('longitude')
+    })
   }
 }

@@ -2,6 +2,12 @@ import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import Service from '#models/service'
 
+
+const coord = (v: unknown, max: number) => {
+  const n = Number(String(v ?? '').replace(',', '.'))
+  return Number.isFinite(n) && n !== 0 && Math.abs(n) <= max ? n : null
+}
+
 export default class OffresController {
 
     // Écran de choix : service, produit ou commerce
@@ -77,6 +83,8 @@ export default class OffresController {
       adresse: texte('adresse'),
       quartier: texte('quartier'),
       commune: texte('commune'),
+      latitude: coord(request.input('latitude'), 90),
+      longitude: coord(request.input('longitude'), 180),
     })
 
     return response.redirect().toRoute('profil.personnel')

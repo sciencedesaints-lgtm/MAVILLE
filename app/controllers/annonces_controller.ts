@@ -3,6 +3,12 @@ import db from '@adonisjs/lucid/services/db'
 import Annonce from '#models/annonce'
 import { MediaService } from '#services/media_service'
 
+
+const coord = (v: unknown, max: number) => {
+  const n = Number(String(v ?? '').replace(',', '.'))
+  return Number.isFinite(n) && n !== 0 && Math.abs(n) <= max ? n : null
+}
+
 export default class AnnoncesController {
   async create({ view }: HttpContext) {
     const categories = await db
@@ -69,6 +75,8 @@ export default class AnnoncesController {
       commune: texte('commune'),
       avenue: texte('avenue'),
       repere: texte('repere'),
+      latitude: coord(request.input('latitude'), 90),
+      longitude: coord(request.input('longitude'), 180),
     })
 
         // Photos et vidéos (facultatif)

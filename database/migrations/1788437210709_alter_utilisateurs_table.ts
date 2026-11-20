@@ -17,15 +17,28 @@ export default class extends BaseSchema {
       table.string('type_institution').nullable()
       table.string('nom_institution').nullable()
       table.string('tutelle').nullable()
+      table.string('profession', 150).nullable()
+      table.string('qualification', 255).nullable()
     })
   }
 
   async down() {
     this.schema.alterTable(this.tableName, (table) => {
       table.dropColumns([
-        'type_compte', 'pays', 'ville', 'type_structure', 
-        'nom_entreprise', 'domaine', 'avenue', 'numero', 
-        'indicatif_pays', 'type_institution', 'nom_institution', 'tutelle'
+        'type_compte',
+        'pays',
+        'ville',
+        'type_structure',
+        'nom_entreprise',
+        'domaine',
+        'avenue',
+        'numero',
+        'indicatif_pays',
+        'type_institution',
+        'nom_institution',
+        'tutelle',
+        'profession',
+        'qualification',
       ])
     })
   }

@@ -2,6 +2,12 @@ import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import Etablissement from '#models/etablissement'
 
+
+const coord = (v: unknown, max: number) => {
+  const n = Number(String(v ?? '').replace(',', '.'))
+  return Number.isFinite(n) && n !== 0 && Math.abs(n) <= max ? n : null
+}
+
 export default class CommercesController {
   async create({ view }: HttpContext) {
     const categories = await db
@@ -92,6 +98,8 @@ export default class CommercesController {
       whatsapp: texte('whatsapp'),
       mobileMoney: mobileMoney.length ? mobileMoney : null,
       livraison: request.input('livraison') === '1',
+      latitude: coord(request.input('latitude'), 90),
+      longitude: coord(request.input('longitude'), 180),
     })
 
     return response.redirect().toRoute('profil.personnel')

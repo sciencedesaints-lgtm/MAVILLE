@@ -137,10 +137,19 @@
           </div>
         </div>
 
+
                 <h2>Photos et vidéos</h2>
 
         <label class="champ" for="medias">Jusqu'à 5 fichiers (photos ou vidéos, 30 Mo maximum chacun)</label>
         <input type="file" id="medias" name="medias" accept="image/*,video/mp4,video/webm,video/quicktime" multiple>
+
+        <h2>Position sur la carte</h2>
+        <p style="color:#94a3b8; font-size:0.85rem; margin:0 0 10px;">Faites cette étape depuis l'endroit de votre offre. Les clients proches de vous vous trouveront en premier.</p>
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
+        <button type="button" id="btn-gps" style="background:#0369a1; margin-bottom:6px;">📍 Utiliser ma position actuelle</button>
+        <p id="etat-gps" style="color:#34d399; font-size:0.85rem; margin:0 0 14px;"></p>
+        <script src="/gps.js" defer></script>
 
         <button type="submit">Publier mon annonce</button>
       </form>

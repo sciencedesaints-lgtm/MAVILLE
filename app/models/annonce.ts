@@ -73,6 +73,12 @@ export default class Annonce extends BaseModel {
   @column()
   declare nombreVues: number
 
+  @column()
+  declare latitude: number | null
+
+  @column()
+  declare longitude: number | null
+
   @belongsTo(() => Utilisateur, { foreignKey: 'vendeurId' })
   declare vendeur: BelongsTo<typeof Utilisateur>
 
