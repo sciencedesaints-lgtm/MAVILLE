@@ -234,6 +234,13 @@ export default class ResultatsController {
       }
     }
 
+        // Entreprises et administrations : trouvées par leur nom, leur domaine
+    // ET leurs activités cochées (table utilisateur_activites)
+    const EXPR_ACTIVITES = `(SELECT string_agg(a2.nom, ' | ' ORDER BY a2.ordre, a2.nom)
+      FROM utilisateur_activites ua2
+      JOIN activites a2 ON a2.id = ua2.activite_id
+      WHERE ua2.utilisateur_id = u.id)`
+
     for (const [genre, typeCompte] of [
       ['entreprise', 'entreprise_agence'],
       ['administration', 'administration_publique'],
@@ -245,14 +252,17 @@ export default class ResultatsController {
         .where('u.ville', user.ville ?? '')
         .where('u.actif', true)
         .whereNot('u.id', user.id)
+        .select('u.*', db.raw(`${EXPR_ACTIVITES} as activites_noms`))
         .limit(50)
       appliquer(
         query,
-        ['u.nom', 'u.domaine', 'u.type_structure', 'u.type_institution'],
+        ['u.nom', 'u.domaine', 'u.type_structure', 'u.type_institution', EXPR_ACTIVITES],
         ['u.tutelle'],
         ['u.commune', 'u.avenue']
       )
       for (const r of await query) {
+        const details: string[] = []
+        if (r.activites_noms) details.push(`🏷️ ${String(r.activites_noms).split(' | ').join(' · ')}`)
         resultats.push({
           id: r.id,
           genre,
@@ -264,55 +274,55 @@ export default class ResultatsController {
           telephone: r.telephone ? `${r.indicatif_pays ?? ''} ${r.telephone}`.trim() : null,
           prix: null,
           description: r.tutelle ? `Tutelle : ${r.tutelle}` : null,
+          details,
+          statut: null,
+        })
+      }
+    }
+    
+    // Particuliers trouvés par leur profession ou leur qualification (fautes tolérées)
+    if (veut('professionnel') && (motsUniques.length || type === 'professionnel')) {
+      const query = db
+        .from('utilisateurs as u')
+        .where('u.type_compte', 'personnel')
+        .where('u.ville', user.ville ?? '')
+        .where('u.actif', true)
+        .whereNotNull('u.profession')
+        .whereNot('u.id', user.id)
+        .limit(50)
+
+      // "plomberie" et "plombier" partagent le radical "plomb"
+      const radicaux = [...new Set(motsUniques.map((m) => (m.length >= 7 ? m.slice(0, 5) : m)))]
+      if (radicaux.length) {
+        const morceaux: string[] = []
+        const valeurs: string[] = []
+        for (const rad of radicaux) {
+          const c = conditionFloue(['u.profession', 'u.qualification'], rad)
+          morceaux.push(`(${c.sql})`)
+          valeurs.push(...c.params)
+        }
+        query.whereRaw(`(${morceaux.join(' OR ')})`, valeurs)
+      }
+
+      for (const r of await query) {
+        resultats.push({
+          id: r.id,
+          genre: 'professionnel',
+          titre: nomComplet(r.prenom, r.nom),
+          proprietaireId: r.id,
+          proprietaire: null,
+          categorie: r.profession,
+          lieu: lieu(r.quartier, r.commune, r.ville),
+          telephone: r.telephone,
+          prix: null,
+          description: coupe(r.qualification),
           details: [],
           statut: null,
         })
       }
     }
 
-        // Particuliers trouvés par leur profession ou leur qualification (fautes tolérées)
-        if (veut('professionnel') && (motsUniques.length || type === 'professionnel')) {
-          const query = db
-            .from('utilisateurs as u')
-            .where('u.type_compte', 'personnel')
-            .where('u.ville', user.ville ?? '')
-            .where('u.actif', true)
-            .whereNotNull('u.profession')
-            .whereNot('u.id', user.id)
-            .limit(50)
-    
-          // "plomberie" et "plombier" partagent le radical "plomb"
-          const radicaux = [...new Set(motsUniques.map((m) => (m.length >= 7 ? m.slice(0, 5) : m)))]
-          if (radicaux.length) {
-            const morceaux: string[] = []
-            const valeurs: string[] = []
-            for (const rad of radicaux) {
-              const c = conditionFloue(['u.profession', 'u.qualification'], rad)
-              morceaux.push(`(${c.sql})`)
-              valeurs.push(...c.params)
-            }
-            query.whereRaw(`(${morceaux.join(' OR ')})`, valeurs)
-          }
-    
-          for (const r of await query) {
-            resultats.push({
-              id: r.id,
-              genre: 'professionnel',
-              titre: nomComplet(r.prenom, r.nom),
-              proprietaireId: r.id,
-              proprietaire: null,
-              categorie: r.profession,
-              lieu: lieu(r.quartier, r.commune, r.ville),
-              telephone: r.telephone,
-              prix: null,
-              description: coupe(r.qualification),
-              details: [],
-              statut: null,
-            })
-          }
-        }
-
-            // Articles des commerces : le résultat est le commerce, avec les articles trouvés
+    // Articles des commerces : le résultat est le commerce, avec les articles trouvés
     const aTermes = motsUniques.length || lieuxUniques.length || expressions.length
     if (ville && veut('commerce') && aTermes) {
       const query = db

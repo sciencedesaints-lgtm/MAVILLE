@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 
 export default class MembresController {
-  async show({ params, view, response }: HttpContext) {
+  async show({ params, view, response, auth }: HttpContext) {
     // Un identifiant invalide (pas un UUID) ferait planter PostgreSQL
     const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     if (!uuid.test(params.id)) {
@@ -13,6 +13,10 @@ export default class MembresController {
     if (!membre) {
       return response.notFound('Profil introuvable')
     }
+
+    // Est-ce que la personne connectée regarde son propre profil ?
+    const connecte = await auth.check()
+    const estProprietaire = connecte && auth.user?.id === membre.id
 
     const services = await db
       .from('services as s')
@@ -35,7 +39,7 @@ export default class MembresController {
       .where('a.visible', true)
       .select('a.*', 'c.nom as categorie_nom')
 
-          // Photos et vidéos de toutes les offres de ce membre
+    // Photos et vidéos de toutes les offres de ce membre
     const toutes = [...services, ...commerces, ...annonces]
     const ids = toutes.map((o: any) => o.id)
     const medias = ids.length
@@ -47,10 +51,10 @@ export default class MembresController {
     }
 
     const activites = await db
-    .from('utilisateur_activites as ua')
-    .join('activites as a', 'a.id', 'ua.activite_id')
-    .where('ua.utilisateur_id', membre.id)
-    .select('a.nom')
+      .from('utilisateur_activites as ua')
+      .join('activites as a', 'a.id', 'ua.activite_id')
+      .where('ua.utilisateur_id', membre.id)
+      .select('a.nom')
 
     const nomComplet = [membre.prenom, membre.nom].filter(Boolean).join(' ')
     const initiales = nomComplet
@@ -68,34 +72,39 @@ export default class MembresController {
       commerces,
       annonces,
       activites,
+      estProprietaire,
     })
   }
 
   // Annuaire des administrations de la ville
   async servicesPublics({ view, auth }: HttpContext) {
-      const user = auth.getUserOrFail()
-  
-      const admins = await db
-        .from('utilisateurs')
-        .where('type_compte', 'administration_publique')
-        .where('actif', true)
-        .where('ville', user.ville ?? '')
-        .whereNot('id', user.id)
-        .select('id', 'nom', 'type_institution', 'commune', 'avenue', 'telephone', 'indicatif_pays')
-        .orderBy('nom')
-  
-      const ids = admins.map((a: any) => a.id)
-      const prestations = ids.length
-        ? await db.from('services').whereIn('prestataire_id', ids).where('visible', true).where('disponible', true).select('prestataire_id', 'nom')
-        : []
-  
-      const liste = admins.map((a: any) => ({
-        ...a,
-        tel: a.telephone ? `${a.indicatif_pays ?? ''} ${a.telephone}`.trim() : null,
-        prestations: prestations.filter((p: any) => p.prestataire_id === a.id).map((p: any) => p.nom),
-      }))
-  
-      return view.render('pages/services_publics', { liste, ville: user.ville })
-  }
+    const user = auth.getUserOrFail()
 
+    const admins = await db
+      .from('utilisateurs')
+      .where('type_compte', 'administration_publique')
+      .where('actif', true)
+      .where('ville', user.ville ?? '')
+      .whereNot('id', user.id)
+      .select('id', 'nom', 'type_institution', 'commune', 'avenue', 'telephone', 'indicatif_pays')
+      .orderBy('nom')
+
+    const ids = admins.map((a: any) => a.id)
+    const prestations = ids.length
+      ? await db
+          .from('services')
+          .whereIn('prestataire_id', ids)
+          .where('visible', true)
+          .where('disponible', true)
+          .select('prestataire_id', 'nom')
+      : []
+
+    const liste = admins.map((a: any) => ({
+      ...a,
+      tel: a.telephone ? `${a.indicatif_pays ?? ''} ${a.telephone}`.trim() : null,
+      prestations: prestations.filter((p: any) => p.prestataire_id === a.id).map((p: any) => p.nom),
+    }))
+
+    return view.render('pages/services_publics', { liste, ville: user.ville })
+  }
 }

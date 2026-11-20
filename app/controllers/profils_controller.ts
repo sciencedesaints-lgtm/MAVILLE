@@ -38,20 +38,15 @@ export default class ProfilsController {
     return view.render('profils/personnel', { user: userData })
   }
 
-  public async entreprise({ view, auth }: HttpContext) {
-    const user = auth.user
-    if (user) {
-      await user.refresh()
-    }
-    return view.render('profils/entreprise', { user })
+  // Entreprise et administration : on utilise le vrai profil public (/membre/:id)
+  public async entreprise({ response, auth }: HttpContext) {
+    const user = auth.getUserOrFail()
+    return response.redirect(`/membre/${user.id}`)
   }
 
-  public async administration({ view, auth }: HttpContext) {
-    const user = auth.user
-    if (user) {
-      await user.refresh()
-    }
-    return view.render('profils/administration', { user })
+  public async administration({ response, auth }: HttpContext) {
+    const user = auth.getUserOrFail()
+    return response.redirect(`/membre/${user.id}`)
   }
 
   public async updateAvatar({ request, response, auth }: HttpContext) {

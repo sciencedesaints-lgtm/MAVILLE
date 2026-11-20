@@ -16,7 +16,10 @@
     .pm-aide { color: #64748b; font-size: 0.8rem; margin: -10px 0 16px; }
     .pm-banniere { height: 110px; border-radius: 12px; background: #0f172a center/cover no-repeat; margin-bottom: 10px; border: 1px solid #334155; }
     .pm-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 1px solid #334155; }
-    @media (max-width: 520px) { .pm-card .ligne { grid-template-columns: 1fr; } }
+    .pm-activites { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .pm-activite { display: flex; align-items: center; gap: 8px; background: #0f172a; border: 1px solid #475569; border-radius: 10px; padding: 10px 12px; color: #e2e8f0; font-size: 0.88rem; cursor: pointer; }
+    .pm-activite input { accent-color: #10b981; width: 16px; height: 16px; flex-shrink: 0; }
+    @media (max-width: 520px) { .pm-card .ligne, .pm-activites { grid-template-columns: 1fr; } }
   </style>
 
   <div class="pm-page">
@@ -63,6 +66,24 @@
         <label class="champ" for="pseudo">Pseudo (facultatif)</label>
         <input type="text" id="pseudo" name="pseudo" value="{{ moi.pseudo || '' }}">
 
+        @if(moi.type_compte === 'entreprise_agence' || moi.type_compte === 'administration_publique')
+          <h2>Mes activités</h2>
+
+          @if(activites.length > 0)
+            <p class="pm-aide" style="margin-top: 0;">Cochez au moins une activité. Les personnes qui cherchent ce domaine vous trouveront.</p>
+            <div class="pm-activites">
+              @each(a in activites)
+                <label class="pm-activite">
+                  <input type="checkbox" name="activites" value="{{ a.id }}" {{ a.coche ? 'checked' : '' }}>
+                  <span>{{ a.nom }}</span>
+                </label>
+              @end
+            </div>
+          @else
+            <div class="pm-erreur">Aucune activité n'est disponible pour votre type de compte.</div>
+          @end
+        @end
+
         <h2>Profession et qualification</h2>
 
         <label class="champ" for="profession">Profession</label>
@@ -88,7 +109,7 @@
         <button type="submit">Enregistrer</button>
       </form>
 
-      <a class="retour" href="{{ route('profil.personnel') }}">← Retour au profil</a>
+      <a class="retour" href="{{ route(retourRoute) }}">← Retour au profil</a>
     </div>
   </div>
 

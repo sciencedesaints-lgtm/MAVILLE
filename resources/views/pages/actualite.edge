@@ -54,6 +54,11 @@
     .boost-card { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #bbf7d0; border-radius: 16px; padding: 20px; }
     .btn-boost { background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 12px; }
     @media (max-width: 1100px) { .right-column { display: none; } }
+    .post-media-container img.post-media { cursor: zoom-in; }
+.visionneur { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 10000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+.visionneur.ouvert { display: flex; }
+.visionneur img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; cursor: zoom-out; }
+.visionneur-fermer { position: absolute; top: 16px; right: 20px; background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 1.6rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; }
   </style>
 
   <div class="maville-layout">
@@ -191,10 +196,36 @@
     </div>
   </div>
 
-  <script>
+    <div class="visionneur" id="visionneur">
+    <button type="button" class="visionneur-fermer" id="visionneur-fermer" aria-label="Fermer">✕</button>
+    <img id="visionneur-img" src="" alt="Photo en grand">
+  </div>
+
+    <script>
     // Affiche le nom du fichier choisi
     document.getElementById('champ-media').addEventListener('change', function () {
       document.getElementById('nom-fichier').textContent = this.files[0] ? '✅ ' + this.files[0].name : ''
+    })
+
+    // Visionneur plein écran des photos
+    const visionneur = document.getElementById('visionneur')
+    const visionneurImg = document.getElementById('visionneur-img')
+
+    function fermerVisionneur() {
+      visionneur.classList.remove('ouvert')
+      visionneurImg.src = ''
+    }
+
+    document.querySelectorAll('img.post-media').forEach(function (img) {
+      img.addEventListener('click', function () {
+        visionneurImg.src = img.src
+        visionneur.classList.add('ouvert')
+      })
+    })
+
+    visionneur.addEventListener('click', fermerVisionneur)
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') fermerVisionneur()
     })
   </script>
   <script src="/notifications.js" defer></script>
