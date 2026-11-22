@@ -27,4 +27,5 @@ export const controllers = {
   Resultats: () => import('#controllers/resultats_controller'),
   Session: () => import('#controllers/session_controller'),
   Uploads: () => import('#controllers/uploads_controller'),
+  EnService: () => import('#controllers/en_service_controller'),
 }

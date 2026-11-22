@@ -18,6 +18,9 @@ type Resultat = {
   nbArticles?: number
   voirPlus?: string | null
   statut: string | null
+  distanceKm: number | null
+  distanceTexte: string | null
+  entete: string | null
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -25,14 +28,41 @@ const MOTS_VENTE = new Set(['vendre', 'vente', 'vend', 'vends', 'acheter', 'acha
 const MOTS_LOCATION = new Set(['louer', 'location', 'loue', 'loyer', 'locat', 'louez'])
 const MARQUEURS_LIEU = new Set(['quartier', 'commune', 'avenue', 'av', 'rue', 'marche'])
 
+const RAYON_KM = 2
+
 const coupe = (t: string | null) => (t && t.length > 180 ? t.slice(0, 177) + '…' : t || null)
 
 export default class ResultatsController {
-  async index({ request, view, auth }: HttpContext) {
+  async index({ request, view, auth, response }: HttpContext) {
     const user = auth.getUserOrFail()
     const q = String(request.input('q') ?? '').trim()
     const type = String(request.input('type') ?? 'tous')
     const rechercheId = String(request.input('r') ?? '')
+
+    // ---------- Position de celui qui cherche ----------
+    const nb = (v: unknown) => {
+      const n = Number(String(v ?? '').replace(',', '.'))
+      return String(v ?? '').trim() !== '' && Number.isFinite(n) ? n : null
+    }
+    const maLat = nb(request.input('lat'))
+    const maLng = nb(request.input('lng'))
+    const positionConnue =
+      maLat !== null && maLng !== null && Math.abs(maLat) <= 90 && Math.abs(maLng) <= 180
+
+    // Distance en km (formule de haversine) ; null si l'offre n'a pas de position
+    const distance = (lat: unknown, lng: unknown): number | null => {
+      if (!positionConnue || lat === null || lat === undefined || lng === null || lng === undefined) return null
+      const la = Number(lat)
+      const ln = Number(lng)
+      if (!Number.isFinite(la) || !Number.isFinite(ln) || (la === 0 && ln === 0)) return null
+      const rad = (d: number) => (d * Math.PI) / 180
+      const dLat = rad(la - maLat!)
+      const dLng = rad(ln - maLng!)
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(rad(maLat!)) * Math.cos(rad(la)) * Math.sin(dLng / 2) ** 2
+      return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    }
 
     // ---------- Analyse de la phrase ----------
     let texteNorm = normaliser(q)
@@ -114,6 +144,7 @@ export default class ResultatsController {
       query.whereRaw(`(${score}) >= 2`, valeurs)
       query.orderByRaw(`(${score}) DESC`, valeurs)
     }
+
     // ---------- Requêtes ----------
     const ville = await db.from('villes').where('nom', user.ville ?? '').first()
     const resultats: Resultat[] = []
@@ -134,12 +165,16 @@ export default class ResultatsController {
         .limit(50)
       appliquer(query, ['s.nom', 'c.nom'], ['s.description'], ['s.quartier', 's.commune', 's.adresse'])
       for (const r of await query) {
+                // Service itinérant : position valable seulement si envoyée il y a moins de 10 minutes
+                const enDirect =
+                r.itinerant && r.position_maj_at && Date.now() - new Date(r.position_maj_at).getTime() < 10 * 60 * 1000
         const details: string[] = []
         if (r.intervention_domicile) details.push('🏠 À domicile')
         if (r.urgence) details.push('⚡ Urgences')
         if (r.sur_rendez_vous) details.push('📅 Sur rendez-vous')
         if (r.prix_negociable) details.push('🤝 Prix négociable')
         if (r.delai) details.push(`⏱ ${r.delai}`)
+        if (r.itinerant) details.push(enDirect ? '🟢 En service, position en direct' : '⚪ Itinérant : hors service pour le moment')
         resultats.push({
           id: r.id,
           genre: 'service',
@@ -153,6 +188,9 @@ export default class ResultatsController {
           description: coupe(r.description),
           details,
           statut: null,
+          distanceKm: r.itinerant ? (enDirect ? distance(r.latitude, r.longitude) : null) : distance(r.latitude, r.longitude),
+          distanceTexte: null,
+          entete: null,
         })
       }
     }
@@ -193,6 +231,9 @@ export default class ResultatsController {
           description: coupe(r.description),
           details,
           statut: null,
+          distanceKm: distance(r.latitude, r.longitude),
+          distanceTexte: null,
+          entete: null,
         })
       }
     }
@@ -230,12 +271,14 @@ export default class ResultatsController {
           description: coupe(r.description),
           details,
           statut: null,
+          distanceKm: distance(r.latitude, r.longitude),
+          distanceTexte: null,
+          entete: null,
         })
       }
     }
 
-        // Entreprises et administrations : trouvées par leur nom, leur domaine
-    // ET leurs activités cochées (table utilisateur_activites)
+    // Entreprises et administrations : nom, domaine ET activités cochées
     const EXPR_ACTIVITES = `(SELECT string_agg(a2.nom, ' | ' ORDER BY a2.ordre, a2.nom)
       FROM utilisateur_activites ua2
       JOIN activites a2 ON a2.id = ua2.activite_id
@@ -276,10 +319,13 @@ export default class ResultatsController {
           description: r.tutelle ? `Tutelle : ${r.tutelle}` : null,
           details,
           statut: null,
+          distanceKm: distance(r.latitude, r.longitude),
+          distanceTexte: null,
+          entete: null,
         })
       }
     }
-    
+
     // Particuliers trouvés par leur profession ou leur qualification (fautes tolérées)
     if (veut('professionnel') && (motsUniques.length || type === 'professionnel')) {
       const query = db
@@ -291,7 +337,6 @@ export default class ResultatsController {
         .whereNot('u.id', user.id)
         .limit(50)
 
-      // "plomberie" et "plombier" partagent le radical "plomb"
       const radicaux = [...new Set(motsUniques.map((m) => (m.length >= 7 ? m.slice(0, 5) : m)))]
       if (radicaux.length) {
         const morceaux: string[] = []
@@ -318,6 +363,9 @@ export default class ResultatsController {
           description: coupe(r.qualification),
           details: [],
           statut: null,
+          distanceKm: distance(r.latitude, r.longitude),
+          distanceTexte: null,
+          entete: null,
         })
       }
     }
@@ -345,7 +393,9 @@ export default class ResultatsController {
           'e.telephone as e_tel',
           'e.whatsapp as e_wa',
           'e.horaires as e_horaires',
-          'e.livraison as e_livraison'
+          'e.livraison as e_livraison',
+          'e.latitude as e_lat',
+          'e.longitude as e_lng'
         )
         .limit(100)
       appliquer(
@@ -410,6 +460,9 @@ export default class ResultatsController {
               articles,
               nbArticles: nbParCommerce.get(idCommerce) ?? articles.length,
               voirPlus: `/commerce/${idCommerce}/catalogue`,
+              distanceKm: distance(premier.e_lat, premier.e_lng),
+              distanceTexte: null,
+              entete: null,
             })
           }
         }
@@ -430,17 +483,57 @@ export default class ResultatsController {
       }
     }
 
-    const rang = (s: string | null) =>
-      s === 'disponible' ? 0 : s === 'en_attente' ? 1 : s === 'indisponible' ? 3 : 2
-    resultats.sort((a, b) => rang(a.statut) - rang(b.statut))
-
     // ---------- Corbeille ----------
     const masques = await db.from('resultats_masques').where('utilisateur_id', user.id)
     const caches = new Set(masques.map((m: any) => `${m.genre}:${m.offre_id}`))
     const visibles = resultats.filter((r) => !caches.has(`${r.genre}:${r.id}`))
 
+    // ---------- Texte de la distance ----------
+    for (const r of visibles) {
+      if (r.distanceKm !== null) {
+        r.distanceTexte =
+          r.distanceKm < 1 ? `à ${Math.round(r.distanceKm * 100) * 10} m de vous` : `à ${r.distanceKm.toFixed(1)} km de vous`
+      }
+    }
+
+    // ---------- Organisation en blocs ----------
+    const rang = (s: string | null) =>
+      s === 'disponible' ? 0 : s === 'en_attente' ? 1 : s === 'indisponible' ? 3 : 2
+
+    let liste: Resultat[] = []
+    let nbProches = 0
+    let messageProche: string | null = null
+
+    if (lieuxUniques.length) {
+      // Un lieu est cité dans la phrase : il remplace la proximité
+      visibles.sort((a, b) => rang(a.statut) - rang(b.statut))
+      if (visibles.length) visibles[0].entete = '📌 Résultats pour le lieu demandé'
+      liste = visibles
+    } else {
+      const proches = visibles
+        .filter((r) => r.distanceKm !== null && r.distanceKm <= RAYON_KM)
+        .sort((a, b) => (a.distanceKm as number) - (b.distanceKm as number))
+      const autres = visibles
+        .filter((r) => !(r.distanceKm !== null && r.distanceKm <= RAYON_KM))
+        .sort((a, b) => rang(a.statut) - rang(b.statut) || (a.distanceKm ?? 999) - (b.distanceKm ?? 999))
+
+      nbProches = proches.length
+      if (positionConnue) {
+        if (proches.length) {
+          proches[0].entete = `📍 Près de vous (moins de ${RAYON_KM} km)`
+        } else {
+          messageProche = `Aucun résultat dans un rayon de ${RAYON_KM} km autour de vous.`
+        }
+        if (autres.length) autres[0].entete = '🏙️ Dans toute la ville'
+      }
+      liste = [...proches, ...autres]
+    }
+
+    // Les en-têtes ne doivent pas être gênés par la corbeille ou les filtres
+    response.header('Cache-Control', 'no-store')
+
     return view.render('pages/resultats', {
-      resultats: visibles,
+      resultats: liste,
       q,
       type,
       portee: 'ville',
@@ -448,6 +541,12 @@ export default class ResultatsController {
       villeConnue: !!ville,
       villeNom: user.ville,
       nbCorbeille: masques.length,
+      lat: positionConnue ? String(maLat) : '',
+      lng: positionConnue ? String(maLng) : '',
+      positionConnue,
+      nbProches,
+      messageProche,
+      lieuCite: lieuxUniques.length > 0,
     })
   }
 }

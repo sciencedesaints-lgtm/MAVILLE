@@ -129,7 +129,7 @@ export class AlertesVilleSchema extends BaseModel {
 }
 
 export class AnnonceSchema extends BaseModel {
-  static $columns = ['avenue', 'categorieId', 'commune', 'createdAt', 'description', 'devise', 'disponible', 'etat', 'id', 'nombreVues', 'periodicite', 'prix', 'prixNegociable', 'quartier', 'repere', 'slug', 'telephone', 'titre', 'typeOffre', 'updatedAt', 'vendeurId', 'villeId', 'visible', 'whatsapp'] as const
+  static $columns = ['avenue', 'categorieId', 'commune', 'createdAt', 'description', 'devise', 'disponible', 'etat', 'id', 'latitude', 'longitude', 'nombreVues', 'periodicite', 'prix', 'prixNegociable', 'quartier', 'repere', 'slug', 'telephone', 'titre', 'typeOffre', 'updatedAt', 'vendeurId', 'villeId', 'visible', 'whatsapp'] as const
   $columns = AnnonceSchema.$columns
   @column()
   declare avenue: string | null
@@ -149,6 +149,10 @@ export class AnnonceSchema extends BaseModel {
   declare etat: string | null
   @column({ isPrimary: true })
   declare id: string
+  @column()
+  declare latitude: string | null
+  @column()
+  declare longitude: string | null
   @column()
   declare nombreVues: number | null
   @column()
@@ -1208,7 +1212,7 @@ export class RoleSchema extends BaseModel {
 }
 
 export class ServiceSchema extends BaseModel {
-  static $columns = ['adresse', 'categorieId', 'commune', 'createdAt', 'delai', 'description', 'devise', 'disponible', 'email', 'id', 'interventionDomicile', 'latitude', 'longitude', 'nom', 'nombreAvis', 'nombreVues', 'noteMoyenne', 'ordreAffichage', 'piecesRequises', 'position', 'prestataireId', 'prixMax', 'prixMin', 'prixNegociable', 'quartier', 'siteWeb', 'slug', 'surRendezVous', 'telephone', 'updatedAt', 'urgence', 'villeId', 'visible'] as const
+  static $columns = ['adresse', 'categorieId', 'commune', 'createdAt', 'delai', 'description', 'devise', 'disponible', 'email', 'id', 'interventionDomicile', 'itinerant', 'latitude', 'longitude', 'nom', 'nombreAvis', 'nombreVues', 'noteMoyenne', 'ordreAffichage', 'piecesRequises', 'position', 'positionMajAt', 'prestataireId', 'prixMax', 'prixMin', 'prixNegociable', 'quartier', 'siteWeb', 'slug', 'surRendezVous', 'telephone', 'updatedAt', 'urgence', 'villeId', 'visible'] as const
   $columns = ServiceSchema.$columns
   @column()
   declare adresse: string | null
@@ -1233,6 +1237,8 @@ export class ServiceSchema extends BaseModel {
   @column()
   declare interventionDomicile: boolean | null
   @column()
+  declare itinerant: boolean
+  @column()
   declare latitude: string | null
   @column()
   declare longitude: string | null
@@ -1250,6 +1256,8 @@ export class ServiceSchema extends BaseModel {
   declare piecesRequises: string | null
   @column()
   declare position: any | null
+  @column.dateTime()
+  declare positionMajAt: DateTime | null
   @column()
   declare prestataireId: string
   @column()

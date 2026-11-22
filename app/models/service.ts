@@ -104,6 +104,9 @@ export default class Service extends BaseModel {
   @column()
   declare ordreAffichage: number
 
+  @column()
+  declare itinerant: boolean
+
   @belongsTo(() => Utilisateur, {
     foreignKey: 'prestataireId',
   })

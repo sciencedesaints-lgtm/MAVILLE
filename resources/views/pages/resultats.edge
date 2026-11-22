@@ -10,6 +10,8 @@
     .filtres a { padding: 8px 14px; border-radius: 20px; background: #1e293b; border: 1px solid #334155; color: #cbd5e1; text-decoration: none; font-size: 0.85rem; }
     .filtres a.actif { background: #064e3b; border-color: #10b981; color: #fff; font-weight: 700; }
     .res-info { color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px; }
+    .res-alerte { background: #1e293b; border: 1px solid #334155; border-left: 4px solid #fbbf24; color: #fde68a; padding: 10px 14px; border-radius: 10px; font-size: 0.88rem; margin-bottom: 14px; }
+    .bloc-titre { color: #38bdf8; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 22px 0 10px; border-bottom: 1px solid #334155; padding-bottom: 6px; }
     .carte { position: relative; background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 18px 20px; margin-bottom: 12px; cursor: pointer; }
     .carte:hover { border-color: #10b981; }
     .carte h3 a::after { content: ''; position: absolute; inset: 0; }
@@ -21,7 +23,9 @@
     .badge.annonce { background: #7c3aed; }
     .badge.entreprise { background: #0f766e; }
     .badge.administration { background: #be123c; }
+    .badge.professionnel { background: #0369a1; }
     .meta { color: #94a3b8; font-size: 0.88rem; margin: 3px 0; }
+    .distance { color: #34d399; font-size: 0.85rem; font-weight: 600; margin: 3px 0; }
     .prix { color: #34d399; font-weight: 700; margin-top: 6px; }
     .tel { position: relative; z-index: 1; display: inline-block; margin-top: 10px; padding: 8px 16px; border-radius: 20px; background: #059669; color: #fff; text-decoration: none; font-size: 0.88rem; font-weight: 600; }
     .vide { text-align: center; color: #94a3b8; padding: 40px 0; }
@@ -30,19 +34,18 @@
     .btn-supp { padding: 8px 14px; border-radius: 20px; border: 1px solid #475569; background: #0f172a; color: #cbd5e1; font-size: 0.82rem; cursor: pointer; }
     .lien-corbeille { display: block; text-align: right; color: #94a3b8; font-size: 0.85rem; text-decoration: none; margin-bottom: 12px; }
     .etat { display: inline-block; margin-top: 8px; padding: 3px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; background: #334155; color: #e2e8f0; }
-.etat.disponible { background: #065f46; }
-.etat.indisponible { background: #92400e; }
-.desc { color: #cbd5e1; font-size: 0.88rem; margin: 6px 0; line-height: 1.45; }
-.puces { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.puce { background: #0f172a; border: 1px solid #334155; color: #cbd5e1; font-size: 0.75rem; padding: 2px 10px; border-radius: 12px; }
-.badge.professionnel { background: #0369a1; }
-.articles { margin-top: 12px; border-top: 1px solid #334155; padding-top: 10px; }
-.article { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; }
-.article img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
-.article-nom { color: #f8fafc; font-weight: 600; font-size: 0.95rem; margin: 0; }
-.article-prix { color: #34d399; font-weight: 700; font-size: 0.9rem; margin: 2px 0; }
-.article-desc { color: #94a3b8; font-size: 0.82rem; margin: 2px 0; }
-.voir-plus { position: relative; z-index: 1; display: inline-block; margin-top: 8px; padding: 8px 16px; border-radius: 20px; background: #0369a1; color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+    .etat.disponible { background: #065f46; }
+    .etat.indisponible { background: #92400e; }
+    .desc { color: #cbd5e1; font-size: 0.88rem; margin: 6px 0; line-height: 1.45; }
+    .puces { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .puce { background: #0f172a; border: 1px solid #334155; color: #cbd5e1; font-size: 0.75rem; padding: 2px 10px; border-radius: 12px; }
+    .articles { margin-top: 12px; border-top: 1px solid #334155; padding-top: 10px; }
+    .article { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; }
+    .article img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+    .article-nom { color: #f8fafc; font-weight: 600; font-size: 0.95rem; margin: 0; }
+    .article-prix { color: #34d399; font-weight: 700; font-size: 0.9rem; margin: 2px 0; }
+    .article-desc { color: #94a3b8; font-size: 0.82rem; margin: 2px 0; }
+    .voir-plus { position: relative; z-index: 1; display: inline-block; margin-top: 8px; padding: 8px 16px; border-radius: 20px; background: #0369a1; color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
   </style>
 
   <div class="res-page">
@@ -53,33 +56,41 @@
         <input type="hidden" name="type" value="{{ type }}">
         <input type="hidden" name="portee" value="{{ portee }}">
         <input type="hidden" name="r" value="{{ rechercheId }}">
+        <input type="hidden" name="lat" value="{{ lat }}">
+        <input type="hidden" name="lng" value="{{ lng }}">
         <button type="submit">Rechercher</button>
       </form>
 
       <a class="lien-corbeille" href="{{ route('corbeille.index') }}">🗑 Corbeille ({{ nbCorbeille }})</a>
 
       <div class="filtres">
-    <a href="?q={{ q }}&type={{ type }}&portee=ville&r={{ rechercheId }}" class="{{ portee === 'ville' ? 'actif' : '' }}">📍 Ma ville</a>
-    <a href="?q={{ q }}&type={{ type }}&portee=pays&r={{ rechercheId }}" class="{{ portee === 'pays' ? 'actif' : '' }}">🏳️ Mon pays</a>
-    <a href="?q={{ q }}&type={{ type }}&portee=monde&r={{ rechercheId }}" class="{{ portee === 'monde' ? 'actif' : '' }}">🌍 Monde</a>
-</div>
+        <a href="?q={{ q }}&type=tous&portee={{ portee }}&r={{ rechercheId }}&lat={{ lat }}&lng={{ lng }}" class="{{ type === 'tous' ? 'actif' : '' }}">Tout</a>
+        <a href="?q={{ q }}&type=service&portee={{ portee }}&r={{ rechercheId }}&lat={{ lat }}&lng={{ lng }}" class="{{ type === 'service' ? 'actif' : '' }}">🔧 Services</a>
+        <a href="?q={{ q }}&type=commerce&portee={{ portee }}&r={{ rechercheId }}&lat={{ lat }}&lng={{ lng }}" class="{{ type === 'commerce' ? 'actif' : '' }}">🏪 Commerces</a>
+        <a href="?q={{ q }}&type=annonce&portee={{ portee }}&r={{ rechercheId }}&lat={{ lat }}&lng={{ lng }}" class="{{ type === 'annonce' ? 'actif' : '' }}">🛍️ Annonces</a>
+        <a href="?q={{ q }}&type=entreprise&portee={{ portee }}&r={{ rechercheId }}&lat={{ lat }}&lng={{ lng }}" class="{{ type === 'entreprise' ? 'actif' : '' }}">🏢 Entreprises</a>
+        <a href="?q={{ q }}&type=administration&portee={{ portee }}&r={{ rechercheId }}&lat={{ lat }}&lng={{ lng }}" class="{{ type === 'administration' ? 'actif' : '' }}">🏛️ Administrations</a>
+        <a href="?q={{ q }}&type=professionnel&portee={{ portee }}&r={{ rechercheId }}&lat={{ lat }}&lng={{ lng }}" class="{{ type === 'professionnel' ? 'actif' : '' }}">🎓 Professionnels</a>
+      </div>
 
-<div class="filtres">
-    <a href="?q={{ q }}&type=tous&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'tous' ? 'actif' : '' }}">Tout</a>
-    <a href="?q={{ q }}&type=service&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'service' ? 'actif' : '' }}">🔧 Services</a>
-    <a href="?q={{ q }}&type=commerce&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'commerce' ? 'actif' : '' }}">🏪 Commerces</a>
-    <a href="?q={{ q }}&type=annonce&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'annonce' ? 'actif' : '' }}">🛍️ Annonces</a>
-    <a href="?q={{ q }}&type=entreprise&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'entreprise' ? 'actif' : '' }}">🏢 Entreprises</a>
-    <a href="?q={{ q }}&type=administration&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'administration' ? 'actif' : '' }}">🏛️ Administrations</a>
-            <a href="?q={{ q }}&type=professionnel&portee={{ portee }}&r={{ rechercheId }}" class="{{ type === 'professionnel' ? 'actif' : '' }}">🎓 Professionnels</a>
-</div>
       @if(!villeConnue)
         <p class="res-info">Votre ville n'est pas reconnue : impossible de chercher.</p>
       @else
         <p class="res-info">{{ resultats.length }} résultat(s) à {{ villeNom }}</p>
       @end
 
+      @if(villeConnue && !lieuCite && !positionConnue)
+        <div class="res-alerte">📍 Position précise indisponible. Activez la localisation (GPS) pour voir d'abord les offres proches de vous. Voici les résultats de toute la ville.</div>
+      @end
+
+      @if(messageProche)
+        <div class="res-alerte">{{ messageProche }} Voici les résultats de toute la ville.</div>
+      @end
+
       @each(r in resultats)
+        @if(r.entete)
+          <h2 class="bloc-titre">{{ r.entete }}</h2>
+        @end
         <div class="carte">
           <div class="carte-haut">
             <div>
@@ -93,11 +104,14 @@
               @if(r.lieu)
                 <p class="meta">📍 {{ r.lieu }}</p>
               @end
+              @if(r.distanceTexte)
+                <p class="distance">🧭 {{ r.distanceTexte }}</p>
+              @end
               @if(r.prix)
                 <p class="prix">{{ r.prix }}</p>
               @end
 
-                            @if(r.description)
+              @if(r.description)
                 <p class="desc">{{ r.description }}</p>
               @end
               @if(r.details.length)
@@ -108,7 +122,7 @@
                 </div>
               @end
 
-                            @if(r.articles && r.articles.length)
+              @if(r.articles && r.articles.length)
                 <div class="articles">
                   @each(a in r.articles)
                     <div class="article">
@@ -129,7 +143,8 @@
                   <a class="voir-plus" href="{{ r.voirPlus }}">🛒 Voir plus d'articles ({{ r.nbArticles }})</a>
                 @end
               @end
-                            @if(r.statut === 'disponible')
+
+              @if(r.statut === 'disponible')
                 <span class="etat disponible">✅ Disponible, confirmé par le vendeur</span>
               @elseif(r.statut === 'en_attente')
                 <span class="etat">⏳ En attente de réponse du vendeur</span>
@@ -162,5 +177,28 @@
       <a class="retour" href="{{ route('web.accueil') }}">← Retour à l'accueil</a>
     </div>
   </div>
+
+  <script>
+    // Ajoute la position de l'utilisateur à l'adresse (une seule tentative par recherche)
+    (function () {
+      var p = new URLSearchParams(location.search)
+      if (p.get('lat') || !navigator.geolocation) return
+      var cle = 'geo_essai_' + location.search
+      try {
+        if (sessionStorage.getItem(cle)) return
+        sessionStorage.setItem(cle, '1')
+      } catch (e) {}
+      navigator.geolocation.getCurrentPosition(
+        function (pos) {
+          if (pos.coords.accuracy > 1000) return
+          p.set('lat', pos.coords.latitude.toFixed(5))
+          p.set('lng', pos.coords.longitude.toFixed(5))
+          location.replace(location.pathname + '?' + p.toString())
+        },
+        function () {},
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      )
+    })()
+  </script>
 
 @end

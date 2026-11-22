@@ -54,6 +54,10 @@ export type ScannedRoutes = {
     'prestations.modele': { paramsTuple?: []; params?: {} }
     'prestations.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'services.publics': { paramsTuple?: []; params?: {} }
+    'en_service.index': { paramsTuple?: []; params?: {} }
+    'en_service.position': { paramsTuple?: []; params?: {} }
+    'en_service.arreter': { paramsTuple?: []; params?: {} }
+    'en_service.basculer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
@@ -117,6 +121,7 @@ export type ScannedRoutes = {
     'prestations.index': { paramsTuple?: []; params?: {} }
     'prestations.modele': { paramsTuple?: []; params?: {} }
     'services.publics': { paramsTuple?: []; params?: {} }
+    'en_service.index': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -159,6 +164,7 @@ export type ScannedRoutes = {
     'prestations.index': { paramsTuple?: []; params?: {} }
     'prestations.modele': { paramsTuple?: []; params?: {} }
     'services.publics': { paramsTuple?: []; params?: {} }
+    'en_service.index': { paramsTuple?: []; params?: {} }
     'web.conditions': { paramsTuple?: []; params?: {} }
     'auth.google': { paramsTuple?: []; params?: {} }
     'auth.google.callback': { paramsTuple?: []; params?: {} }
@@ -189,6 +195,9 @@ export type ScannedRoutes = {
     'prestations.store': { paramsTuple?: []; params?: {} }
     'prestations.import': { paramsTuple?: []; params?: {} }
     'prestations.supprimer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'en_service.position': { paramsTuple?: []; params?: {} }
+    'en_service.arreter': { paramsTuple?: []; params?: {} }
+    'en_service.basculer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'web.conditions.accept': { paramsTuple?: []; params?: {} }
     'web.session.store': { paramsTuple?: []; params?: {} }
     'web.new_account.store': { paramsTuple?: []; params?: {} }

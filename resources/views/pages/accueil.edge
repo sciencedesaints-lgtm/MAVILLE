@@ -111,6 +111,7 @@
         @elseif(auth.user && auth.user.typeCompte === 'administration_publique')
           <a href="{{ route('profil.administration') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">🏛️ Portail Administration</a>
                     <a href="/mes-prestations" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">📋 Mes prestations</a>
+                    <a href="/en-service" class="nav-link">🚕 En service</a>
         @else
           <a href="{{ route('profil.personnel') }}" style="display: block; padding: 12px 16px; color: #f8fafc; text-decoration: none; font-size: 0.95rem;">👤 Mon Profil Personnel</a>
         @endif

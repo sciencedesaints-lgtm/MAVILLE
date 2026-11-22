@@ -26,6 +26,7 @@ const MediasController = () => import('#controllers/medias_controller')
 const PrestationsController = () => import('#controllers/prestations_controller')
 const ProfilsController = () => import('#controllers/profils_controller')
 const ProfilEditionController = () => import('#controllers/profil_edition_controller')
+const EnServiceController = () => import('#controllers/en_service_controller')
 /* 
 ========================================================================== 
 1. VUES ET AFFICHAGE WEB (PAGE PAR PAGE)
@@ -104,6 +105,10 @@ router.group(() => {
   router.get('/modele-prestations.csv', [PrestationsController, 'modele']).as('prestations.modele')
   router.post('/prestations/:id/supprimer', [PrestationsController, 'supprimer']).as('prestations.supprimer')
   router.get('/services-publics', [MembresController, 'servicesPublics']).as('services.publics')
+  router.get('/en-service', [EnServiceController, 'index']).as('en_service.index')
+  router.post('/en-service/position', [EnServiceController, 'position']).as('en_service.position')
+  router.post('/en-service/arreter', [EnServiceController, 'arreter']).as('en_service.arreter')
+  router.post('/en-service/:id/itinerant', [EnServiceController, 'basculer']).as('en_service.basculer')
 }).use(middleware.auth())
 
 // Conditions d'utilisation (après l'inscription, utilisateur connecté)
