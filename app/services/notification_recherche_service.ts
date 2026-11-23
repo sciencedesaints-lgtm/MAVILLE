@@ -1,5 +1,6 @@
 import db from '@adonisjs/lucid/services/db'
 import { analyser, motsDe, normaliser, conditionFloue } from '#services/analyse_recherche'
+import { detecterLieux, racine } from '#services/lieux'
 
 type Auteur = {
   id: string | number
@@ -29,7 +30,15 @@ export class NotificationRechercheService {
     )
     if (autreVille) return 0
 
-    const { mots, expressions, intention } = analyser(q)
+    const analyse = analyser(q)
+    const { expressions, intention } = analyse
+    let mots = analyse.mots
+
+    // Les mots qui désignent un lieu connu ne sont pas cherchés comme des mots ordinaires
+    const lieuxCites = await detecterLieux(ville.id, ville.nom, q)
+    const motsDuLieu = new Set(lieuxCites.flatMap((l) => l.mots.map(racine)))
+    mots = mots.filter((m) => !motsDuLieu.has(m))
+
     const termes = [...mots, ...expressions]
     if (!termes.length) return 0
 
@@ -49,6 +58,19 @@ export class NotificationRechercheService {
       query.orderByRaw(`(${score}) DESC`, valeurs)
     }
 
+    // Le lieu cité doit correspondre au quartier, à la commune ou à l'adresse de l'offre
+    const filtrerLieu = (query: any, colonnesLieu: string[]) => {
+      if (!motsDuLieu.size) return
+      const morceaux: string[] = []
+      const valeurs: string[] = []
+      for (const m of motsDuLieu) {
+        const c = conditionFloue(colonnesLieu, m)
+        morceaux.push(`(${c.sql})`)
+        valeurs.push(...c.params)
+      }
+      query.whereRaw(`(${morceaux.join(' OR ')})`, valeurs)
+    }
+
     const auteurId = String(auteur.id)
     const candidats: Candidat[] = []
 
@@ -61,6 +83,7 @@ export class NotificationRechercheService {
       .whereNot('s.prestataire_id', auteurId)
       .select('s.prestataire_id as proprietaire', 's.id as offre_id', 's.nom as offre')
     filtrer(services, ['s.nom', 's.description', 'c.nom'])
+    filtrerLieu(services, ['s.quartier', 's.commune', 's.adresse'])
     for (const r of await services) {
       candidats.push({ proprietaire: r.proprietaire, genre: 'service', offreId: r.offre_id, offre: r.offre })
     }
@@ -74,6 +97,7 @@ export class NotificationRechercheService {
       .whereNot('e.proprietaire_id', auteurId)
       .select('e.proprietaire_id as proprietaire', 'e.id as offre_id', 'e.nom as offre')
     filtrer(commerces, ['e.nom', 'e.description', 'c.nom', 'e.marche'])
+    filtrerLieu(commerces, ['e.adresse', 'e.quartier', 'e.commune', 'e.marche'])
     for (const r of await commerces) {
       candidats.push({ proprietaire: r.proprietaire, genre: 'commerce', offreId: r.offre_id, offre: r.offre })
     }
@@ -88,26 +112,28 @@ export class NotificationRechercheService {
       .select('a.vendeur_id as proprietaire', 'a.id as offre_id', 'a.titre as offre')
     if (intention) annonces.where('a.type_offre', intention)
     filtrer(annonces, ['a.titre', 'a.description', 'c.nom'])
+    filtrerLieu(annonces, ['a.quartier', 'a.commune', 'a.avenue', 'a.repere'])
     for (const r of await annonces) {
       candidats.push({ proprietaire: r.proprietaire, genre: 'annonce', offreId: r.offre_id, offre: r.offre })
     }
 
-        // Articles du catalogue des commerces : le commerce est notifié, avec le nom de l'article
-        const articlesCommerces = db
-        .from('produits as p')
-        .join('etablissements as e', 'e.id', 'p.etablissement_id')
-        .leftJoin('categories_produits as c', 'c.id', 'p.categorie_id')
-        .where('e.ville_id', ville.id)
-        .where('e.visible', true)
-        .where('e.ouvert', true)
-        .where('p.visible', true)
-        .where('p.disponible', true)
-        .whereNot('e.proprietaire_id', auteurId)
-        .select('e.proprietaire_id as proprietaire', 'e.id as offre_id', 'p.nom as offre')
-      filtrer(articlesCommerces, ['p.nom', 'p.description', 'c.nom'])
-      for (const r of await articlesCommerces) {
-        candidats.push({ proprietaire: r.proprietaire, genre: 'commerce', offreId: r.offre_id, offre: r.offre })
-      }
+    // Articles du catalogue des commerces : le commerce est notifié
+    const articlesCommerces = db
+      .from('produits as p')
+      .join('etablissements as e', 'e.id', 'p.etablissement_id')
+      .leftJoin('categories_produits as c', 'c.id', 'p.categorie_id')
+      .where('e.ville_id', ville.id)
+      .where('e.visible', true)
+      .where('e.ouvert', true)
+      .where('p.visible', true)
+      .where('p.disponible', true)
+      .whereNot('e.proprietaire_id', auteurId)
+      .select('e.proprietaire_id as proprietaire', 'e.id as offre_id', 'p.nom as offre')
+    filtrer(articlesCommerces, ['p.nom', 'p.description', 'c.nom'])
+    filtrerLieu(articlesCommerces, ['e.adresse', 'e.quartier', 'e.commune', 'e.marche'])
+    for (const r of await articlesCommerces) {
+      candidats.push({ proprietaire: r.proprietaire, genre: 'commerce', offreId: r.offre_id, offre: r.offre })
+    }
 
     // Une seule ligne par vendeur (sa première offre = la mieux classée)
     const parVendeur = new Map<string, Candidat>()

@@ -732,6 +732,31 @@ export class LangueSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class LieuxSchema extends BaseModel {
+  static $columns = ['alias', 'commune', 'createdAt', 'id', 'latitude', 'longitude', 'nom', 'type', 'updatedAt', 'villeId'] as const
+  $columns = LieuxSchema.$columns
+  @column()
+  declare alias: string | null
+  @column()
+  declare commune: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare latitude: string | null
+  @column()
+  declare longitude: string | null
+  @column()
+  declare nom: string
+  @column()
+  declare type: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare villeId: string
+}
+
 export class LivraisonSchema extends BaseModel {
   static $columns = ['commandeId', 'createdAt', 'dateDepart', 'dateLivraison', 'id', 'livreurId', 'statut', 'updatedAt'] as const
   $columns = LivraisonSchema.$columns

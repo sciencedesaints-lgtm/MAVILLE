@@ -13,6 +13,7 @@ export const controllers = {
   Corbeille: () => import('#controllers/corbeille_controller'),
   Demandes: () => import('#controllers/demandes_controller'),
   DemandesServices: () => import('#controllers/demandes_services_controller'),
+  EnService: () => import('#controllers/en_service_controller'),
   Etablissements: () => import('#controllers/etablissements_controller'),
   Medias: () => import('#controllers/medias_controller'),
   Membres: () => import('#controllers/membres_controller'),
@@ -27,5 +28,4 @@ export const controllers = {
   Resultats: () => import('#controllers/resultats_controller'),
   Session: () => import('#controllers/session_controller'),
   Uploads: () => import('#controllers/uploads_controller'),
-  EnService: () => import('#controllers/en_service_controller'),
 }

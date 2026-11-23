@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import { MOTS_VIDES, normaliser, conditionFloue } from '#services/analyse_recherche'
+import { detecterLieux, racine } from '#services/lieux'
 
 type Resultat = {
   id: string
@@ -15,6 +16,7 @@ type Resultat = {
   description: string | null
   details: string[]
   articles?: { nom: string; prix: string; description: string | null; photo: string | null }[]
+  medias?: { url: string; type: string }[]
   nbArticles?: number
   voirPlus?: string | null
   statut: string | null
@@ -44,11 +46,10 @@ export default class ResultatsController {
       const n = Number(String(v ?? '').replace(',', '.'))
       return String(v ?? '').trim() !== '' && Number.isFinite(n) ? n : null
     }
-    const maLat = nb(request.input('lat'))
-    const maLng = nb(request.input('lng'))
-    const positionConnue =
+    let maLat = nb(request.input('lat'))
+    let maLng = nb(request.input('lng'))
+    let positionConnue =
       maLat !== null && maLng !== null && Math.abs(maLat) <= 90 && Math.abs(maLng) <= 180
-
     // Distance en km (formule de haversine) ; null si l'offre n'a pas de position
     const distance = (lat: unknown, lng: unknown): number | null => {
       if (!positionConnue || lat === null || lat === undefined || lng === null || lng === undefined) return null
@@ -103,8 +104,8 @@ export default class ResultatsController {
       mots.push(mot.length > 3 ? mot.replace(/[sx]$/, '') : mot)
     }
 
-    const motsUniques = [...new Set(mots)]
-    const lieuxUniques = [...new Set(lieux)]
+    let motsUniques = [...new Set(mots)]
+    let lieuxUniques = [...new Set(lieux)]
 
     // Nom/titre/catégorie = 2 points, description = 1 point, lieu cité = 3 points. Minimum : 2 points.
     const appliquer = (
@@ -147,6 +148,26 @@ export default class ResultatsController {
 
     // ---------- Requêtes ----------
     const ville = await db.from('villes').where('nom', user.ville ?? '').first()
+        // ---------- Lieux connus cités dans la phrase (« maison au golf ») ----------
+        let lieuReference: string | null = null
+        if (ville) {
+          const trouves = await detecterLieux(ville.id, ville.nom, q)
+          if (trouves.length) {
+            const motsDuLieu = new Set(trouves.flatMap((l) => l.mots.map(racine)))
+            // ces mots désignent le lieu : on ne les cherche plus comme des mots ordinaires
+            motsUniques = motsUniques.filter((m) => !motsDuLieu.has(m))
+            lieuxUniques = [...new Set([...lieuxUniques, ...motsDuLieu])]
+    
+            // Si le lieu a des coordonnées, les distances sont mesurées depuis ce lieu
+            const precis = trouves.find((l) => l.latitude !== null && l.longitude !== null)
+            if (precis) {
+              maLat = precis.latitude
+              maLng = precis.longitude
+              positionConnue = true
+              lieuReference = precis.nom
+            }
+          }
+        }
     const resultats: Resultat[] = []
     const veut = (genre: string) => type === 'tous' || type === genre
     const lieu = (...parties: (string | null)[]) => parties.filter(Boolean).join(', ')
@@ -182,7 +203,7 @@ export default class ResultatsController {
           proprietaireId: r.prestataire_id,
           proprietaire: nomComplet(r.u_prenom, r.u_nom),
           categorie: r.categorie_nom,
-          lieu: lieu(r.quartier, r.commune),
+          lieu: lieu(r.adresse, r.quartier, r.commune),
           telephone: r.telephone,
           prix: r.prix_min ? `dès ${Number(r.prix_min)} ${r.devise}` : null,
           description: coupe(r.description),
@@ -263,7 +284,12 @@ export default class ResultatsController {
           proprietaireId: r.vendeur_id,
           proprietaire: nomComplet(r.u_prenom, r.u_nom),
           categorie: r.categorie_nom,
-          lieu: lieu(r.quartier, r.commune),
+          lieu: lieu(
+            r.avenue ? `Avenue ${r.avenue}` : null,
+            r.quartier,
+            r.commune,
+            r.repere ? `Repère : ${r.repere}` : null
+          ),
           telephone: r.telephone || r.whatsapp,
           prix: r.prix
             ? `${Number(r.prix)} ${r.devise}${r.type_offre === 'location' ? ' / ' + r.periodicite : ''}`
@@ -488,65 +514,81 @@ export default class ResultatsController {
     const caches = new Set(masques.map((m: any) => `${m.genre}:${m.offre_id}`))
     const visibles = resultats.filter((r) => !caches.has(`${r.genre}:${r.id}`))
 
-    // ---------- Texte de la distance ----------
-    for (const r of visibles) {
-      if (r.distanceKm !== null) {
-        r.distanceTexte =
-          r.distanceKm < 1 ? `à ${Math.round(r.distanceKm * 100) * 10} m de vous` : `à ${r.distanceKm.toFixed(1)} km de vous`
+        // Photos et vidéos des offres
+        const idsOffres = visibles
+        .filter((r) => ['service', 'commerce', 'annonce'].includes(r.genre))
+        .map((r) => r.id)
+      const medias = idsOffres.length
+        ? await db.from('offres_medias').whereIn('offre_id', idsOffres).orderBy('ordre')
+        : []
+      for (const r of visibles) {
+        r.medias = medias
+          .filter((m: any) => m.offre_id === r.id && m.type_offre === r.genre)
+          .map((m: any) => ({ url: m.url, type: m.type }))
       }
-    }
 
-    // ---------- Organisation en blocs ----------
-    const rang = (s: string | null) =>
-      s === 'disponible' ? 0 : s === 'en_attente' ? 1 : s === 'indisponible' ? 3 : 2
-
-    let liste: Resultat[] = []
-    let nbProches = 0
-    let messageProche: string | null = null
-
-    if (lieuxUniques.length) {
-      // Un lieu est cité dans la phrase : il remplace la proximité
-      visibles.sort((a, b) => rang(a.statut) - rang(b.statut))
-      if (visibles.length) visibles[0].entete = '📌 Résultats pour le lieu demandé'
-      liste = visibles
-    } else {
-      const proches = visibles
-        .filter((r) => r.distanceKm !== null && r.distanceKm <= RAYON_KM)
-        .sort((a, b) => (a.distanceKm as number) - (b.distanceKm as number))
-      const autres = visibles
-        .filter((r) => !(r.distanceKm !== null && r.distanceKm <= RAYON_KM))
-        .sort((a, b) => rang(a.statut) - rang(b.statut) || (a.distanceKm ?? 999) - (b.distanceKm ?? 999))
-
-      nbProches = proches.length
-      if (positionConnue) {
-        if (proches.length) {
-          proches[0].entete = `📍 Près de vous (moins de ${RAYON_KM} km)`
-        } else {
-          messageProche = `Aucun résultat dans un rayon de ${RAYON_KM} km autour de vous.`
+        // ---------- Texte de la distance ----------
+        const depuis = lieuReference ? lieuReference : 'vous'
+        for (const r of visibles) {
+          if (r.distanceKm !== null) {
+            r.distanceTexte =
+              r.distanceKm < 1
+                ? `à ${Math.round(r.distanceKm * 100) * 10} m de ${depuis}`
+                : `à ${r.distanceKm.toFixed(1)} km de ${depuis}`
+          }
         }
-        if (autres.length) autres[0].entete = '🏙️ Dans toute la ville'
-      }
-      liste = [...proches, ...autres]
-    }
-
-    // Les en-têtes ne doivent pas être gênés par la corbeille ou les filtres
-    response.header('Cache-Control', 'no-store')
-
-    return view.render('pages/resultats', {
-      resultats: liste,
-      q,
-      type,
-      portee: 'ville',
-      rechercheId: UUID.test(rechercheId) ? rechercheId : '',
-      villeConnue: !!ville,
-      villeNom: user.ville,
-      nbCorbeille: masques.length,
-      lat: positionConnue ? String(maLat) : '',
-      lng: positionConnue ? String(maLng) : '',
-      positionConnue,
-      nbProches,
-      messageProche,
-      lieuCite: lieuxUniques.length > 0,
-    })
+    
+        // ---------- Organisation en blocs ----------
+        const rang = (s: string | null) =>
+          s === 'disponible' ? 0 : s === 'en_attente' ? 1 : s === 'indisponible' ? 3 : 2
+    
+        let liste: Resultat[] = []
+        let nbProches = 0
+        let messageProche: string | null = null
+    
+        if (lieuxUniques.length && !lieuReference) {
+          // Lieu cité sans coordonnées connues : recherche par le texte seulement
+          visibles.sort((a, b) => rang(a.statut) - rang(b.statut))
+          if (visibles.length) visibles[0].entete = '📌 Résultats pour le lieu demandé'
+          liste = visibles
+        } else {
+          const proches = visibles
+            .filter((r) => r.distanceKm !== null && r.distanceKm <= RAYON_KM)
+            .sort((a, b) => (a.distanceKm as number) - (b.distanceKm as number))
+          const autres = visibles
+            .filter((r) => !(r.distanceKm !== null && r.distanceKm <= RAYON_KM))
+            .sort((a, b) => rang(a.statut) - rang(b.statut) || (a.distanceKm ?? 999) - (b.distanceKm ?? 999))
+    
+          nbProches = proches.length
+          if (positionConnue) {
+            const ou = lieuReference ? `de ${lieuReference}` : 'de vous'
+            if (proches.length) {
+              proches[0].entete = `📍 Près ${ou} (moins de ${RAYON_KM} km)`
+            } else {
+              messageProche = `Aucun résultat dans un rayon de ${RAYON_KM} km autour ${ou}.`
+            }
+            if (autres.length) autres[0].entete = '🏙️ Dans toute la ville'
+          }
+          liste = [...proches, ...autres]
+        }
+    
+        response.header('Cache-Control', 'no-store')
+    
+        return view.render('pages/resultats', {
+          resultats: liste,
+          q,
+          type,
+          portee: 'ville',
+          rechercheId: UUID.test(rechercheId) ? rechercheId : '',
+          villeConnue: !!ville,
+          villeNom: user.ville,
+          nbCorbeille: masques.length,
+          lat: positionConnue && !lieuReference ? String(maLat) : '',
+          lng: positionConnue && !lieuReference ? String(maLng) : '',
+          positionConnue,
+          nbProches,
+          messageProche,
+          lieuCite: lieuxUniques.length > 0,
+        })
   }
 }
